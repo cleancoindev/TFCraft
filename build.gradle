@@ -83,7 +83,7 @@ task deobfJar(type: Jar) {
     appendix = 'deobf'
 	
 	manifest.attributes(
-            'FMLCorePlugin': 'com.bioxx.tfc.TFCASMLoadingPlugin',
+            'FMLCorePlugin': 'com.dunk.tfc.TFCASMLoadingPlugin',
 			'FMLCorePluginContainsFMLMod': 'true',
 			'FMLAT': 'tfc_at.cfg'
     )
@@ -117,7 +117,7 @@ from(sourceSets.main.resources.srcDirs) {
 
 jar {
     manifest.attributes(
-            'FMLCorePlugin': 'com.bioxx.tfc.TFCASMLoadingPlugin',
+            'FMLCorePlugin': 'com.dunk.tfc.TFCASMLoadingPlugin',
 			'FMLCorePluginContainsFMLMod': 'true',
 			'FMLAT': 'tfc_at.cfg'
     )
