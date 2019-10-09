@@ -219,6 +219,7 @@ public class ItemHeat
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.brassIngot2x,1), brassRaw,new ItemStack(TFCItems.brassUnshaped,2,0)));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.brassUnshaped,1), brassRaw,new ItemStack(TFCItems.brassUnshaped,1)));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.brassSheet,1), brassRaw,new ItemStack(TFCItems.brassUnshaped,2,0)));
+		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.brassTube,1), brassRaw,new ItemStack(TFCItems.brassUnshaped,1,0)));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.brassSheet2x,1), brassRaw,new ItemStack(TFCItems.brassUnshaped,4,0)));
 		//Bronze
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.clayMoldSheet,1,2), bronzeRaw,new ItemStack(TFCItems.clayMoldSheet,1),5,2));
@@ -439,10 +440,13 @@ public class ItemHeat
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.garlic, 1), 1, 1200, null));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.carrot, 1), 1, 1200, null));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.greenbeans, 1), 1, 1200, null));
+		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.blackEyedPeas, 1), 1, 1200, null));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.greenBellPepper, 1), 1, 1200, null));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.yellowBellPepper, 1), 1, 1200, null));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.redBellPepper, 1), 1, 1200, null));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.squash, 1), 1, 1200, null));
+		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.grapes, 1), 1, 1200, null));
+		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.melonSlice, 1), 1, 1200, null));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.seaWeed, 1), 1, 1200, new ItemStack(TFCItems.soda,1)).setKeepNBT(true).setWeightRatio(0.4f));
 
 		//Fruit
@@ -455,6 +459,8 @@ public class ItemHeat
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.cherry, 1), 1, 1200, null));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.peach, 1), 1, 1200, null));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.plum, 1), 1, 1200, null));
+		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.papaya, 1), 1, 1200, null));
+		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.date, 1), 1, 1200, null));
 
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.wintergreenBerry, 1), 1, 1200, null));
 		manager.addIndex(new HeatIndex(new ItemStack(TFCItems.blueberry, 1), 1, 1200, null));

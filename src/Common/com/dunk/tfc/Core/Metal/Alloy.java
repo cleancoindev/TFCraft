@@ -13,7 +13,7 @@ import com.dunk.tfc.api.Metal;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-public class Alloy 
+public class Alloy
 {
 	public List<AlloyMetal> alloyIngred;
 	public Metal outputType;
@@ -72,14 +72,47 @@ public class Alloy
 		Iterator<AlloyMetal> iter = a.iterator();
 		boolean matches = true;
 		int amount = 0;
+
+		float resultPercent = 0;
+		if(a.size() > 1)
+		{
+		for (AlloyMetal met : a)
+		{
+			if (met.metalType == this.outputType)
+			{
+				resultPercent += met.metal;
+			}
+		}
+		if (resultPercent > 0)
+		{
+			for (AlloyMetal met : a)
+			{
+				met.metal/= (1f - (resultPercent/100f));
+			}
+		}
+		}
 		while (iter.hasNext() && matches)
 		{
 			AlloyMetal am = iter.next();
-			matches = searchForAlloyMetal(am);
 			amount += am.metal;
+			if(am.metalType == this.outputType && a.size() > 1)
+			{
+				continue;
+			}
+			matches = searchForAlloyMetal(am);
+			
 		}
-
-		if(!matches)
+		if(a.size() > 1)
+		{
+		if (resultPercent > 0)
+		{
+			for (AlloyMetal met : a)
+			{
+				met.metal*= (1f - (resultPercent/100f));
+			}
+		}
+		}
+		if (!matches)
 			return null;
 		else
 			return new Alloy(this.outputType, amount);
@@ -88,10 +121,10 @@ public class Alloy
 	public boolean searchForAlloyMetal(AlloyMetal am)
 	{
 		Iterator<AlloyMetal> iter = alloyIngred.iterator();
-		while(iter.hasNext())
+		while (iter.hasNext())
 		{
 			AlloyMetalCompare amc = (AlloyMetalCompare) iter.next();
-			if(amc.compare(am))
+			if (amc.compare(am))
 				return true;
 		}
 		return false;
@@ -100,11 +133,11 @@ public class Alloy
 	public float getPercentForMetal(Metal m)
 	{
 		Iterator<AlloyMetal> iter = alloyIngred.iterator();
-		//AlloyMetal am = new AlloyMetal(m, -1);
-		while(iter.hasNext())
+		// AlloyMetal am = new AlloyMetal(m, -1);
+		while (iter.hasNext())
 		{
 			AlloyMetal amc = iter.next();
-			if(amc.metalType == m)
+			if (amc.metalType == m)
 				return amc.metal;
 		}
 		return 0;
@@ -112,13 +145,8 @@ public class Alloy
 
 	public enum EnumTier
 	{
-		Tier0(0, "Fire pit"),
-		TierI(1, "Pit Kiln"),
-		TierII(2, "Beehive Kiln"),
-		TierIII(3, "Bloomery"),
-		TierIV(4, "Blast Furnace"),
-		TierV(5, "Crucible"),
-		TierVI(6), TierVII(7), TierVIII(8), TierIX(9), TierX(10);
+		Tier0(0, "Fire pit"), TierI(1, "Pit Kiln"), TierII(2, "Beehive Kiln"), TierIII(3, "Bloomery"), TierIV(4,
+				"Blast Furnace"), TierV(5, "Crucible"), TierVI(6), TierVII(7), TierVIII(8), TierIX(9), TierX(10);
 
 		public final int tier;
 		public final String name;
@@ -126,41 +154,41 @@ public class Alloy
 		EnumTier(int t)
 		{
 			tier = t;
-            name = name();
+			name = name();
 		}
 
-        EnumTier(int t, String n)
-        {
-            tier = t;
-            name = n;
-        }
+		EnumTier(int t, String n)
+		{
+			tier = t;
+			name = n;
+		}
 
-        @Override
-        public String toString()
-        {
-            return name;
-        }
-    }
+		@Override
+		public String toString()
+		{
+			return name;
+		}
+	}
 
 	public void toPacket(DataOutputStream dos)
 	{
 		try
 		{
-			if(outputType != null)
+			if (outputType != null)
 				dos.writeUTF(outputType.name);
 			else
 				dos.writeUTF("Unknown");
 
 			dos.writeFloat(outputAmount);
 			dos.writeInt(alloyIngred.size());
-			for(int i = 0; i < alloyIngred.size(); i++)
+			for (int i = 0; i < alloyIngred.size(); i++)
 			{
 				AlloyMetal am = alloyIngred.get(i);
 				dos.writeUTF(am.metalType.name);
 				dos.writeFloat(am.metal);
 			}
 		}
-		catch (IOException e) 
+		catch (IOException e)
 		{
 			TerraFirmaCraft.LOG.catching(e);
 		}
@@ -173,9 +201,10 @@ public class Alloy
 			outputType = MetalRegistry.instance.getMetalFromString(dis.readUTF());
 			outputAmount = dis.readFloat();
 			int size = dis.readInt();
-			for(int i = 0; i < size; i++)
+			for (int i = 0; i < size; i++)
 			{
-				AlloyMetal am = new AlloyMetal(MetalRegistry.instance.getMetalFromString(dis.readUTF()), dis.readFloat());
+				AlloyMetal am = new AlloyMetal(MetalRegistry.instance.getMetalFromString(dis.readUTF()),
+						dis.readFloat());
 				this.alloyIngred.add(am);
 			}
 		}
@@ -191,7 +220,7 @@ public class Alloy
 		nbt.setString("outputType", outputType.name);
 		nbt.setFloat("outputAmount", outputAmount);
 		NBTTagList nbtlist = new NBTTagList();
-		for(int i = 0; i < alloyIngred.size(); i++)
+		for (int i = 0; i < alloyIngred.size(); i++)
 		{
 			NBTTagCompound nbt1 = new NBTTagCompound();
 			AlloyMetal am = alloyIngred.get(i);
@@ -207,17 +236,18 @@ public class Alloy
 		outputType = MetalRegistry.instance.getMetalFromString(nbt.getString("outputType"));
 		outputAmount = nbt.getFloat("outputAmount");
 		NBTTagList nbtlist = nbt.getTagList("metalList", 10);
-		for(int i = 0; i < nbtlist.tagCount(); i++)
+		for (int i = 0; i < nbtlist.tagCount(); i++)
 		{
 			NBTTagCompound nbt1 = nbtlist.getCompoundTagAt(i);
-			AlloyMetal am = new AlloyMetal(MetalRegistry.instance.getMetalFromString(nbt1.getString("metalType")), nbt1.getFloat("amount"));
+			AlloyMetal am = new AlloyMetal(MetalRegistry.instance.getMetalFromString(nbt1.getString("metalType")),
+					nbt1.getFloat("amount"));
 			this.alloyIngred.add(am);
 		}
 		return this;
 	}
 
-    public EnumTier getFurnaceTier()
-    {
-        return furnaceTier;
-    }
+	public EnumTier getFurnaceTier()
+	{
+		return furnaceTier;
+	}
 }

@@ -150,6 +150,7 @@ public class TFCItems
 	public static Item woolPants;
 	public static Item woolShirt;
 	public static Item woolCoat;
+	public static Item woolRobe;
 	public static Item woolHat;
 	
 	//Silk
@@ -157,6 +158,7 @@ public class TFCItems
 	public static Item silkPants;
 	public static Item silkShirt;
 	public static Item silkCoat;
+	public static Item silkRobe;
 	public static Item silkHat;
 	
 	//Linen
@@ -164,6 +166,7 @@ public class TFCItems
 	public static Item linenPants;
 	public static Item linenShirt;
 	public static Item linenCoat;
+	public static Item linenRobe;
 	public static Item linenHat;
 	
 	//Fur
@@ -178,8 +181,10 @@ public class TFCItems
 	//Straw
 	public static Item grassShirt;
 	public static Item strawHat;
+	public static Item strawHat2;
 	public static Item grassSkirt;
 	public static Item grassSandals;
+	public static Item grassCoat;
 	
 	//Leather
 	public static Item leatherSandals;
@@ -283,9 +288,14 @@ public class TFCItems
 	public static Item steelKnife;
 
 	public static Item fireStarter;
+	public static Item bowFireStarter;
 	public static Item fishingRod;
 	public static Item bow;
-
+	public static Item unstrungBow;
+	public static Item pole;
+	public static Item woodenSpear;
+	public static Item woodenStaff;
+	
 	public static Item stoneHammer;
 	public static Item bismuthBronzeHammer;
 	public static Item blackBronzeHammer;
@@ -326,6 +336,7 @@ public class TFCItems
 	public static Item tinUnshaped;
 	public static Item zincUnshaped;
 	public static Item ceramicMold;
+	public static  Item clayTile;
 	public static Item ink;
 
 	//Tool Heads
@@ -631,6 +642,18 @@ public class TFCItems
 	public static Item redSteelHelmet;
 	public static Item steelHelmet;
 
+	
+	public static Item clayBucketUnfired;
+	public static Item clayBucketEmpty;
+	public static Item clayBucketWater;
+	public static Item clayBucketSaltWater;
+	public static Item clayBucketMilk;
+	public static Item clayBucketPlaster;
+	public static Item clayBucketGypsum;
+	
+	public static Item mud;
+	public static Item mudBrick;
+	
 	public static Item woodenBucketEmpty;
 	public static Item woodenBucketWater;
 	public static Item woodenBucketSaltWater;
@@ -656,12 +679,16 @@ public class TFCItems
 	public static Item seedsRedBellPepper;
 	public static Item seedsSoybean;
 	public static Item seedsGreenbean;
+	public static Item seedsBlackEyedPeas;
 	public static Item seedsSquash;
 	public static Item seedsJute;
 	public static Item seedsFlax;
 	public static Item seedsMadder;
 	public static Item seedsWeld;
 	public static Item seedsWoad;
+	public static Item seedsPumpkin;
+	public static Item seedsMelon;
+	public static Item seedsGrapes;
 
 	public static Item fruitTreeSapling;
 
@@ -674,6 +701,8 @@ public class TFCItems
 	public static Item cherry;
 	public static Item peach;
 	public static Item plum;
+	public static Item papaya;
+	public static Item date;
 	public static Item egg;
 	public static Item eggCooked;
 	public static Item cheese;
@@ -691,6 +720,7 @@ public class TFCItems
 	public static Item mushroomFoodB;
 	public static Item mushroomFoodR;
 	public static Item pumpkinGuts;
+	public static Item melonSlice;
 	public static Item pumpkinShell;
 	public static Item garlic;
 	public static Item carrot;
@@ -698,12 +728,14 @@ public class TFCItems
 	//public static Item Hemp;
 	public static Item soybean;
 	public static Item greenbeans;
+	public static Item blackEyedPeas;
 	public static Item greenBellPepper;
 	public static Item yellowBellPepper;
 	public static Item redBellPepper;
 	public static Item squash;
 	public static Item seaWeed;
 	public static Item sugar;
+	public static Item grapes;
 
 	public static Item wheatGround;
 	public static Item barleyGround;
@@ -792,7 +824,17 @@ public class TFCItems
 	public static Item doorWillow;
 	public static Item doorKapok;
 	public static Item doorAcacia;
-
+	public static Item doorPalm;
+	public static Item doorEbony;
+	public static Item doorFever;
+	public static Item doorBaobab;
+	public static Item doorLimba;
+	public static Item doorMahogany;
+	public static Item doorTeak;
+	public static Item doorBamboo;
+	public static Item doorGingko;
+	public static Item doorFruitwood;
+	
 	public static Item blueprint;
 	public static Item nametag;
 	//public static Item writabeBookTFC;
@@ -814,7 +856,8 @@ public class TFCItems
 	public static Item spindleHead;
 	public static Item stoneBrick;
 	public static Item mortar;
-	public static Item vinegar;
+	public static Item woodenBucketVinegar;
+	public static Item clayBucketVinegar;
 	public static Item hide;
 	public static Item soakedHide;
 	public static Item scrapedHide;
@@ -841,6 +884,7 @@ public class TFCItems
 	public static Item sake;
 	public static Item vodka;
 	public static Item berryWine;
+	public static Item wine;
 	public static Item whiskey;
 	public static Item cornWhiskey;
 
@@ -855,6 +899,9 @@ public class TFCItems
 	public static Item potteryBowl;
 	public static Item burlapSack;
 	//public static Item KilnRack;
+	public static Item lyre;
+	public static Item boneFlute;
+	public static Item hollowBone;
 	public static Item straw;
 	public static Item strawBasket;
 	public static Item flatClay;
@@ -883,6 +930,13 @@ public class TFCItems
 	public static Item clayMoldSword;
 	public static Item clayMoldJavelin;
 
+	public static Item brassTube;
+	public static Item horn;
+	public static Item blowingHorn;
+	public static Item brassHorn;
+	public static Item conchHorn;
+	
+	
 	public static Item tuyereCopper;
 	public static Item tuyereBronze;
 	public static Item tuyereBlackBronze;
@@ -957,6 +1011,7 @@ public class TFCItems
 	public static int mMStoneUses = 55;
 	
 	public static int boneUses = 30;
+	public static int woodUses = 40;
 	
 	public static int stringUses = 500;
 	
@@ -1006,6 +1061,7 @@ public class TFCItems
 	public static ToolMaterial mMToolMaterial;
 	
 	public static ToolMaterial boneToolMaterial;
+	public static ToolMaterial woodToolMaterial;
 	public static ToolMaterial smallIronToolMaterial;
 
 	public static ToolMaterial bismuthBronzeToolMaterial;
@@ -1266,6 +1322,7 @@ public class TFCItems
 		GameRegistry.registerItem(tinUnshaped, tinUnshaped.getUnlocalizedName());
 		GameRegistry.registerItem(zincUnshaped, zincUnshaped.getUnlocalizedName());
 
+		GameRegistry.registerItem(woodenStaff, woodenStaff.getUnlocalizedName());
 		GameRegistry.registerItem(stoneHammer, stoneHammer.getUnlocalizedName());
 		GameRegistry.registerItem(bismuthBronzeHammer, bismuthBronzeHammer.getUnlocalizedName());
 		GameRegistry.registerItem(blackBronzeHammer, blackBronzeHammer.getUnlocalizedName());
@@ -1279,6 +1336,7 @@ public class TFCItems
 
 		GameRegistry.registerItem(ink, ink.getUnlocalizedName());
 		GameRegistry.registerItem(fireStarter, fireStarter.getUnlocalizedName());
+		GameRegistry.registerItem(bowFireStarter, bowFireStarter.getUnlocalizedName());
 
 		GameRegistry.registerItem(bismuthBronzePickaxeHead, bismuthBronzePickaxeHead.getUnlocalizedName());
 		GameRegistry.registerItem(blackBronzePickaxeHead, blackBronzePickaxeHead.getUnlocalizedName());
@@ -1420,12 +1478,23 @@ public class TFCItems
 		GameRegistry.registerItem(redSteelScytheHead, redSteelScytheHead.getUnlocalizedName());
 		GameRegistry.registerItem(steelScytheHead, steelScytheHead.getUnlocalizedName());
 
+		GameRegistry.registerItem(mud, mud.getUnlocalizedName());
+		GameRegistry.registerItem(mudBrick, mudBrick.getUnlocalizedName());
+		
 		GameRegistry.registerItem(woodenBucketEmpty, woodenBucketEmpty.getUnlocalizedName());
 		GameRegistry.registerItem(woodenBucketWater, woodenBucketWater.getUnlocalizedName());
 		GameRegistry.registerItem(woodenBucketSaltWater, woodenBucketSaltWater.getUnlocalizedName());
 		GameRegistry.registerItem(woodenBucketMilk, woodenBucketMilk.getUnlocalizedName());
 		GameRegistry.registerItem(woodenBucketPlaster, woodenBucketPlaster.getUnlocalizedName());
 		GameRegistry.registerItem(woodenBucketGypsum, woodenBucketGypsum.getUnlocalizedName());
+		
+		GameRegistry.registerItem(clayBucketUnfired, clayBucketUnfired.getUnlocalizedName());
+		GameRegistry.registerItem(clayBucketEmpty, clayBucketEmpty.getUnlocalizedName());
+		GameRegistry.registerItem(clayBucketWater, clayBucketWater.getUnlocalizedName());
+		GameRegistry.registerItem(clayBucketSaltWater, clayBucketSaltWater.getUnlocalizedName());
+		GameRegistry.registerItem(clayBucketMilk, clayBucketMilk.getUnlocalizedName());
+		GameRegistry.registerItem(clayBucketPlaster, clayBucketPlaster.getUnlocalizedName());
+		GameRegistry.registerItem(clayBucketGypsum, clayBucketGypsum.getUnlocalizedName());
 
 		GameRegistry.registerItem(bismuthBronzeKnifeHead, bismuthBronzeKnifeHead.getUnlocalizedName());
 		GameRegistry.registerItem(blackBronzeKnifeHead, blackBronzeKnifeHead.getUnlocalizedName());
@@ -1490,6 +1559,7 @@ public class TFCItems
 		GameRegistry.registerItem(woolPants, woolPants.getUnlocalizedName());
 		GameRegistry.registerItem(woolShirt, woolShirt.getUnlocalizedName());
 		GameRegistry.registerItem(woolCoat, woolCoat.getUnlocalizedName());
+		GameRegistry.registerItem(woolRobe, woolRobe.getUnlocalizedName());
 		GameRegistry.registerItem(woolHat, woolHat.getUnlocalizedName());
 		
 		//Linen
@@ -1497,6 +1567,7 @@ public class TFCItems
 		GameRegistry.registerItem(linenPants, linenPants.getUnlocalizedName());
 		GameRegistry.registerItem(linenShirt, linenShirt.getUnlocalizedName());
 		GameRegistry.registerItem(linenCoat, linenCoat.getUnlocalizedName());
+		GameRegistry.registerItem(linenRobe, linenRobe.getUnlocalizedName());
 		GameRegistry.registerItem(linenHat, linenHat.getUnlocalizedName());
 		
 		//Silk
@@ -1504,6 +1575,7 @@ public class TFCItems
 		GameRegistry.registerItem(silkPants, silkPants.getUnlocalizedName());
 		GameRegistry.registerItem(silkShirt, silkShirt.getUnlocalizedName());
 		GameRegistry.registerItem(silkCoat, silkCoat.getUnlocalizedName());
+		GameRegistry.registerItem(silkRobe, silkRobe.getUnlocalizedName());
 		GameRegistry.registerItem(silkHat, silkHat.getUnlocalizedName());
 		
 		//Fur
@@ -1518,9 +1590,11 @@ public class TFCItems
 		//Straw
 		GameRegistry.registerItem(grassShirt, grassShirt.getUnlocalizedName());
 		GameRegistry.registerItem(strawHat, strawHat.getUnlocalizedName());
+		GameRegistry.registerItem(strawHat2, strawHat2.getUnlocalizedName());
 		GameRegistry.registerItem(grassSkirt, grassSkirt.getUnlocalizedName());
 		GameRegistry.registerItem(grassSandals, grassSandals.getUnlocalizedName());
 		GameRegistry.registerItem(strawBasket, strawBasket.getUnlocalizedName());
+		GameRegistry.registerItem(grassCoat, grassCoat.getUnlocalizedName());
 		
 		//Leather
 		GameRegistry.registerItem(leatherSandals, leatherSandals.getUnlocalizedName());
@@ -1555,7 +1629,17 @@ public class TFCItems
 		GameRegistry.registerItem(doorWillow, doorWillow.getUnlocalizedName());
 		GameRegistry.registerItem(doorKapok, doorKapok.getUnlocalizedName());
 		GameRegistry.registerItem(doorAcacia, doorAcacia.getUnlocalizedName());
-
+		GameRegistry.registerItem(doorPalm, doorPalm.getUnlocalizedName());
+		GameRegistry.registerItem(doorEbony, doorEbony.getUnlocalizedName());
+		GameRegistry.registerItem(doorFever, doorFever.getUnlocalizedName());
+		GameRegistry.registerItem(doorBaobab, doorBaobab.getUnlocalizedName());
+		GameRegistry.registerItem(doorLimba, doorLimba.getUnlocalizedName());
+		GameRegistry.registerItem(doorMahogany, doorMahogany.getUnlocalizedName());
+		GameRegistry.registerItem(doorTeak, doorTeak.getUnlocalizedName());
+		GameRegistry.registerItem(doorBamboo, doorBamboo.getUnlocalizedName());
+		GameRegistry.registerItem(doorGingko, doorGingko.getUnlocalizedName());
+		GameRegistry.registerItem(doorFruitwood, doorFruitwood.getUnlocalizedName());
+		
 		GameRegistry.registerItem(glassBottle, glassBottle.getUnlocalizedName());
 		GameRegistry.registerItem(waterBottle, waterBottle.getUnlocalizedName());
 		GameRegistry.registerItem(beer, beer.getUnlocalizedName());
@@ -1565,6 +1649,7 @@ public class TFCItems
 		GameRegistry.registerItem(sake, sake.getUnlocalizedName());
 		GameRegistry.registerItem(vodka, vodka.getUnlocalizedName());
 		GameRegistry.registerItem(berryWine, berryWine.getUnlocalizedName());
+		GameRegistry.registerItem(wine, wine.getUnlocalizedName());
 		GameRegistry.registerItem(whiskey, whiskey.getUnlocalizedName());
 		GameRegistry.registerItem(cornWhiskey, cornWhiskey.getUnlocalizedName());
 
@@ -1587,7 +1672,7 @@ public class TFCItems
 		GameRegistry.registerItem(stoneBrick , stoneBrick.getUnlocalizedName());
 
 		GameRegistry.registerItem(mortar , mortar.getUnlocalizedName());
-		GameRegistry.registerItem(vinegar , vinegar.getUnlocalizedName());
+		GameRegistry.registerItem(woodenBucketVinegar , woodenBucketVinegar.getUnlocalizedName());
 
 		GameRegistry.registerItem(hide , hide.getUnlocalizedName());
 		GameRegistry.registerItem(soakedHide , soakedHide.getUnlocalizedName());
@@ -1605,6 +1690,11 @@ public class TFCItems
 		GameRegistry.registerItem(straw , straw.getUnlocalizedName());
 		GameRegistry.registerItem(flatClay , flatClay.getUnlocalizedName());
 		
+		
+		GameRegistry.registerItem(lyre, lyre.getUnlocalizedName());
+		GameRegistry.registerItem(boneFlute, boneFlute.getUnlocalizedName());
+		GameRegistry.registerItem(hollowBone,hollowBone.getUnlocalizedName());
+		
 		GameRegistry.registerItem(boneNeedle, boneNeedle.getUnlocalizedName());
 		GameRegistry.registerItem(ironNeedle, ironNeedle.getUnlocalizedName());
 		
@@ -1618,6 +1708,7 @@ public class TFCItems
 		//GameRegistry.registerItem(PotteryPot , PotteryPot.getUnlocalizedName());
 
 		GameRegistry.registerItem(ceramicMold , ceramicMold.getUnlocalizedName());
+		GameRegistry.registerItem(clayTile, clayTile.getUnlocalizedName());
 		GameRegistry.registerItem(fireBrick , fireBrick.getUnlocalizedName());
 		
 		GameRegistry.registerItem(clayMoldSheet, clayMoldSheet.getUnlocalizedName());
@@ -1638,6 +1729,12 @@ public class TFCItems
 		GameRegistry.registerItem(clayMoldSword , clayMoldSword.getUnlocalizedName());
 		GameRegistry.registerItem(clayMoldJavelin , clayMoldJavelin.getUnlocalizedName());
 
+		GameRegistry.registerItem(brassTube, brassTube.getUnlocalizedName());
+		GameRegistry.registerItem(brassHorn, brassHorn.getUnlocalizedName());
+		GameRegistry.registerItem(horn, horn.getUnlocalizedName());
+		GameRegistry.registerItem(blowingHorn, blowingHorn.getUnlocalizedName());
+		GameRegistry.registerItem(conchHorn, conchHorn.getUnlocalizedName());
+		
 		GameRegistry.registerItem(tuyereCopper , tuyereCopper.getUnlocalizedName());
 		GameRegistry.registerItem(tuyereBronze , tuyereBronze.getUnlocalizedName());
 		GameRegistry.registerItem(tuyereBlackBronze , tuyereBlackBronze.getUnlocalizedName());
@@ -1669,6 +1766,9 @@ public class TFCItems
 		GameRegistry.registerItem(bone, bone.getUnlocalizedName());
 		GameRegistry.registerItem(boneFragment, boneFragment.getUnlocalizedName());
 		GameRegistry.registerItem(bow, bow.getUnlocalizedName());
+		GameRegistry.registerItem(unstrungBow, unstrungBow.getUnlocalizedName());
+		GameRegistry.registerItem(pole, pole.getUnlocalizedName());
+		GameRegistry.registerItem(woodenSpear, woodenSpear.getUnlocalizedName());
 		GameRegistry.registerItem(arrow, arrow.getUnlocalizedName());
 		GameRegistry.registerItem(dye, dye.getUnlocalizedName());
 		GameRegistry.registerItem(rope, rope.getUnlocalizedName());
@@ -1699,6 +1799,8 @@ public class TFCItems
 		GameRegistry.registerItem(cherry, cherry.getUnlocalizedName());
 		GameRegistry.registerItem(peach, peach.getUnlocalizedName());
 		GameRegistry.registerItem(plum, plum.getUnlocalizedName());
+		GameRegistry.registerItem(papaya, papaya.getUnlocalizedName());
+		GameRegistry.registerItem(date, date.getUnlocalizedName());
 		GameRegistry.registerItem(egg, egg.getUnlocalizedName());
 		GameRegistry.registerItem(eggCooked, eggCooked.getUnlocalizedName());
 		GameRegistry.registerItem(wheatGrain, wheatGrain.getUnlocalizedName());
@@ -1714,6 +1816,7 @@ public class TFCItems
 		GameRegistry.registerItem(mushroomFoodB, mushroomFoodB.getUnlocalizedName());
 		GameRegistry.registerItem(mushroomFoodR, mushroomFoodR.getUnlocalizedName());
 		GameRegistry.registerItem(pumpkinGuts, pumpkinGuts.getUnlocalizedName());
+		GameRegistry.registerItem(melonSlice, melonSlice.getUnlocalizedName());
 		GameRegistry.registerItem(pumpkinShell, pumpkinShell.getUnlocalizedName());
 		GameRegistry.registerItem(garlic, garlic.getUnlocalizedName());
 		GameRegistry.registerItem(carrot, carrot.getUnlocalizedName());
@@ -1721,10 +1824,12 @@ public class TFCItems
 		//GameRegistry.registerItem(Hemp, Hemp.getUnlocalizedName());
 		GameRegistry.registerItem(soybean, soybean.getUnlocalizedName());
 		GameRegistry.registerItem(greenbeans, greenbeans.getUnlocalizedName());
+		GameRegistry.registerItem(blackEyedPeas, blackEyedPeas.getUnlocalizedName());
 		GameRegistry.registerItem(greenBellPepper, greenBellPepper.getUnlocalizedName());
 		GameRegistry.registerItem(yellowBellPepper, yellowBellPepper.getUnlocalizedName());
 		GameRegistry.registerItem(redBellPepper, redBellPepper.getUnlocalizedName());
 		GameRegistry.registerItem(squash, squash.getUnlocalizedName());
+		GameRegistry.registerItem(grapes, grapes.getUnlocalizedName());
 		GameRegistry.registerItem(cheese, cheese.getUnlocalizedName());
 		GameRegistry.registerItem(wheatWhole, wheatWhole.getUnlocalizedName());
 		GameRegistry.registerItem(barleyWhole, barleyWhole.getUnlocalizedName());
@@ -1768,12 +1873,16 @@ public class TFCItems
 		GameRegistry.registerItem(seedsRedBellPepper, seedsRedBellPepper.getUnlocalizedName());
 		GameRegistry.registerItem(seedsSoybean, seedsSoybean.getUnlocalizedName());
 		GameRegistry.registerItem(seedsGreenbean, seedsGreenbean.getUnlocalizedName());
+		GameRegistry.registerItem(seedsBlackEyedPeas, seedsBlackEyedPeas.getUnlocalizedName());
 		GameRegistry.registerItem(seedsSquash, seedsSquash.getUnlocalizedName());
 		GameRegistry.registerItem(seedsJute, seedsJute.getUnlocalizedName());
 		GameRegistry.registerItem(seedsFlax, seedsFlax.getUnlocalizedName());
 		GameRegistry.registerItem(seedsMadder, seedsMadder.getUnlocalizedName());
 		GameRegistry.registerItem(seedsWeld, seedsWeld.getUnlocalizedName());
 		GameRegistry.registerItem(seedsWoad, seedsWoad.getUnlocalizedName());
+		GameRegistry.registerItem(seedsPumpkin, seedsPumpkin.getUnlocalizedName());
+		GameRegistry.registerItem(seedsMelon, seedsMelon.getUnlocalizedName());
+		GameRegistry.registerItem(seedsGrapes, seedsGrapes.getUnlocalizedName());
 		GameRegistry.registerItem(muttonRaw, muttonRaw.getUnlocalizedName());
 		GameRegistry.registerItem(venisonRaw, venisonRaw.getUnlocalizedName());
 		GameRegistry.registerItem(horseMeatRaw, horseMeatRaw.getUnlocalizedName());

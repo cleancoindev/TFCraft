@@ -2,6 +2,7 @@ package com.dunk.tfc.Render.Blocks;
 
 import org.lwjgl.opengl.GL11;
 
+import com.dunk.tfc.Render.RenderBlocksWithRotation;
 import com.dunk.tfc.TileEntities.TEBarrel;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -21,7 +22,8 @@ public class RenderBasket implements ISimpleBlockRenderingHandler
 	{
 		TEBarrel te = (TEBarrel) world.getTileEntity(x, y, z);
 		renderer.renderAllFaces = true;
-
+		
+		
 		if((te.rotation & -128) == 0)
 		{
 			if(te.getSealed())
@@ -83,7 +85,7 @@ public class RenderBasket implements ISimpleBlockRenderingHandler
 				renderer.renderStandardBlock(block, x, y, z);
 			}
 		}
-
+	
 
 		renderer.renderAllFaces = false;
 

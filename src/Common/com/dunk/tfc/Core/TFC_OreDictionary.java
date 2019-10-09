@@ -656,19 +656,23 @@ public class TFC_OreDictionary
 
 		OreDictionary.registerOre("bucketEmpty", new ItemStack(Items.bucket));
 		OreDictionary.registerOre("bucketEmpty", new ItemStack(TFCItems.woodenBucketEmpty));
+		OreDictionary.registerOre("bucketEmpty", new ItemStack(TFCItems.clayBucketEmpty));
 		OreDictionary.registerOre("bucketEmpty", new ItemStack(TFCItems.redSteelBucketEmpty));
 		OreDictionary.registerOre("bucketEmpty", new ItemStack(TFCItems.blueSteelBucketEmpty));
 
 		OreDictionary.registerOre("bucketWater", new ItemStack(Items.water_bucket));
 		OreDictionary.registerOre("bucketWater", new ItemStack(TFCItems.woodenBucketWater, 1, WILD));
+		OreDictionary.registerOre("bucketWater", new ItemStack(TFCItems.clayBucketWater, 1, WILD));
 		OreDictionary.registerOre("bucketWater", new ItemStack(TFCItems.redSteelBucketWater, 1, WILD));
 		OreDictionary.registerOre("bucketWater", new ItemStack(TFCItems.woodenBucketSaltWater, 1, WILD));
 		OreDictionary.registerOre("bucketWater", new ItemStack(TFCItems.redSteelBucketSaltWater, 1, WILD));
 
 		OreDictionary.registerOre("bucketFreshWater", new ItemStack(TFCItems.woodenBucketWater, 1, WILD));
+		OreDictionary.registerOre("bucketFreshWater", new ItemStack(TFCItems.clayBucketWater, 1, WILD));
 		OreDictionary.registerOre("bucketFreshWater", new ItemStack(TFCItems.redSteelBucketWater, 1, WILD));
 
 		OreDictionary.registerOre("bucketSaltWater", new ItemStack(TFCItems.woodenBucketSaltWater, 1, WILD));
+		OreDictionary.registerOre("bucketSaltWater", new ItemStack(TFCItems.clayBucketSaltWater, 1, WILD));
 		OreDictionary.registerOre("bucketSaltWater", new ItemStack(TFCItems.redSteelBucketSaltWater, 1, WILD));
 
 		OreDictionary.registerOre("bucketLava", new ItemStack(Items.lava_bucket));
@@ -676,6 +680,7 @@ public class TFC_OreDictionary
 
 		OreDictionary.registerOre("bucketMilk", new ItemStack(Items.milk_bucket));
 		OreDictionary.registerOre("bucketMilk", new ItemStack(TFCItems.woodenBucketMilk));
+		OreDictionary.registerOre("bucketMilk", new ItemStack(TFCItems.clayBucketMilk));
 
 		OreDictionary.registerOre("toolFlintSteel", new ItemStack(Items.flint_and_steel, 1, WILD));
 		OreDictionary.registerOre("toolFlintSteel", new ItemStack(TFCItems.flintSteel, 1, WILD));

@@ -303,7 +303,7 @@ public class EntityWolfTFC extends EntityWolf implements IAnimal, IInnateArmor, 
 	}
 
 	@Override
-	public EnumDamageType getDamageType()
+	public EnumDamageType getDamageType(EntityLivingBase is)
 	{
 		return EnumDamageType.SLASHING;
 	}

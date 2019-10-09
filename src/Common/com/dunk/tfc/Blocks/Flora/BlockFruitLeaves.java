@@ -29,22 +29,23 @@ import net.minecraft.world.World;
 
 public class BlockFruitLeaves extends BlockTerraContainer
 {
-	//private int adjacentTreeBlocks[];
+	// private int adjacentTreeBlocks[];
 	private String[] woodNames = Global.FRUIT_META_NAMES;
 	private IIcon[] icons = new IIcon[16];
-	//private IIcon[] iconsDead = new IIcon[16];
+	// private IIcon[] iconsDead = new IIcon[16];
 	public static IIcon[] iconsFruit = new IIcon[16];
+	public static IIcon[] sapIcons = new IIcon[16];
 	private IIcon[] iconsOpaque = new IIcon[16];
-	//private IIcon[] iconsDeadOpaque = new IIcon[16];
+	// private IIcon[] iconsDeadOpaque = new IIcon[16];
 	public static IIcon[] iconsFlowers = new IIcon[16];
 
-	//private int offset;
+	// private int offset;
 
 	public BlockFruitLeaves(int offset)
 	{
 		super(Material.leaves);
 		this.setTickRandomly(true);
-		//this.offset = offset;
+		// this.offset = offset;
 	}
 
 	@Override
@@ -79,18 +80,32 @@ public class BlockFruitLeaves extends BlockTerraContainer
 		else
 			return iconsOpaque[meta & 7];
 	}
+	
+	public static IIcon getSaplingIcon(int meta)
+	{
+		return sapIcons[meta];
+	}
 
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegisterer)
 	{
-		for(int i = 0; i < 9; i++)
+		for (int i = 0; i < 9; i++)
 		{
-			icons[i] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "wood/fruit trees/" + woodNames[i] + " Leaves");
-			iconsOpaque[i] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "wood/fruit trees/" + woodNames[i] + " Leaves Opaque");
-			//iconsDead[i] = iconRegisterer.registerIcon(Reference.ModID + ":" + "wood/fruit trees/" + WoodNames[i] + " Leaves");
-			//iconsDeadOpaque[i] = iconRegisterer.registerIcon(Reference.ModID + ":" + "wood/fruit trees/" + WoodNames[i] + " Leaves Opaque");
-			iconsFruit[i] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "wood/fruit trees/" + woodNames[i] + " Fruit");
-			iconsFlowers[i] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "wood/fruit trees/" + woodNames[i] + " Flowers");
+			icons[i] = iconRegisterer
+					.registerIcon(Reference.MOD_ID + ":" + "wood/fruit trees/" + woodNames[i] + " Leaves");
+			
+			sapIcons[i] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "wood/fruit trees/" + woodNames[i] + " Sapling");
+			
+			iconsOpaque[i] = iconRegisterer
+					.registerIcon(Reference.MOD_ID + ":" + "wood/fruit trees/" + woodNames[i] + " Leaves Opaque");
+			// iconsDead[i] = iconRegisterer.registerIcon(Reference.ModID + ":"
+			// + "wood/fruit trees/" + WoodNames[i] + " Leaves");
+			// iconsDeadOpaque[i] = iconRegisterer.registerIcon(Reference.ModID
+			// + ":" + "wood/fruit trees/" + WoodNames[i] + " Leaves Opaque");
+			iconsFruit[i] = iconRegisterer
+					.registerIcon(Reference.MOD_ID + ":" + "wood/fruit trees/" + woodNames[i] + " Fruit");
+			iconsFlowers[i] = iconRegisterer
+					.registerIcon(Reference.MOD_ID + ":" + "wood/fruit trees/" + woodNames[i] + " Flowers");
 		}
 	}
 
@@ -114,66 +129,40 @@ public class BlockFruitLeaves extends BlockTerraContainer
 
 	private void lifeCycle(World world, int x, int y, int z)
 	{
-		if(!world.isRemote)
+		if (!world.isRemote)
 		{
 			if (!canStay(world, x, y, z))
 			{
 				destroyLeaves(world, x, y, z);
 				return;
 			}
-
+			TEFruitLeaves te = (TEFruitLeaves) world.getTileEntity(x, y, z);
 			Random rand = new Random();
-			int meta = world.getBlockMetadata(x, y, z);
-			int m = meta - 8;
+			int fruitType = te.fruitType;
 
 			FloraManager manager = FloraManager.getInstance();
-			FloraIndex fi = manager.findMatchingIndex(getType(this, m));
-			FloraIndex fi2 = manager.findMatchingIndex(getType(this, meta));
+			FloraIndex fi = manager.findMatchingIndex(getType(this, fruitType));
 
 			float temp = TFC_Climate.getHeightAdjustedTemp(world, x, y, z);
-			TEFruitLeaves te = (TEFruitLeaves) world.getTileEntity(x, y, z);
-			if(te != null)
-			{
-				if(fi2 != null)
-				{
-					if(temp >= fi2.minTemp && temp < fi2.maxTemp)
-					{
-						if (fi2.inHarvest(TFC_Time.getSeasonAdjustedMonth(z)) && !te.hasFruit && TFC_Time.getMonthsSinceDay(te.dayHarvested) > 1)
-						{
-							if(meta < 8)
-							{
-								meta += 8;
-								te.hasFruit = true;
-								te.dayFruited = TFC_Time.getTotalDays();
-							}
-							world.setBlockMetadataWithNotify(x, y, z, meta, 0x2);
-						}
-					}
-					else
-					{
-						if(meta >= 8 && rand.nextInt(10) == 0)
-						{
-							if(te.hasFruit)
-							{
-								te.hasFruit = false;
-								world.setBlockMetadataWithNotify(x, y, z, meta - 8, 0x2);
-							}
-						}
-					}
-				}
 
-				if(fi != null)
+			if (te != null)
+			{
+				if (fi != null)
 				{
-					if(!fi.inHarvest(TFC_Time.getSeasonAdjustedMonth(z)))
+					if (!fi.inHarvest(TFC_Time.getSeasonAdjustedMonth(z)))
 					{
-						if(world.getBlockMetadata(x, y, z) >= 8)
+						if (te.hasFruit)
 						{
-							if(te.hasFruit)
-							{
-								te.hasFruit = false;
-								world.setBlockMetadataWithNotify(x, y, z, meta-8, 0x2); 
-							}
+							te.hasFruit = false;
+							world.setBlockMetadataWithNotify(x, y, z, 10, 0x2);
 						}
+
+					}
+					else if(fi.inHarvest(TFC_Time.getSeasonAdjustedMonth(z)) && !te.hasFruit && TFC_Time.getMonthsSinceDay(te.dayHarvested) > 1)
+					{
+						te.hasFruit = true;
+						te.dayFruited = TFC_Time.getTotalDays();
+						world.setBlockMetadataWithNotify(x, y, z, 10, 0x2);
 					}
 				}
 
@@ -185,15 +174,23 @@ public class BlockFruitLeaves extends BlockTerraContainer
 
 	public static boolean canStay(World world, int x, int y, int z)
 	{
-		//Only leaf blocks that are within one block and on the same level or 1 above a branch or the top of the trunk
+		// Only leaf blocks that are within one block and on the same level or 1
+		// above a branch or the top of the trunk
 		for (int i = 1; i >= -1; i--)
 		{
 			for (int j = 0; j >= -1; j--)
 			{
 				for (int k = 1; k >= -1; k--)
 				{
-					if (world.getBlock(i + x, j + y, k + z) == TFCBlocks.fruitTreeWood &&
-							world.getBlock(i + x, j + y + 1, k + z) != TFCBlocks.fruitTreeWood) // Only branches or the top of the trunk
+					if (world.getBlock(i + x, j + y, k + z) == TFCBlocks.fruitTreeWood && world.getBlock(i + x,
+							j + y + 1, k + z) != TFCBlocks.fruitTreeWood) // Only
+																			// branches
+																			// or
+																			// the
+																			// top
+																			// of
+																			// the
+																			// trunk
 						return true;
 				}
 			}
@@ -204,25 +201,34 @@ public class BlockFruitLeaves extends BlockTerraContainer
 
 	public static String getType(Block block, int meta)
 	{
-		if(block == TFCBlocks.fruitTreeLeaves)
+		if (block == TFCBlocks.fruitTreeLeaves)
 		{
-			switch(meta)
+			switch (meta)
 			{
-			case 0: return Global.FRUIT_META_NAMES[0];
-			case 1: return Global.FRUIT_META_NAMES[1];
-			case 2: return Global.FRUIT_META_NAMES[2];
-			case 3: return Global.FRUIT_META_NAMES[3];
-			case 4: return Global.FRUIT_META_NAMES[4];
-			case 5: return Global.FRUIT_META_NAMES[5];
-			case 6: return Global.FRUIT_META_NAMES[6];
-			case 7: return Global.FRUIT_META_NAMES[7];
+			case 0:
+				return Global.FRUIT_META_NAMES[0];
+			case 1:
+				return Global.FRUIT_META_NAMES[1];
+			case 2:
+				return Global.FRUIT_META_NAMES[2];
+			case 3:
+				return Global.FRUIT_META_NAMES[3];
+			case 4:
+				return Global.FRUIT_META_NAMES[4];
+			case 5:
+				return Global.FRUIT_META_NAMES[5];
+			case 6:
+				return Global.FRUIT_META_NAMES[6];
+			case 7:
+				return Global.FRUIT_META_NAMES[7];
 			}
 		}
 		else
 		{
-			switch(meta)
+			switch (meta)
 			{
-			case 0: return Global.FRUIT_META_NAMES[8];
+			case 0:
+				return Global.FRUIT_META_NAMES[8];
 			}
 		}
 		return "";
@@ -256,7 +262,8 @@ public class BlockFruitLeaves extends BlockTerraContainer
 			FloraManager manager = FloraManager.getInstance();
 			FloraIndex fi = manager.findMatchingIndex(getType(this, world.getBlockMetadata(x, y, z) & 7));
 
-			if (fi != null && (fi.inHarvest(TFC_Time.getSeasonAdjustedMonth(z)) || fi.inHarvest((TFC_Time.getSeasonAdjustedMonth(z) + 11) % 12) && (meta & 8) == 8))
+			if (fi != null && (fi.inHarvest(TFC_Time.getSeasonAdjustedMonth(z)) || fi
+					.inHarvest((TFC_Time.getSeasonAdjustedMonth(z) + 11) % 12) && (meta & 8) == 8))
 			{
 				TEFruitLeaves te = (TEFruitLeaves) world.getTileEntity(x, y, z);
 				if (te != null && te.hasFruit)
@@ -264,7 +271,8 @@ public class BlockFruitLeaves extends BlockTerraContainer
 					te.hasFruit = false;
 					te.dayHarvested = TFC_Time.getTotalDays();
 					world.setBlockMetadataWithNotify(x, y, z, meta - 8, 3);
-					dropBlockAsItem(world, x, y, z, ItemFoodTFC.createTag(fi.getOutput(), Helper.roundNumber(4 + (world.rand.nextFloat() * 12), 10)));
+					dropBlockAsItem(world, x, y, z, ItemFoodTFC.createTag(fi.getOutput(),
+							Helper.roundNumber(4 + (world.rand.nextFloat() * 12), 10)));
 				}
 			}
 		}
@@ -272,23 +280,26 @@ public class BlockFruitLeaves extends BlockTerraContainer
 
 	/* Right-Click Harvest Fruit */
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int side, float hitX,
+			float hitY, float hitZ)
 	{
-		if(!world.isRemote)
+		if (!world.isRemote)
 		{
 			int meta = world.getBlockMetadata(x, y, z);
 			FloraManager manager = FloraManager.getInstance();
 			FloraIndex fi = manager.findMatchingIndex(getType(this, world.getBlockMetadata(x, y, z) & 7));
 
-			if (fi != null && (fi.inHarvest(TFC_Time.getSeasonAdjustedMonth(z)) || fi.inHarvest((TFC_Time.getSeasonAdjustedMonth(z) + 11) % 12) && (meta & 8) == 8))
+			if (fi != null && (fi.inHarvest(TFC_Time.getSeasonAdjustedMonth(z)) || fi
+					.inHarvest((TFC_Time.getSeasonAdjustedMonth(z) + 11) % 12) && (meta & 8) == 8))
 			{
 				TEFruitLeaves te = (TEFruitLeaves) world.getTileEntity(x, y, z);
-				if(te != null && te.hasFruit)
+				if (te != null && te.hasFruit)
 				{
 					te.hasFruit = false;
 					te.dayHarvested = TFC_Time.getTotalDays();
 					world.setBlockMetadataWithNotify(x, y, z, meta - 8, 3);
-					dropBlockAsItem(world, x, y, z, ItemFoodTFC.createTag(fi.getOutput(), Helper.roundNumber(4 + (world.rand.nextFloat() * 12), 10)));
+					dropBlockAsItem(world, x, y, z, ItemFoodTFC.createTag(fi.getOutput(),
+							Helper.roundNumber(4 + (world.rand.nextFloat() * 12), 10)));
 					return true;
 				}
 			}

@@ -137,7 +137,6 @@ public class ContainerBarrel extends ContainerTFC
 	public void detectAndSendChanges()
 	{
 		super.detectAndSendChanges();
-
 		for (int var1 = 0; var1 < this.crafters.size() && guiTab == 0; ++var1)
 		{
 			ICrafting var2 = (ICrafting)this.crafters.get(var1);
@@ -153,6 +152,7 @@ public class ContainerBarrel extends ContainerTFC
 				var2.sendProgressBarUpdate(this, 1, this.barrel.getFluidLevel());
 			}
 		}
+	//	barrel.getWorldObj().markBlockForUpdate(barrel.xCoord, barrel.yCoord, barrel.zCoord);
 	}
 
 	@Override

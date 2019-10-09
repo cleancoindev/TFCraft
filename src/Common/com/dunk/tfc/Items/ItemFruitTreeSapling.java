@@ -3,10 +3,12 @@ package com.dunk.tfc.Items;
 import java.util.List;
 
 import com.dunk.tfc.Reference;
+import com.dunk.tfc.Blocks.Flora.BlockBranch;
 import com.dunk.tfc.Core.TFCTabs;
 import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.TileEntities.TEFruitTreeWood;
 import com.dunk.tfc.api.TFCBlocks;
+import com.dunk.tfc.api.TFCOptions;
 import com.dunk.tfc.api.Constant.Global;
 
 import cpw.mods.fml.relauncher.Side;
@@ -37,23 +39,23 @@ public class ItemFruitTreeSapling extends ItemTerra
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
 	{
 		//int meta = MathHelper.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
-		if(side == 1 && world.getBlock(x, y, z).isNormalCube() && world.getBlock(x, y, z).isOpaqueCube() &&
-				TFC_Core.isSoil(world.getBlock(x, y, z)) &&
+		if(side == 1 && ((world.getBlock(x, y, z).isNormalCube() && world.getBlock(x, y, z).isOpaqueCube() &&
+				(TFC_Core.isSoil(world.getBlock(x, y, z))) || (stack.getItemDamage()==10 && TFC_Core.isSand(world.getBlock(x, y, z)))) || (world.getBlock(x, y, z) instanceof BlockBranch && TFCOptions.enableDebugMode)) &&
 				world.isAirBlock(x, y + 1, z) && !world.isRemote)
 		{
 
 			int damage = stack.getItemDamage();
 			if (damage >= metaNames.length)
 			{
-				damage -= 8;
 				stack.setItemDamage(damage);
 			}
-			world.setBlock(x, y + 1, z, TFCBlocks.fruitTreeWood, damage, 0x2);
-
+			world.setBlock(x, y + 1, z, TFCBlocks.branchEnd2__y_, 10, 0x2);
+			((TEFruitTreeWood)world.getTileEntity(x, y + 1, z)).fruitType = damage;
 			((TEFruitTreeWood)world.getTileEntity(x, y + 1, z)).setTrunk(true);
 			((TEFruitTreeWood)world.getTileEntity(x, y + 1, z)).setHeight(0);
 			((TEFruitTreeWood)world.getTileEntity(x, y + 1, z)).initBirth();
-
+			((TEFruitTreeWood)world.getTileEntity(x, y + 1, z)).broadcastPacketInRange();
+			world.markBlockForUpdate(x, y+1, z);
 			stack.stackSize = stack.stackSize - 1;
 			return true;
 		}

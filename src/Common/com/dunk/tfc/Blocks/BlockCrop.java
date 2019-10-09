@@ -55,7 +55,11 @@ public class BlockCrop extends BlockContainer
 	private IIcon[] iconsMadder = new IIcon[5];
 	private IIcon[] iconsWeld = new IIcon[5];
 	private IIcon[] iconsWoad = new IIcon[6];
-
+	private IIcon[] iconsPumpkin = new IIcon[5];
+	private IIcon[] iconsGrapesLadder = new IIcon[9];
+	private IIcon[] iconsGrapes = new IIcon[9];
+	private IIcon[] iconsBlackEyedPeas = new IIcon[7];
+	
 	public IIcon iconInfest;
 
 	public BlockCrop()
@@ -73,14 +77,15 @@ public class BlockCrop extends BlockContainer
 	@Override
 	public void registerBlockIcons(IIconRegister register)
 	{
-		for(int i = 1; i < 6; i++)
+		for (int i = 1; i < 6; i++)
 		{
 			iconsCarrots[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Carrots (" + i + ")");
 			iconsGarlic[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Garlic (" + i + ")");
-			iconsMadder[i-1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Madder (" + i + ")");
-			iconsWeld[i-1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Weld (" + i + ")");
+			iconsMadder[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Madder (" + i + ")");
+			iconsWeld[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Weld (" + i + ")");
+			iconsPumpkin[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Pumpkin (" + i + ")");
 		}
-		for(int i = 1; i < 7; i++)
+		for (int i = 1; i < 7; i++)
 		{
 			iconsCorn[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Corn (" + i + ")");
 			iconsCabbage[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Cabbage (" + i + ")");
@@ -88,17 +93,22 @@ public class BlockCrop extends BlockContainer
 			iconsFlax[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Flax (" + i + ")");
 			iconsWoad[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Woad (" + i + ")");
 		}
-		for(int i = 1; i < 8; i++)
+		for (int i = 1; i < 8; i++)
 		{
-			iconsPepperRed[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/PepperRed (" + i + ")");
-			iconsPepperYellow[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/PepperYellow (" + i + ")");
-			iconsGreenbean[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Greenbean (" + i + ")");
+			iconsPepperRed[i - 1] = register
+					.registerIcon(Reference.MOD_ID + ":" + "plants/crops/PepperRed (" + i + ")");
+			iconsPepperYellow[i - 1] = register
+					.registerIcon(Reference.MOD_ID + ":" + "plants/crops/PepperYellow (" + i + ")");
+			iconsGreenbean[i - 1] = register
+					.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Greenbean (" + i + ")");
+			iconsBlackEyedPeas[i - 1] = register
+					.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Black-Eyed Peas (" + i + ")");
 			iconsOnion[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Onion (" + i + ")");
 			iconsPotato[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Potato (" + i + ")");
 			iconsSquash[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Squash (" + i + ")");
 			iconsSoybean[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Soybean (" + i + ")");
 		}
-		for(int i = 1; i < 9; i++)
+		for (int i = 1; i < 9; i++)
 		{
 			iconsTomato[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Tomato (" + i + ")");
 			iconsWheat[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Wheat (" + i + ")");
@@ -106,7 +116,13 @@ public class BlockCrop extends BlockContainer
 			iconsBarley[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Barley (" + i + ")");
 			iconsOat[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Oat (" + i + ")");
 			iconsRice[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Rice (" + i + ")");
-			iconsSugarcane[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Sugarcane (" + i + ")");
+			iconsSugarcane[i - 1] = register
+					.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Sugarcane (" + i + ")");
+		}
+		for (int i = 1; i < 10; i++)
+		{
+			iconsGrapesLadder[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Grapes Ladder (" + i + ")");
+			iconsGrapes[i - 1] = register.registerIcon(Reference.MOD_ID + ":" + "plants/crops/Grapes (" + i + ")");
 		}
 
 		iconInfest = register.registerIcon(Reference.MOD_ID + ":bugs");
@@ -118,12 +134,12 @@ public class BlockCrop extends BlockContainer
 	{
 		TECrop te = (TECrop) access.getTileEntity(x, y, z);
 		CropIndex crop = CropManager.getInstance().getCropFromId(te.cropId);
-
+		boolean farmland = access.getBlock(x,y-1,z) instanceof BlockFarmland;
 		int stage = (int) Math.floor(te.growth);
-		if(stage > crop.numGrowthStages)
+		if (stage > crop.numGrowthStages)
 			stage = crop.numGrowthStages;
 
-		switch(te.cropId)
+		switch (te.cropId)
 		{
 		case 0:
 			return iconsWheat[stage];
@@ -131,46 +147,54 @@ public class BlockCrop extends BlockContainer
 			return iconsCorn[stage];
 		case 2:
 			return iconsTomato[stage];
-		case 3://Barley
+		case 3:// Barley
 			return iconsBarley[stage];
-		case 4://Rye
+		case 4:// Rye
 			return iconsRye[stage];
-		case 5://Oat
+		case 5:// Oat
 			return iconsOat[stage];
-		case 6://Rice
+		case 6:// Rice
 			return iconsRice[stage];
-		case 7://Potato
+		case 7:// Potato
 			return iconsPotato[stage];
-		case 8://Onion
+		case 8:// Onion
 			return iconsOnion[stage];
-		case 9://Cabbage
+		case 9:// Cabbage
 			return iconsCabbage[stage];
-		case 10://Garlic
+		case 10:// Garlic
 			return iconsGarlic[stage];
-		case 11://Carrots
+		case 11:// Carrots
 			return iconsCarrots[stage];
-		case 12://Yellow Bell
+		case 12:// Yellow Bell
 			return iconsPepperYellow[stage];
-		case 13://Red Bell
+		case 13:// Red Bell
 			return iconsPepperRed[stage];
-		case 14://Soybean
+		case 14:// Soybean
 			return iconsSoybean[stage];
-		case 15://Greenbean
+		case 15:// Greenbean
 			return iconsGreenbean[stage];
-		case 16://Squash
+		case 16:// Squash
 			return iconsSquash[stage];
-		case 17://Jute
+		case 17:// Jute
 			return iconsJute[stage];
-		case 18://Sugarcane
+		case 18:// Sugarcane
 			return iconsSugarcane[stage];
-		case 19://Flax
+		case 19:// Flax
 			return iconsFlax[stage];
-		case 20://Madder
+		case 20:// Madder
 			return iconsMadder[stage];
-		case 21://Weld
+		case 21:// Weld
 			return iconsWeld[stage];
-		case 22://Woad
+		case 22:// Woad
 			return iconsWoad[stage];
+		case 23:
+			return iconsPumpkin[stage];
+		case 24:
+			return iconsPumpkin[stage];
+		case 25:
+			return farmland?iconsGrapesLadder[stage]:iconsGrapes[stage];
+		case 26:
+			return iconsBlackEyedPeas[stage];
 		}
 		return iconsCorn[6];
 	}
@@ -182,19 +206,25 @@ public class BlockCrop extends BlockContainer
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int side, float hitX,
+			float hitY, float hitZ)
 	{
 		TECrop te = (TECrop) world.getTileEntity(x, y, z);
 		CropIndex crop = CropManager.getInstance().getCropFromId(te.cropId);
+		boolean b = false;
+		if (crop.activateHarvestable && !world.isRemote)
+		{
+			b = te.activateCrop(world, x, y, z, entityplayer, crop);
+		}
 
-		if(TFCOptions.enableDebugMode)
+		if (TFCOptions.enableDebugMode)
 		{
 			TerraFirmaCraft.LOG.info("Crop ID: " + te.cropId);
 			TerraFirmaCraft.LOG.info("Growth: " + te.growth);
 			TerraFirmaCraft.LOG.info("Est Growth: " + te.getEstimatedGrowth(crop));
 		}
 
-		return false;
+		return b;
 	}
 
 	@Override
@@ -215,7 +245,8 @@ public class BlockCrop extends BlockContainer
 					{
 						for (int z = -1; z < 2; z++)
 						{
-							if (world.getBlock(i + x, j, k + z) == this && player.inventory.getStackInSlot(player.inventory.currentItem) != null)
+							if (world.getBlock(i + x, j, k + z) == this && player.inventory
+									.getStackInSlot(player.inventory.currentItem) != null)
 							{
 								player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
 								TECrop teX = (TECrop) world.getTileEntity(i + x, j, k + z);
@@ -240,8 +271,8 @@ public class BlockCrop extends BlockContainer
 	}
 
 	/**
-	 * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
-	 * cleared to be reused)
+	 * Returns a bounding box from the pool of bounding boxes (this means this
+	 * box can change after the pool has been cleared to be reused)
 	 */
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)

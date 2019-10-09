@@ -8,8 +8,10 @@ import java.util.Set;
 import com.dunk.tfc.Reference;
 import com.dunk.tfc.Core.TFCTabs;
 import com.dunk.tfc.Core.TFC_Core;
+import com.dunk.tfc.Food.ItemFoodTFC;
 import com.dunk.tfc.Items.Pottery.ItemPotterySheetMold;
 import com.dunk.tfc.TileEntities.TEAnvil;
+import com.dunk.tfc.api.Food;
 import com.dunk.tfc.api.HeatIndex;
 import com.dunk.tfc.api.HeatRegistry;
 import com.dunk.tfc.api.Metal;
@@ -23,17 +25,22 @@ import com.dunk.tfc.api.Enums.EnumWeight;
 import com.dunk.tfc.api.Interfaces.IEquipable;
 import com.dunk.tfc.api.Interfaces.ISize;
 import com.dunk.tfc.api.Interfaces.ISmeltable;
+import com.dunk.tfc.api.Util.Helper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class ItemTerra extends Item implements ISize, ISmeltable
@@ -41,6 +48,8 @@ public class ItemTerra extends Item implements ISize, ISmeltable
 	protected boolean stackable = true;
 	protected EnumSize size = EnumSize.TINY;
 	protected EnumWeight weight = EnumWeight.LIGHT;
+	
+	protected EnumItemReach reach;
 
 	public String[] metaNames;
 	public IIcon[] metaIcons;
@@ -55,6 +64,7 @@ public class ItemTerra extends Item implements ISize, ISmeltable
 		super();
 		this.setCreativeTab(TFCTabs.TFC_MISC);
 		textureFolder = "";
+		reach = EnumItemReach.SHORT;
 		setNoRepair();
 	}
 
@@ -184,6 +194,7 @@ public class ItemTerra extends Item implements ISize, ISmeltable
 
 	public static void addSizeInformation(ItemStack object, List<String> arraylist)
 	{
+
 		if (((ISize) object.getItem()).getSize(object) != null && ((ISize) object.getItem()).getWeight(object) != null
 				&& ((ISize) object.getItem()).getReach(object) != null)
 			arraylist.add("\u2696"
@@ -200,6 +211,12 @@ public class ItemTerra extends Item implements ISize, ISmeltable
 			}
 		}
 	}
+	
+	@Override
+	 protected MovingObjectPosition getMovingObjectPositionFromPlayer(World p_77621_1_, EntityPlayer p_77621_2_, boolean p_77621_3_)
+    {
+        return Helper.getMovingObjectPositionFromPlayer(p_77621_1_, p_77621_2_, p_77621_3_, 4);
+    }
 
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -209,17 +226,17 @@ public class ItemTerra extends Item implements ISize, ISmeltable
 		ItemTerra.addSizeInformation(is, arraylist);
 
 		ItemTerra.addHeatInformation(is, arraylist);
-		
 		if (is.stackTagCompound != null && TFCOptions.enableDebugMode)
 		{
 			Iterator<String> keys = (is.stackTagCompound.func_150296_c()).iterator();
-			String key;
+			String key = keys.next();
+			//arraylist.add(key + " : " + is.stackTagCompound.getString(key));
 			while (keys.hasNext() && (key = keys.next()) != null)
 			{
-				if(key.equals("Items"))
-				{
-					continue;
-				}
+				//if(key.equals("Items"))
+				//{
+				//	continue;
+				//}
 				arraylist.add(key + " : " + is.stackTagCompound.getString(key));
 			}
 		}
@@ -230,7 +247,7 @@ public class ItemTerra extends Item implements ISize, ISmeltable
 			if (tag.hasKey(TEAnvil.ITEM_CRAFTING_VALUE_TAG) || tag.hasKey(TEAnvil.ITEM_CRAFTING_RULE_1_TAG))
 				arraylist.add(TFC_Core.translate("gui.ItemWorked"));
 		}
-
+		arraylist.add(TFC_Core.translate("gui."+this.getReach(is).getName()));
 		addItemInformation(is, player, arraylist);
 		addExtraInformation(is, player, arraylist);
 	}
@@ -331,11 +348,17 @@ public class ItemTerra extends Item implements ISize, ISmeltable
 		weight = e;
 		return this;
 	}
+	
+	public ItemTerra setReach(EnumItemReach r)
+	{
+		this.reach = r;
+		return this;
+	}
 
 	@Override
 	public EnumItemReach getReach(ItemStack is)
 	{
-		return EnumItemReach.SHORT;
+		return reach;
 	}
 
 	public boolean isActualMetal(ItemStack is)
@@ -356,11 +379,11 @@ public class ItemTerra extends Item implements ISize, ISmeltable
 		{
 			return Global.LIME;
 		}
-		if (is.getItem().equals(TFCItems.solidifiedGlass) || is.getItem().equals(TFCItems.moltenGlass))
+		if (is.getItem().equals(TFCItems.solidifiedGlass) || is.getItem().equals(TFCItems.moltenGlass) || is.getItem().equals(TFCItems.glassBottle))
 		{
 			return Global.GLASS;
 		}
-		if (is.getItem().equals(TFCItems.soda) || is.getItem().equals(TFCItems.moltenSoda))
+		if (is.getItem().equals(TFCItems.soda) || is.getItem().equals(TFCItems.moltenSoda) || (is.getItem().equals(TFCItems.powder) && is.getItemDamage()==13))
 		{
 			return Global.SODA;
 		}
@@ -371,6 +394,14 @@ public class ItemTerra extends Item implements ISize, ISmeltable
 	public short getMetalReturnAmount(ItemStack is)
 	{
 		// TODO Auto-generated method stub
+		if(is != null && is.getItem().equals(TFCItems.glassBottle))
+		{
+			return 80;
+		}
+		else if( (is.getItem().equals(TFCItems.powder) && is.getItemDamage()==14))
+		{
+			return 5;
+		}
 		return 10;
 	}
 

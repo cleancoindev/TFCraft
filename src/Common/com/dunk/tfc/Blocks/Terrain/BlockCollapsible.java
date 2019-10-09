@@ -176,7 +176,7 @@ public class BlockCollapsible extends BlockTerraContainer
 					{
 						return true;
 					}
-					if (world != null && TFC_Core.isHorizSupport(world.getBlock(i + x, j + y, k + z)))
+					if (world != null && world.doChunksNearChunkExist(i+x, j+y, k+z, 1)&& TFC_Core.isHorizSupport(world.getBlock(i + x, j + y, k + z)))
 					{
 						if(world.rand.nextFloat() < collapseChance / 100f)
 							world.setBlockToAir(i + x, j + y, k + z);

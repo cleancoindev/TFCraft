@@ -2,6 +2,7 @@ package com.dunk.tfc.Food;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.dunk.tfc.Reference;
 import com.dunk.tfc.TerraFirmaCraft;
@@ -38,6 +39,8 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
@@ -60,6 +63,9 @@ public class ItemFoodTFC extends ItemTerra implements ISize, ICookableFood, IMer
 	public float decayRate = 1.0f;
 	public boolean edible = true;
 	public boolean canBeUsedRaw = true;
+	public boolean poisonOnRaw = false;
+	public boolean guaranteedPoisonOnRaw = false;
+	public float waterRestoreAmount;
 	protected int tasteSweet;
 	protected int tasteSour;
 	protected int tasteSalty;
@@ -67,6 +73,8 @@ public class ItemFoodTFC extends ItemTerra implements ISize, ICookableFood, IMer
 	protected int tasteUmami;
 	protected boolean canBeSmoked;
 	protected float smokeAbsorb;
+	public boolean nutritionAsIfCooked;
+	public float waterPercentage = 0;
 
 	public IIcon cookedIcon;
 	protected boolean hasCookedIcon;
@@ -100,6 +108,21 @@ public class ItemFoodTFC extends ItemTerra implements ISize, ICookableFood, IMer
 		this(fg, sw, so, sa, bi, um, edible);
 		canBeUsedRaw = usable;
 	}
+	
+	public ItemFoodTFC(EnumFoodGroup fg, int sw, int so, int sa, int bi, int um, boolean edible, boolean usable, boolean poison)
+	{
+		this(fg, sw, so, sa, bi, um, edible);
+		canBeUsedRaw = usable;
+		poisonOnRaw = poison;
+	}
+	
+	public ItemFoodTFC(EnumFoodGroup fg, int sw, int so, int sa, int bi, int um, boolean edible, boolean usable, boolean poison, boolean guaranteedPoison)
+	{
+		this(fg, sw, so, sa, bi, um, edible);
+		canBeUsedRaw = usable;
+		poisonOnRaw = poison;
+		guaranteedPoisonOnRaw = guaranteedPoison;
+	}
 
 	public ItemFoodTFC setDecayRate(float f)
 	{
@@ -116,6 +139,30 @@ public class ItemFoodTFC extends ItemTerra implements ISize, ICookableFood, IMer
 	public ItemFoodTFC setHasCookedIcon()
 	{
 		this.hasCookedIcon = true;
+		return this;
+	}
+	
+	public ItemFoodTFC setPoisonOnRaw(boolean p)
+	{
+		this.poisonOnRaw = p;
+		return this;
+	}
+	
+	public ItemFoodTFC setWaterPercentage(float w)
+	{
+		w = Math.min(Math.max(w, 0f), 1f);
+		this.waterPercentage = w;
+		return this;
+	}
+	
+	public ItemFoodTFC setNutritionAsIfCooked(boolean n)
+	{
+		this.nutritionAsIfCooked = n;
+		return this;
+	}
+	public ItemFoodTFC setWaterRestoreAmount(float f)
+	{
+		this.waterRestoreAmount = f;
 		return this;
 	}
 
@@ -316,7 +363,7 @@ public class ItemFoodTFC extends ItemTerra implements ISize, ICookableFood, IMer
 		if(Food.hasMealSkill(is))
 			rank = SkillRank.values()[Food.getMealSkill(is)];
 
-		int[] prefs = TFC_Core.getPlayerFoodStats(player).getPrefTaste();
+		int[] prefs = TFC_Core.getPlayerFoodStats(player).getPrefTaste(is);
 
 		String sSweet = EnumChatFormatting.DARK_GRAY + TFC_Core.translate("gui.taste.sweet") + ": " + EnumChatFormatting.WHITE;
 		String sSour = EnumChatFormatting.DARK_GRAY + TFC_Core.translate("gui.taste.sour") + ": " + EnumChatFormatting.WHITE;
@@ -458,6 +505,18 @@ public class ItemFoodTFC extends ItemTerra implements ISize, ICookableFood, IMer
 		{
 			if(is.hasTagCompound())
 			{
+				if(this.poisonOnRaw && !this.guaranteedPoisonOnRaw && !Food.isCooked(is) && Food.getDecay(is) > 0)
+				{
+					float decay = Food.getDecay(is);
+					if(itemRand.nextInt(25) < decay)
+					{
+						player.addPotionEffect(new PotionEffect(Potion.poison.getId(), 100, 1));
+					}
+				}
+				else if(this.poisonOnRaw && this.guaranteedPoisonOnRaw && !Food.isCooked(is))
+				{
+					player.addPotionEffect(new PotionEffect(Potion.poison.getId(), 100, 1));
+				}
 				//NBTTagCompound nbt = is.getTagCompound();
 				float weight = Food.getWeight(is);
 				float decay = Math.max(Food.getDecay(is), 0);
@@ -469,7 +528,12 @@ public class ItemFoodTFC extends ItemTerra implements ISize, ICookableFood, IMer
 
 				float tasteFactor = foodstats.getTasteFactor(is);
 				foodstats.addNutrition(((IFood)(is.getItem())).getFoodGroup(), eatAmount*tasteFactor);
-				foodstats.stomachLevel += eatAmount*tasteFactor;
+				foodstats.stomachLevel += (eatAmount *(Food.hasNutritionWhenRaw(is)||Food.isCooked(is)?1.5f:0.75f ))*tasteFactor;
+				float waterRestore = Food.getWater(is);
+				float waterDiff = foodstats.waterLevel+waterRestore-foodstats.getMaxWater(foodstats.player);
+				if(waterDiff > 0)
+					waterRestore-=waterDiff;
+				foodstats.waterLevel += waterRestore;
 				if(FoodStatsTFC.reduceFood(is, eatAmount))
 					is.stackSize = 0;
 			}

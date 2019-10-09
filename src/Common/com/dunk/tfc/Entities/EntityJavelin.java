@@ -29,7 +29,7 @@ public class EntityJavelin extends EntityProjectileTFC implements ICausesDamage
 	}
 
 	@Override
-	public EnumDamageType getDamageType()
+	public EnumDamageType getDamageType(EntityLivingBase is)
 	{
 		return EnumDamageType.PIERCING;
 	}

@@ -2,63 +2,69 @@ package com.dunk.tfc.WorldGen.Generators.Trees;
 
 import java.util.Random;
 
+import com.dunk.tfc.Blocks.Flora.BlockBranch;
 import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.api.TFCBlocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class WorldGenDouglasFir extends WorldGenerator
+public class WorldGenDouglasFir extends WorldGenTreeBase
 {
 	private boolean tall;
-	private final int metaID;
 
-	public WorldGenDouglasFir(boolean par1, int m, boolean t)
+	int extraTreeHeight = 6;
+
+	boolean newT = true;
+
+	public WorldGenDouglasFir(boolean par1, int m, boolean t, boolean sap)
 	{
-		super(par1);
-		metaID = m;
-		tall = t;
+		super(par1, m, sap);
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int par3, int par4, int par5)
+	public boolean generate(World world, Random rand, int xCoord, int yCoord, int zCoord)
 	{
-		int i = rand.nextInt(10) + 10;
-		if(rand.nextInt(20)==0)
-			tall=true;
-		if(tall)
-			i += rand.nextInt(10);
+		int distFromEdge = 5;
+		// We don't want to generate too close to chunk boundaries, because that
+		// gets out of hand
+		if ((xCoord % 16 > 16 - distFromEdge || Math.abs(
+				xCoord) % 16 < distFromEdge || zCoord % 16 > 16 - distFromEdge || Math.abs(zCoord) % 16 < distFromEdge)&&!fromSapling)
+		{
+			return false;
+		}
+		height = rand.nextInt(10) + 8;
+		
+		this.tempSourceX = xCoord;
+		this.tempSourceZ = zCoord;
+		
+		if (rand.nextInt(20) == 0)
+			tall = true;
+		if (tall)
+			height += rand.nextInt(10);
 
-		if (par4 < 1 || par4 + i + 1 > 256)
+		if (yCoord < 1 || yCoord + height + 1 + extraTreeHeight > 256)
 			return false;
 
-		boolean flag = true;
-		for (int j = par4; j <= par4 + 1 + i; j++)
+		if (TFC_Core.isWater(world.getBlock(xCoord, yCoord, zCoord)))
 		{
-			byte byte0 = 1;
+			return false;
+		}
 
-			if (j == par4)
-				byte0 = 0;
-
-			if (j >= (par4 + 1 + i) - 2)
-				byte0 = 2;
-
-			for (int l = par3 - byte0; l <= par3 + byte0 && flag; l++)
+		boolean flag = true;
+		int c = 0;
+		for (int j = yCoord; j <= yCoord + 1 + height + extraTreeHeight; j++)
+		{
+			c++;
+			for(int ii = xCoord-c>(height/3)?3:2; ii < xCoord+ (c>(height/3)?4:3); ii++)
 			{
-				for (int j1 = par5 - byte0; j1 <= par5 + byte0 && flag; j1++)
+				for(int kk = zCoord-c>(height/3)?3:2; kk < zCoord+(c>(height/3)?4:3); kk++)
 				{
-					if (j >= 0 && j < 256)
+					if(!world.getBlock(ii, j, kk).isReplaceable(world,ii, j, kk))
 					{
-						Block j2 = world.getBlock(l, j, j1);
-						if (!j2.isAir(world, l, j, j1) && !j2.isReplaceable(world, l, j, j1))
-						{
-							flag = false;
-						}
-					}
-					else
-					{
-						flag = false;
+						return false;
 					}
 				}
 			}
@@ -67,44 +73,237 @@ public class WorldGenDouglasFir extends WorldGenerator
 		if (!flag)
 			return false;
 
-		if (!TFC_Core.isSoil(world.getBlock(par3, par4 - 1, par5)) || par4 >= 256 - i - 1)
+		if (!TFC_Core.isSoil(world.getBlock(xCoord, yCoord - 1, zCoord)) || yCoord >= 256 - height - 1)
 			return false;
-
-		for (int k1 = par4 + (i/3)-1; k1 <= par4 + i-1; k1++)
+		for (int l1 = 0; l1 < height; l1++)
 		{
-			int k2 = k1 - (par4 + i);
-			int z=i;
-			if (i>20)
-				z=20;
-			int x = z/10 +1;
-			if (k1-par4>i/2||k1-par4-(i/3)+2<3)
-				x--;
-			if(par4+i-k1<4)
-				x=1;
+			setBlockAndNotifyAdequately(world, xCoord, yCoord + l1, zCoord, TFCBlocks.logNatural, treeId);
+		}
 
-			for (int l3 = par3 -x; l3 <= par3 +x; l3++)
+		// We want to make branches in a radial pattern going up
+		int startHeight = height / 3;
+		int branchPattern = rand.nextInt(8);
+		for (int i = startHeight; i < height; i++)
+		{
+			int numBranchesHere = rand.nextInt(3) + 2;
+			int extraBranchLength = i < ((9f * height) / 10f) ? 2 : 1;
+			for (int j = 0; j < numBranchesHere; j++)
 			{
-				int j4 = l3 - par3;
-				for (int l4 = par5-x; l4 <= par5 +x; l4++)
+				if (rand.nextInt(4) != 0)
 				{
-					int i5 = l4 - par5;
-					if ((Math.abs(j4) != 0 || Math.abs(i5) != 0 && k2 != 0) &&
-						(Math.abs(j4) + Math.abs(i5) != x * 2 || 
-						k1 - par4 > i / 2 && k1 - par4 < (4 * i / 5) || 
-						k1 - par4 - (i / 3) + 2 == 2) &&
-						rand.nextInt(12) != 0 && world.isAirBlock(l3, k1, l4))
+					generateRandomBranches(world, rand, xCoord, yCoord + i, zCoord,
+							initialDirections[(branchPattern + j) % 8], 1, rand.nextInt(2) + extraBranchLength);
+				}
+			}
+			branchPattern += numBranchesHere;
+			branchPattern %= 8;
+		}
+		for (int i = height; i < height + extraTreeHeight; i++)
+		{
+			int numBranchesHere = rand.nextInt(3) + 2;
+			int extraBranchLength = 1;
+			for (int j = 0; j < numBranchesHere; j++)
+			{
+				if (rand.nextInt(4) != 0)
+				{
+					generateRandomBranches(world, rand, xCoord, yCoord + i, zCoord,
+							initialDirections[(branchPattern + j) % 8], 1, rand.nextInt(2) + extraBranchLength);
+				}
+			}
+			setBlockAndNotifyAdequately(world, xCoord, yCoord + i, zCoord, TFCBlocks.branch__y_, treeId);
+			branchPattern += numBranchesHere;
+			branchPattern %= 8;
+		}
+		setBlockAndNotifyAdequately(world, xCoord, yCoord + height + extraTreeHeight, zCoord, TFCBlocks.branchEnd__y_,
+				treeId);
+		fillInLeaves(world, rand, xCoord, yCoord + height + extraTreeHeight, zCoord, true);
+		return true;
+	}
+
+	protected boolean fillInLeaves(World world, Random rand, int xCoord, int yCoord, int zCoord, boolean high)
+	{
+		for (int i = -1; i < 2; i++)
+		{
+			for (int i2 = 0; i2 < 2; i2++)
+			{
+				for (int j = -1; j < 2; j++)
+				{
+					if (i2 > 0 && ((i != 0 || j != 0) || !high))
 					{
-						setBlockAndNotifyAdequately(world, l3, k1, l4, TFCBlocks.leaves, metaID);
+						continue;
+					}
+					if (world.getBlock(xCoord + i, yCoord + i2, zCoord + j).isReplaceable(world, xCoord + i,
+							yCoord + i2, zCoord + j) && i * j == 0)
+					{
+						world.setBlock(xCoord + i, yCoord + i2, zCoord + j, TFCBlocks.leaves, treeId, 2);
 					}
 				}
 			}
 		}
-		setBlockAndNotifyAdequately(world, par3, par4+i, par5, TFCBlocks.leaves, metaID);
-		for (int l1 = 0; l1 < i; l1++)
-		{
-			setBlockAndNotifyAdequately(world, par3, par4 + l1, par5, TFCBlocks.logNatural, metaID);
-		}
 		return true;
+	}
+
+	@Override
+	protected boolean generateRandomBranches(World world, Random rand, int xCoord, int yCoord, int zCoord,
+			int[] currentDirection, int numBranches, int remainingDistance)
+	{
+		if (remainingDistance < 1)
+		{
+			return true;
+		}
+		boolean[] validDirections = new boolean[] { false, false, false, false, false, false, false, false };
+		int numValidDirections = 0;
+		if (currentDirection[0] != 1)
+		{
+			if (currentDirection[2] != 1)
+			{
+				validDirections[0] = true;
+				numValidDirections++;
+			}
+			validDirections[1] = true;
+			numValidDirections++;
+			if (currentDirection[2] != -1)
+			{
+				validDirections[2] = true;
+				numValidDirections++;
+			}
+		}
+		if (currentDirection[2] != 1)
+		{
+			if (currentDirection[0] != -1)
+			{
+				validDirections[3] = true;
+				numValidDirections++;
+			}
+			validDirections[4] = true;
+			numValidDirections++;
+		}
+		if (currentDirection[2] != -1)
+		{
+			if (currentDirection[0] != -1)
+			{
+				validDirections[5] = true;
+				numValidDirections++;
+			}
+			validDirections[6] = true;
+			numValidDirections++;
+		}
+		if (currentDirection[0] != -1)
+		{
+			validDirections[7] = true;
+			numValidDirections++;
+		}
+		numBranches = Math.min(numBranches, numValidDirections);
+		boolean placedBranch = false;
+		for (int i = 0; i < numBranches; i++)
+		{
+			int currentRemainingDistance = remainingDistance;
+			if (numValidDirections == 0)
+			{
+				break;
+			}
+			int[] curDir = null;
+			if (i > 0)
+			{
+				int index = rand.nextInt(initialDirections.length);
+				while (!validDirections[index])
+				{
+					index = rand.nextInt(initialDirections.length);
+				}
+				validDirections[index] = false;
+				numValidDirections--;
+				curDir = initialDirections[index];
+				if (currentRemainingDistance > 1)
+				{
+					currentRemainingDistance = 1;
+				}
+			}
+			else
+			{
+				curDir = currentDirection;
+			}
+			if (curDir[0] * curDir[2] != 0)
+			{
+				if (shouldSubtractDistance(rand))
+				{
+					currentRemainingDistance--;
+				}
+			}
+			if (world.getBlock(xCoord + curDir[0], yCoord, zCoord + curDir[2]).isReplaceable(world, xCoord + curDir[0],
+					yCoord, zCoord + curDir[2]) || world.getBlock(xCoord + curDir[0], yCoord + curDir[1], zCoord + curDir[2]).getMaterial() == Material.leaves)
+			{
+				Block theBranch = null;
+				if (curDir[0] == -1)
+				{
+					if (curDir[2] == -1)
+					{
+						theBranch = currentRemainingDistance > 3 ? TFCBlocks.branch_X_Z : TFCBlocks.branchEnd_X_Z;
+					}
+					else if (curDir[2] == 0)
+					{
+						theBranch = currentRemainingDistance > 3 ? TFCBlocks.branch_X__ : TFCBlocks.branchEnd_X__;
+					}
+					else
+					{
+						theBranch = currentRemainingDistance > 3 ? TFCBlocks.branch_X_z : TFCBlocks.branchEnd_X_z;
+					}
+				}
+				else if (curDir[0] == 0)
+				{
+					if (curDir[2] == -1)
+					{
+						theBranch = currentRemainingDistance > 3 ? TFCBlocks.branch___Z : TFCBlocks.branchEnd___Z;
+					}
+					else
+					{
+						theBranch = currentRemainingDistance > 3 ? TFCBlocks.branch___z : TFCBlocks.branchEnd___z;
+					}
+				}
+				else
+				{
+					if (curDir[2] == -1)
+					{
+						theBranch = currentRemainingDistance > 3 ? TFCBlocks.branch_x_Z : TFCBlocks.branchEnd_x_Z;
+					}
+					else if (curDir[2] == 0)
+					{
+						theBranch = currentRemainingDistance > 3 ? TFCBlocks.branch_x__ : TFCBlocks.branchEnd_x__;
+					}
+					else
+					{
+						theBranch = currentRemainingDistance > 3 ? TFCBlocks.branch_x_z : TFCBlocks.branchEnd_x_z;
+					}
+				}
+				// If the branch directly below is the same, it'll look ugly, so
+				// skip it.
+				if (world.getBlock(xCoord + curDir[0], yCoord - 1, zCoord + curDir[2]) == theBranch )
+				{
+				//	i--;
+				//	continue;
+				}
+				// We only want to place this branch here if this branch can
+				// continue.
+				if (generateRandomBranches(world, rand, xCoord + curDir[0], yCoord  + curDir[1], zCoord + curDir[2],
+						curDir, 3, currentRemainingDistance - 1))
+				{
+					//world.setBlock(xCoord + curDir[0], yCoord, zCoord + curDir[2], theBranch,treeId,2);
+					setBlockAndNotifyAdequately(world,xCoord + curDir[0], yCoord, zCoord + curDir[2], theBranch,treeId);
+					if (((BlockBranch) theBranch).isEnd() && !fromSapling)
+					{
+						convertGrassToDirt(world, xCoord + curDir[0], yCoord, zCoord + curDir[2], height);
+					}
+					if (((BlockBranch) theBranch).isEnd())
+					{
+						fillInLeaves(world, rand, xCoord + curDir[0], yCoord, zCoord + curDir[2],
+								currentRemainingDistance > 1);
+					}
+					
+					
+					placedBranch = true;
+				}
+			}
+		}
+		return placedBranch;
 	}
 
 }

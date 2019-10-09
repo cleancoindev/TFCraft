@@ -12,6 +12,7 @@ import com.dunk.tfc.WorldGen.GenLayers.DataLayers.PH.GenPHLayer;
 import com.dunk.tfc.WorldGen.GenLayers.DataLayers.Rain.GenRainLayerTFC;
 import com.dunk.tfc.WorldGen.GenLayers.DataLayers.Rock.GenRockLayer;
 import com.dunk.tfc.WorldGen.GenLayers.DataLayers.Stability.GenStabilityLayer;
+import com.dunk.tfc.WorldGen.GenLayers.DataLayers.Tree.GenRegionLayer;
 import com.dunk.tfc.WorldGen.GenLayers.DataLayers.Tree.GenTreeLayer;
 
 import net.minecraft.world.World;
@@ -28,6 +29,10 @@ public class WorldCacheManager
 	//Trees
 	protected GenLayerTFC[] treesIndexLayer;
 	protected DataCache[] treeCache;
+	
+	//Regions
+	protected GenLayerTFC regionIndexLayer;
+	protected DataCache regionCache;
 
 	//Humidity
 	protected GenLayerTFC evtIndexLayer;
@@ -68,15 +73,20 @@ public class WorldCacheManager
 		DataLayer.RHYOLITE, DataLayer.BASALT, DataLayer.ANDESITE,
 		DataLayer.DACITE, DataLayer.GRANITE, DataLayer.DIORITE, DataLayer.GABBRO};
 
-	public static final DataLayer[] TREE_ARRAY = new DataLayer[] {DataLayer.ASH, DataLayer.ASPEN, DataLayer.BIRCH, DataLayer.CHESTNUT, DataLayer.DOUGLASFIR, 
-		DataLayer.HICKORY, DataLayer.MAPLE, DataLayer.OAK, DataLayer.PINE, DataLayer.REDWOOD, DataLayer.PINE, DataLayer.SPRUCE, DataLayer.SYCAMORE, 
+	public static final DataLayer[] TREE_ARRAY = new DataLayer[] {DataLayer.ASH, DataLayer.ASPEN, DataLayer.BIRCH, DataLayer.CHESTNUT, DataLayer.DOUGLASFIR,DataLayer.EBONY, 
+		DataLayer.HICKORY, DataLayer.MAPLE, DataLayer.OAK, DataLayer.PALM, DataLayer.PINE, DataLayer.REDWOOD, DataLayer.PINE, DataLayer.SPRUCE, DataLayer.SYCAMORE, 
 		DataLayer.WHITECEDAR, DataLayer.WHITEELM, DataLayer.WILLOW, DataLayer.NO_TREE};
+	
+	public static final DataLayer[] REGION_ARRAY = new DataLayer[] {DataLayer.AMERICAS,DataLayer.AFRICA,DataLayer.EUROPE,DataLayer.ASIA};
 
 	private WorldCacheManager()
 	{
 		rockCache = new DataCache[3];
 		treeCache = new DataCache[3];
 		evtCache = new DataCache(this, 0);
+		
+		regionCache = new DataCache(this,0);
+		
 		rainfallCache = new DataCache(this, 0);
 		rockCache[0] = new DataCache(this, 0);
 		rockCache[1] = new DataCache(this, 1);
@@ -114,6 +124,8 @@ public class WorldCacheManager
 		treesIndexLayer[0] = GenTreeLayer.initialize(genSeed+4, TREE_ARRAY);
 		treesIndexLayer[1] = GenTreeLayer.initialize(genSeed+5, TREE_ARRAY);
 		treesIndexLayer[2] = GenTreeLayer.initialize(genSeed+6, TREE_ARRAY);
+		
+		
 
 		//Setup Evapotranspiration
 		evtIndexLayer = GenEVTLayer.initialize(genSeed+7, worldtype);
@@ -129,6 +141,8 @@ public class WorldCacheManager
 
 		//Setup Soil Drainage
 		drainageIndexLayer = GenDrainageLayer.initialize(genSeed+11, worldtype);
+		
+		regionIndexLayer = GenRegionLayer.initialize(genSeed+12, REGION_ARRAY);
 
 		worldTempCache = new LinkedHashMap<String, Float>();
 	}
@@ -276,6 +290,11 @@ public class WorldCacheManager
 		return this.treeCache[index].getDataLayerAt(treesIndexLayer[index], x, z);
 	}
 
+	public DataLayer getRegionLayerAt(int x, int z)
+	{
+		return this.regionCache.getDataLayerAt(regionIndexLayer, x, z);
+	}
+	
 	/**
 	 * Returns biomes to use for the blocks and loads the other data like temperature and humidity onto the
 	 * WorldChunkManager Args: oldBiomeList, x, z, width, depth
@@ -283,6 +302,15 @@ public class WorldCacheManager
 	public DataLayer[] loadTreeLayerGeneratorData(DataLayer[] layers, int x, int y, int width, int height, int layer)
 	{
 		return this.getDataLayerAt(treeCache.clone(), layers, treesIndexLayer, x, y, width, height, true, 0);
+	}
+	
+	/**
+	 * Returns biomes to use for the blocks and loads the other data like temperature and humidity onto the
+	 * WorldChunkManager Args: oldBiomeList, x, z, width, depth
+	 */
+	public DataLayer[] loadRegionLayerGeneratorData(DataLayer[] layers, int x, int y, int width, int height, int layer)
+	{
+		return this.getDataLayerAt(regionCache, layers, regionIndexLayer, x, y, width, height, true, 0);
 	}
 
 	public DataLayer getEVTLayerAt(int x, int z)

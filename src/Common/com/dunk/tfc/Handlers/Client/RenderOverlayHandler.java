@@ -21,6 +21,7 @@ import com.dunk.tfc.Items.ItemQuiver;
 import com.dunk.tfc.Items.Tools.ItemChisel;
 import com.dunk.tfc.Items.Tools.ItemCustomHoe;
 import com.dunk.tfc.Items.Tools.ItemHammer;
+import com.dunk.tfc.Items.Tools.ItemKnife;
 import com.dunk.tfc.WorldGen.DataLayer;
 import com.dunk.tfc.api.TFCAttributes;
 import com.dunk.tfc.api.TFCItems;
@@ -40,6 +41,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -104,6 +106,11 @@ public class RenderOverlayHandler
 			{
 				int mode = playerInfo.hoeMode;
 				this.drawTexturedModalRect(mid + 95, sr.getScaledHeight() - 21, 0 + (20 * mode), 38, 20, 20);
+			}
+			else if (currentItem instanceof ItemKnife)
+			{
+				int mode = playerInfo.knifeMode;
+				this.drawTexturedModalRect(mid + 95, sr.getScaledHeight() - 21, 0 + (20 * mode), 110, 20, 20);
 			}
 			else if (currentItem instanceof ItemChisel)
 			{
@@ -389,7 +396,7 @@ public class RenderOverlayHandler
 			{
 				TFC_Core.bindTexture(new ResourceLocation("minecraft:textures/gui/icons.png"));
 				float tension = 0;
-				if (player.getHeldItem().hasTagCompound() && player.getHeldItem().stackTagCompound.hasKey("tension"))
+				if (player.getHeldItem() != null && player.getHeldItem().hasTagCompound() && player.getHeldItem().stackTagCompound.hasKey("tension"))
 				{
 					tension = player.getHeldItem().stackTagCompound.getInteger("tension");
 				}
@@ -520,12 +527,20 @@ public class RenderOverlayHandler
 						+ TFC_Climate.getCacheManager(mc.theWorld).getRockLayerAt(xCoord, zCoord, 0).getName() + ", "
 						+ TFC_Climate.getCacheManager(mc.theWorld).getRockLayerAt(xCoord, zCoord, 1).getName() + ", "
 						+ TFC_Climate.getCacheManager(mc.theWorld).getRockLayerAt(xCoord, zCoord, 2).getName());
-				event.left.add("Tree Layers: "
+				/*event.left.add("Tree Layers: "
 						+ TFC_Climate.getCacheManager(mc.theWorld).getTreeLayerAt(xCoord, zCoord, 0).getName() + ", "
 						+ TFC_Climate.getCacheManager(mc.theWorld).getTreeLayerAt(xCoord, zCoord, 1).getName() + ", "
-						+ TFC_Climate.getCacheManager(mc.theWorld).getTreeLayerAt(xCoord, zCoord, 2).getName());
+						+ TFC_Climate.getCacheManager(mc.theWorld).getTreeLayerAt(xCoord, zCoord, 2).getName());*/
+				event.left.add("Region Layer: "
+						+ TFC_Core.translate("gui."+TFC_Climate.getCacheManager(mc.theWorld).getRegionLayerAt(xCoord, zCoord).getName()));
 			}
-
+		}
+		else if(player.getHeldItem() != null && player.getHeldItem().getItem() == Items.compass)
+		{
+			int xCoord = (int) player.posX;
+			int yCoord = (int) player.posY;
+			int zCoord = (int) player.posZ;
+			event.left.add(TFC_Core.translate("gui.region")+" "+ TFC_Core.translate("gui."+TFC_Climate.getCacheManager(mc.theWorld).getRegionLayerAt(xCoord, zCoord).getName()));
 		}
 	}
 

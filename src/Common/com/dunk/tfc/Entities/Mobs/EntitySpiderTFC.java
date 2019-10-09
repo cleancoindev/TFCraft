@@ -7,6 +7,7 @@ import com.dunk.tfc.api.Enums.EnumDamageType;
 import com.dunk.tfc.api.Interfaces.ICausesDamage;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySpider;
@@ -31,7 +32,7 @@ public class EntitySpiderTFC extends EntitySpider implements ICausesDamage
 	}
 
 	@Override
-	public EnumDamageType getDamageType()
+	public EnumDamageType getDamageType(EntityLivingBase is)
 	{
 		return EnumDamageType.PIERCING;
 	}

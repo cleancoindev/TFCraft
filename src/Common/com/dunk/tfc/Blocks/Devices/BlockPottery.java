@@ -8,6 +8,7 @@ import com.dunk.tfc.Reference;
 import com.dunk.tfc.Blocks.BlockTerraContainer;
 import com.dunk.tfc.Items.ItemLogs;
 import com.dunk.tfc.Items.Pottery.ItemPotteryBase;
+import com.dunk.tfc.Items.Tools.ItemFirestarter;
 import com.dunk.tfc.TileEntities.TEPottery;
 import com.dunk.tfc.api.TFCBlocks;
 import com.dunk.tfc.api.TFCItems;
@@ -89,7 +90,7 @@ public class BlockPottery extends BlockTerraContainer
 			TEPottery te = (TEPottery) world.getTileEntity(x, y, z);
 
 			if (te.isLit() || player.inventory.getCurrentItem() != null
-					&& (player.inventory.getCurrentItem().getItem() == TFCItems.flintSteel || player.inventory.getCurrentItem().getItem() == TFCItems.fireStarter))
+					&& (player.inventory.getCurrentItem().getItem() == TFCItems.flintSteel || player.inventory.getCurrentItem().getItem() instanceof ItemFirestarter))
 				return false;
 
 			if(player.inventory.getCurrentItem() != null && player.inventory.getCurrentItem().getItem() == TFCItems.straw && !player.isSneaking())

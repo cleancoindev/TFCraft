@@ -79,7 +79,7 @@ public class ContainerSpecialCrafting extends ContainerTFC
 	@Override
 	public void onCraftMatrixChanged(IInventory ii)
 	{
-		ItemStack result = CraftingManagerTFC.getInstance().findMatchingRecipe(this.craftMatrix, worldObj);
+		ItemStack result = CraftingManagerTFC.getInstance().findMatchingRecipe(this.craftMatrix,(int)this.invPlayer.player.posX,(int)this.invPlayer.player.posY,(int)this.invPlayer.player.posZ, worldObj);
 
 		// Handle decreasing the stack of the held item used to open the
 		// interface.

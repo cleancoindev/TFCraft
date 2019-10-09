@@ -2,6 +2,7 @@ package com.dunk.tfc;
 
 import com.dunk.tfc.Blocks.BlockBloom;
 import com.dunk.tfc.Blocks.BlockCharcoal;
+import com.dunk.tfc.Blocks.BlockChimney;
 import com.dunk.tfc.Blocks.BlockCrop;
 import com.dunk.tfc.Blocks.BlockDetailed;
 import com.dunk.tfc.Blocks.BlockFarmland;
@@ -11,6 +12,7 @@ import com.dunk.tfc.Blocks.BlockLogPile;
 import com.dunk.tfc.Blocks.BlockMetalSheet;
 import com.dunk.tfc.Blocks.BlockMetalTrapDoor;
 import com.dunk.tfc.Blocks.BlockMolten;
+import com.dunk.tfc.Blocks.BlockMudBricks;
 import com.dunk.tfc.Blocks.BlockPlanks;
 import com.dunk.tfc.Blocks.BlockPlanks2;
 import com.dunk.tfc.Blocks.BlockPlasterPlanks;
@@ -22,6 +24,7 @@ import com.dunk.tfc.Blocks.BlockStair;
 import com.dunk.tfc.Blocks.BlockStalactite;
 import com.dunk.tfc.Blocks.BlockSulfur;
 import com.dunk.tfc.Blocks.BlockThatch;
+import com.dunk.tfc.Blocks.BlockTileRoof;
 import com.dunk.tfc.Blocks.BlockWoodConstruct;
 import com.dunk.tfc.Blocks.BlockWoodSupport;
 import com.dunk.tfc.Blocks.BlockWoodSupport2;
@@ -33,6 +36,8 @@ import com.dunk.tfc.Blocks.Devices.BlockBellows;
 import com.dunk.tfc.Blocks.Devices.BlockBlastFurnace;
 import com.dunk.tfc.Blocks.Devices.BlockChestTFC;
 import com.dunk.tfc.Blocks.Devices.BlockCrucible;
+import com.dunk.tfc.Blocks.Devices.BlockDrum;
+import com.dunk.tfc.Blocks.Devices.BlockDryingBricks;
 import com.dunk.tfc.Blocks.Devices.BlockEarlyBloomery;
 import com.dunk.tfc.Blocks.Devices.BlockFirepit;
 import com.dunk.tfc.Blocks.Devices.BlockFoodPrep;
@@ -61,6 +66,7 @@ import com.dunk.tfc.Blocks.Flora.BlockFlower;
 import com.dunk.tfc.Blocks.Flora.BlockFlower2;
 import com.dunk.tfc.Blocks.Flora.BlockFruitLeaves;
 import com.dunk.tfc.Blocks.Flora.BlockFruitWood;
+import com.dunk.tfc.Blocks.Flora.BlockLeafLitter;
 import com.dunk.tfc.Blocks.Flora.BlockLogHoriz;
 import com.dunk.tfc.Blocks.Flora.BlockLogHoriz2;
 import com.dunk.tfc.Blocks.Flora.BlockLogNatural;
@@ -71,6 +77,7 @@ import com.dunk.tfc.Blocks.Flora.BlockSapling;
 import com.dunk.tfc.Blocks.Flora.BlockSapling2;
 import com.dunk.tfc.Blocks.Flora.BlockSkinnyLogNatural;
 import com.dunk.tfc.Blocks.Flora.BlockSkinnyLogNatural2;
+import com.dunk.tfc.Blocks.Flora.BlockUndergrowth;
 import com.dunk.tfc.Blocks.Flora.BlockWaterPlant;
 import com.dunk.tfc.Blocks.Liquids.BlockFreshWater;
 import com.dunk.tfc.Blocks.Liquids.BlockHotWater;
@@ -120,6 +127,7 @@ import com.dunk.tfc.Blocks.Vanilla.BlockCustomIce;
 import com.dunk.tfc.Blocks.Vanilla.BlockCustomLeaves;
 import com.dunk.tfc.Blocks.Vanilla.BlockCustomLeaves2;
 import com.dunk.tfc.Blocks.Vanilla.BlockCustomLilyPad;
+import com.dunk.tfc.Blocks.Vanilla.BlockCustomMelon;
 import com.dunk.tfc.Blocks.Vanilla.BlockCustomPumpkin;
 import com.dunk.tfc.Blocks.Vanilla.BlockCustomReed;
 import com.dunk.tfc.Blocks.Vanilla.BlockCustomSnow;
@@ -131,6 +139,7 @@ import com.dunk.tfc.Blocks.Vanilla.BlockTFCFence2;
 import com.dunk.tfc.Blocks.Vanilla.BlockTorch;
 import com.dunk.tfc.Blocks.Vanilla.BlockTorchOff;
 import com.dunk.tfc.Core.TFCTabs;
+import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Items.ItemBlocks.ItemAnvil1;
 import com.dunk.tfc.Items.ItemBlocks.ItemAnvil2;
 import com.dunk.tfc.Items.ItemBlocks.ItemArmourStand;
@@ -138,6 +147,9 @@ import com.dunk.tfc.Items.ItemBlocks.ItemArmourStand2;
 import com.dunk.tfc.Items.ItemBlocks.ItemBarrels;
 import com.dunk.tfc.Items.ItemBlocks.ItemBellows;
 import com.dunk.tfc.Items.ItemBlocks.ItemBerryBush;
+import com.dunk.tfc.Items.ItemBlocks.ItemBigDrum;
+import com.dunk.tfc.Items.ItemBlocks.ItemBranch;
+import com.dunk.tfc.Items.ItemBlocks.ItemBranch2;
 import com.dunk.tfc.Items.ItemBlocks.ItemChest;
 import com.dunk.tfc.Items.ItemBlocks.ItemCrucible;
 import com.dunk.tfc.Items.ItemBlocks.ItemCustomLilyPad;
@@ -157,6 +169,7 @@ import com.dunk.tfc.Items.ItemBlocks.ItemFlowers2;
 import com.dunk.tfc.Items.ItemBlocks.ItemFungi;
 import com.dunk.tfc.Items.ItemBlocks.ItemGrill;
 import com.dunk.tfc.Items.ItemBlocks.ItemLargeVessel;
+import com.dunk.tfc.Items.ItemBlocks.ItemLittleDrum;
 import com.dunk.tfc.Items.ItemBlocks.ItemLooms;
 import com.dunk.tfc.Items.ItemBlocks.ItemMetalTrapDoor;
 import com.dunk.tfc.Items.ItemBlocks.ItemOilLamp;
@@ -192,113 +205,215 @@ public class BlockSetup extends TFCBlocks
 		GameRegistry.registerBlock(stoneIgEx, ItemStone.class, "StoneIgEx");
 		GameRegistry.registerBlock(stoneSed, ItemStone.class, "StoneSed");
 		GameRegistry.registerBlock(stoneMM, ItemStone.class, "StoneMM");
-		
+
 		GameRegistry.registerBlock(fauxPalm, "Fake Palm");
-		
-		GameRegistry.registerBlock(branch_xyz, "Branch_xyz");
-		GameRegistry.registerBlock(branch_xyZ, "Branch_xyZ");
-		GameRegistry.registerBlock(branch_xYz, "Branch_xYz");
-		GameRegistry.registerBlock(branch_xYZ, "Branch_xYZ");
-		GameRegistry.registerBlock(branch_Xyz, "Branch_Xyz");
-		GameRegistry.registerBlock(branch_XyZ, "Branch_XyZ");
-		GameRegistry.registerBlock(branch_XYz, "Branch_XYz");
-		GameRegistry.registerBlock(branch_XYZ, "Branch_XYZ");	
-		GameRegistry.registerBlock(branch_x_z, "Branch_x_z");
-		GameRegistry.registerBlock(branch_x_Z, "Branch_x_Z");
-		GameRegistry.registerBlock(branch_X_z, "Branch_X_z");
-		GameRegistry.registerBlock(branch_X_Z, "Branch_X_Z");	
-		GameRegistry.registerBlock(branch__Yz, "Branch__Yz");
-		GameRegistry.registerBlock(branch__YZ, "Branch__YZ");
-		GameRegistry.registerBlock(branch__yz, "Branch__yz");
-		GameRegistry.registerBlock(branch__yZ, "Branch__yZ");	
-		GameRegistry.registerBlock(branch___z, "Branch___z");
-		GameRegistry.registerBlock(branch___Z, "Branch___Z");
-		GameRegistry.registerBlock(branch_x__, "Branch_x__");
-		GameRegistry.registerBlock(branch_X__, "Branch_X__");	
-		GameRegistry.registerBlock(branch_xy_, "Branch_xy_");
-		GameRegistry.registerBlock(branch_Xy_, "Branch_Xy_");	
-		GameRegistry.registerBlock(branch_xY_, "Branch_xY_");
-		GameRegistry.registerBlock(branch_XY_, "Branch_XY_");	
-		GameRegistry.registerBlock(branch__y_, "Branch__y_");
-		//2
-		GameRegistry.registerBlock(branch2_xyz, "Branch2_xyz");
-		GameRegistry.registerBlock(branch2_xyZ, "Branch2_xyZ");
-		GameRegistry.registerBlock(branch2_xYz, "Branch2_xYz");
-		GameRegistry.registerBlock(branch2_xYZ, "Branch2_xYZ");
-		GameRegistry.registerBlock(branch2_Xyz, "Branch2_Xyz");
-		GameRegistry.registerBlock(branch2_XyZ, "Branch2_XyZ");
-		GameRegistry.registerBlock(branch2_XYz, "Branch2_XYz");
-		GameRegistry.registerBlock(branch2_XYZ, "Branch2_XYZ");	
-		GameRegistry.registerBlock(branch2_x_z, "Branch2_x_z");
-		GameRegistry.registerBlock(branch2_x_Z, "Branch2_x_Z");
-		GameRegistry.registerBlock(branch2_X_z, "Branch2_X_z");
-		GameRegistry.registerBlock(branch2_X_Z, "Branch2_X_Z");	
-		GameRegistry.registerBlock(branch2__Yz, "Branch2__Yz");
-		GameRegistry.registerBlock(branch2__YZ, "Branch2__YZ");
-		GameRegistry.registerBlock(branch2__yz, "Branch2__yz");
-		GameRegistry.registerBlock(branch2__yZ, "Branch2__yZ");	
-		GameRegistry.registerBlock(branch2___z, "Branch2___z");
-		GameRegistry.registerBlock(branch2___Z, "Branch2___Z");
-		GameRegistry.registerBlock(branch2_x__, "Branch2_x__");
-		GameRegistry.registerBlock(branch2_X__, "Branch2_X__");	
-		GameRegistry.registerBlock(branch2_xy_, "Branch2_xy_");
-		GameRegistry.registerBlock(branch2_Xy_, "Branch2_Xy_");	
-		GameRegistry.registerBlock(branch2_xY_, "Branch2_xY_");
-		GameRegistry.registerBlock(branch2_XY_, "Branch2_XY_");	
-		GameRegistry.registerBlock(branch2__y_, "Branch2__y_");
-		//Terminal branches
-		GameRegistry.registerBlock(branchEnd_xyz, "BranchEnd_xyz");
-		GameRegistry.registerBlock(branchEnd_xyZ, "BranchEnd_xyZ");
-		GameRegistry.registerBlock(branchEnd_xYz, "BranchEnd_xYz");
-		GameRegistry.registerBlock(branchEnd_xYZ, "BranchEnd_xYZ");
-		GameRegistry.registerBlock(branchEnd_Xyz, "BranchEnd_Xyz");
-		GameRegistry.registerBlock(branchEnd_XyZ, "BranchEnd_XyZ");
-		GameRegistry.registerBlock(branchEnd_XYz, "BranchEnd_XYz");
-		GameRegistry.registerBlock(branchEnd_XYZ, "BranchEnd_XYZ");	
-		GameRegistry.registerBlock(branchEnd_x_z, "BranchEnd_x_z");
-		GameRegistry.registerBlock(branchEnd_x_Z, "BranchEnd_x_Z");
-		GameRegistry.registerBlock(branchEnd_X_z, "BranchEnd_X_z");
-		GameRegistry.registerBlock(branchEnd_X_Z, "BranchEnd_X_Z");	
-		GameRegistry.registerBlock(branchEnd__Yz, "BranchEnd__Yz");
-		GameRegistry.registerBlock(branchEnd__YZ, "BranchEnd__YZ");
-		GameRegistry.registerBlock(branchEnd__yz, "BranchEnd__yz");
-		GameRegistry.registerBlock(branchEnd__yZ, "BranchEnd__yZ");	
-		GameRegistry.registerBlock(branchEnd___z, "BranchEnd___z");
-		GameRegistry.registerBlock(branchEnd___Z, "BranchEnd___Z");
-		GameRegistry.registerBlock(branchEnd_x__, "BranchEnd_x__");
-		GameRegistry.registerBlock(branchEnd_X__, "BranchEnd_X__");	
-		GameRegistry.registerBlock(branchEnd_xy_, "BranchEnd_xy_");
-		GameRegistry.registerBlock(branchEnd_Xy_, "BranchEnd_Xy_");	
-		GameRegistry.registerBlock(branchEnd_xY_, "BranchEnd_xY_");
-		GameRegistry.registerBlock(branchEnd_XY_, "BranchEnd_XY_");	
-		GameRegistry.registerBlock(branchEnd__y_, "BranchEnd__y_");
-		//2
-		GameRegistry.registerBlock(branchEnd2_xyz, "BranchEnd2_xyz");
-		GameRegistry.registerBlock(branchEnd2_xyZ, "BranchEnd2_xyZ");
-		GameRegistry.registerBlock(branchEnd2_xYz, "BranchEnd2_xYz");
-		GameRegistry.registerBlock(branchEnd2_xYZ, "BranchEnd2_xYZ");
-		GameRegistry.registerBlock(branchEnd2_Xyz, "BranchEnd2_Xyz");
-		GameRegistry.registerBlock(branchEnd2_XyZ, "BranchEnd2_XyZ");
-		GameRegistry.registerBlock(branchEnd2_XYz, "BranchEnd2_XYz");
-		GameRegistry.registerBlock(branchEnd2_XYZ, "BranchEnd2_XYZ");	
-		GameRegistry.registerBlock(branchEnd2_x_z, "BranchEnd2_x_z");
-		GameRegistry.registerBlock(branchEnd2_x_Z, "BranchEnd2_x_Z");
-		GameRegistry.registerBlock(branchEnd2_X_z, "BranchEnd2_X_z");
-		GameRegistry.registerBlock(branchEnd2_X_Z, "BranchEnd2_X_Z");	
-		GameRegistry.registerBlock(branchEnd2__Yz, "BranchEnd2__Yz");
-		GameRegistry.registerBlock(branchEnd2__YZ, "BranchEnd2__YZ");
-		GameRegistry.registerBlock(branchEnd2__yz, "BranchEnd2__yz");
-		GameRegistry.registerBlock(branchEnd2__yZ, "BranchEnd2__yZ");	
-		GameRegistry.registerBlock(branchEnd2___z, "BranchEnd2___z");
-		GameRegistry.registerBlock(branchEnd2___Z, "BranchEnd2___Z");
-		GameRegistry.registerBlock(branchEnd2_x__, "BranchEnd2_x__");
-		GameRegistry.registerBlock(branchEnd2_X__, "BranchEnd2_X__");	
-		GameRegistry.registerBlock(branchEnd2_xy_, "BranchEnd2_xy_");
-		GameRegistry.registerBlock(branchEnd2_Xy_, "BranchEnd2_Xy_");	
-		GameRegistry.registerBlock(branchEnd2_xY_, "BranchEnd2_xY_");
-		GameRegistry.registerBlock(branchEnd2_XY_, "BranchEnd2_XY_");	
-		GameRegistry.registerBlock(branchEnd2__y_, "BranchEnd2__y_");
-		
+
+		/*
+		 * GameRegistry.registerBlock(branch_xyz, "Branch_xyz");
+		 * GameRegistry.registerBlock(branch_xyZ, "Branch_xyZ");
+		 * GameRegistry.registerBlock(branch_xYz, "Branch_xYz");
+		 * GameRegistry.registerBlock(branch_xYZ, "Branch_xYZ");
+		 * GameRegistry.registerBlock(branch_Xyz, "Branch_Xyz");
+		 * GameRegistry.registerBlock(branch_XyZ, "Branch_XyZ");
+		 * GameRegistry.registerBlock(branch_XYz, "Branch_XYz");
+		 * GameRegistry.registerBlock(branch_XYZ, "Branch_XYZ");
+		 * GameRegistry.registerBlock(branch_x_z, "Branch_x_z");
+		 * GameRegistry.registerBlock(branch_x_Z, "Branch_x_Z");
+		 * GameRegistry.registerBlock(branch_X_z, "Branch_X_z");
+		 * GameRegistry.registerBlock(branch_X_Z, "Branch_X_Z");
+		 * GameRegistry.registerBlock(branch__Yz, "Branch__Yz");
+		 * GameRegistry.registerBlock(branch__YZ, "Branch__YZ");
+		 * GameRegistry.registerBlock(branch__yz, "Branch__yz");
+		 * GameRegistry.registerBlock(branch__yZ, "Branch__yZ");
+		 * GameRegistry.registerBlock(branch___z, "Branch___z");
+		 * GameRegistry.registerBlock(branch___Z, "Branch___Z");
+		 * GameRegistry.registerBlock(branch_x__, "Branch_x__");
+		 * GameRegistry.registerBlock(branch_X__, "Branch_X__");
+		 * GameRegistry.registerBlock(branch_xy_, "Branch_xy_");
+		 * GameRegistry.registerBlock(branch_Xy_, "Branch_Xy_");
+		 * GameRegistry.registerBlock(branch_xY_, "Branch_xY_");
+		 * GameRegistry.registerBlock(branch_XY_, "Branch_XY_");
+		 * GameRegistry.registerBlock(branch__y_, "Branch__y_"); //2
+		 * GameRegistry.registerBlock(branch2_xyz, "Branch2_xyz");
+		 * GameRegistry.registerBlock(branch2_xyZ, "Branch2_xyZ");
+		 * GameRegistry.registerBlock(branch2_xYz, "Branch2_xYz");
+		 * GameRegistry.registerBlock(branch2_xYZ, "Branch2_xYZ");
+		 * GameRegistry.registerBlock(branch2_Xyz, "Branch2_Xyz");
+		 * GameRegistry.registerBlock(branch2_XyZ, "Branch2_XyZ");
+		 * GameRegistry.registerBlock(branch2_XYz, "Branch2_XYz");
+		 * GameRegistry.registerBlock(branch2_XYZ, "Branch2_XYZ");
+		 * GameRegistry.registerBlock(branch2_x_z, "Branch2_x_z");
+		 * GameRegistry.registerBlock(branch2_x_Z, "Branch2_x_Z");
+		 * GameRegistry.registerBlock(branch2_X_z, "Branch2_X_z");
+		 * GameRegistry.registerBlock(branch2_X_Z, "Branch2_X_Z");
+		 * GameRegistry.registerBlock(branch2__Yz, "Branch2__Yz");
+		 * GameRegistry.registerBlock(branch2__YZ, "Branch2__YZ");
+		 * GameRegistry.registerBlock(branch2__yz, "Branch2__yz");
+		 * GameRegistry.registerBlock(branch2__yZ, "Branch2__yZ");
+		 * GameRegistry.registerBlock(branch2___z, "Branch2___z");
+		 * GameRegistry.registerBlock(branch2___Z, "Branch2___Z");
+		 * GameRegistry.registerBlock(branch2_x__, "Branch2_x__");
+		 * GameRegistry.registerBlock(branch2_X__, "Branch2_X__");
+		 * GameRegistry.registerBlock(branch2_xy_, "Branch2_xy_");
+		 * GameRegistry.registerBlock(branch2_Xy_, "Branch2_Xy_");
+		 * GameRegistry.registerBlock(branch2_xY_, "Branch2_xY_");
+		 * GameRegistry.registerBlock(branch2_XY_, "Branch2_XY_");
+		 * GameRegistry.registerBlock(branch2__y_, "Branch2__y_"); //Terminal
+		 * branches GameRegistry.registerBlock(branchEnd_xyz, "BranchEnd_xyz");
+		 * GameRegistry.registerBlock(branchEnd_xyZ, "BranchEnd_xyZ");
+		 * GameRegistry.registerBlock(branchEnd_xYz, "BranchEnd_xYz");
+		 * GameRegistry.registerBlock(branchEnd_xYZ, "BranchEnd_xYZ");
+		 * GameRegistry.registerBlock(branchEnd_Xyz, "BranchEnd_Xyz");
+		 * GameRegistry.registerBlock(branchEnd_XyZ, "BranchEnd_XyZ");
+		 * GameRegistry.registerBlock(branchEnd_XYz, "BranchEnd_XYz");
+		 * GameRegistry.registerBlock(branchEnd_XYZ, "BranchEnd_XYZ");
+		 * GameRegistry.registerBlock(branchEnd_x_z, "BranchEnd_x_z");
+		 * GameRegistry.registerBlock(branchEnd_x_Z, "BranchEnd_x_Z");
+		 * GameRegistry.registerBlock(branchEnd_X_z, "BranchEnd_X_z");
+		 * GameRegistry.registerBlock(branchEnd_X_Z, "BranchEnd_X_Z");
+		 * GameRegistry.registerBlock(branchEnd__Yz, "BranchEnd__Yz");
+		 * GameRegistry.registerBlock(branchEnd__YZ, "BranchEnd__YZ");
+		 * GameRegistry.registerBlock(branchEnd__yz, "BranchEnd__yz");
+		 * GameRegistry.registerBlock(branchEnd__yZ, "BranchEnd__yZ");
+		 * GameRegistry.registerBlock(branchEnd___z, "BranchEnd___z");
+		 * GameRegistry.registerBlock(branchEnd___Z, "BranchEnd___Z");
+		 * GameRegistry.registerBlock(branchEnd_x__, "BranchEnd_x__");
+		 * GameRegistry.registerBlock(branchEnd_X__, "BranchEnd_X__");
+		 * GameRegistry.registerBlock(branchEnd_xy_, "BranchEnd_xy_");
+		 * GameRegistry.registerBlock(branchEnd_Xy_, "BranchEnd_Xy_");
+		 * GameRegistry.registerBlock(branchEnd_xY_, "BranchEnd_xY_");
+		 * GameRegistry.registerBlock(branchEnd_XY_, "BranchEnd_XY_");
+		 * GameRegistry.registerBlock(branchEnd__y_, "BranchEnd__y_"); //2
+		 * GameRegistry.registerBlock(branchEnd2_xyz, "BranchEnd2_xyz");
+		 * GameRegistry.registerBlock(branchEnd2_xyZ, "BranchEnd2_xyZ");
+		 * GameRegistry.registerBlock(branchEnd2_xYz, "BranchEnd2_xYz");
+		 * GameRegistry.registerBlock(branchEnd2_xYZ, "BranchEnd2_xYZ");
+		 * GameRegistry.registerBlock(branchEnd2_Xyz, "BranchEnd2_Xyz");
+		 * GameRegistry.registerBlock(branchEnd2_XyZ, "BranchEnd2_XyZ");
+		 * GameRegistry.registerBlock(branchEnd2_XYz, "BranchEnd2_XYz");
+		 * GameRegistry.registerBlock(branchEnd2_XYZ, "BranchEnd2_XYZ");
+		 * GameRegistry.registerBlock(branchEnd2_x_z, "BranchEnd2_x_z");
+		 * GameRegistry.registerBlock(branchEnd2_x_Z, "BranchEnd2_x_Z");
+		 * GameRegistry.registerBlock(branchEnd2_X_z, "BranchEnd2_X_z");
+		 * GameRegistry.registerBlock(branchEnd2_X_Z, "BranchEnd2_X_Z");
+		 * GameRegistry.registerBlock(branchEnd2__Yz, "BranchEnd2__Yz");
+		 * GameRegistry.registerBlock(branchEnd2__YZ, "BranchEnd2__YZ");
+		 * GameRegistry.registerBlock(branchEnd2__yz, "BranchEnd2__yz");
+		 * GameRegistry.registerBlock(branchEnd2__yZ, "BranchEnd2__yZ");
+		 * GameRegistry.registerBlock(branchEnd2___z, "BranchEnd2___z");
+		 * GameRegistry.registerBlock(branchEnd2___Z, "BranchEnd2___Z");
+		 * GameRegistry.registerBlock(branchEnd2_x__, "BranchEnd2_x__");
+		 * GameRegistry.registerBlock(branchEnd2_X__, "BranchEnd2_X__");
+		 * GameRegistry.registerBlock(branchEnd2_xy_, "BranchEnd2_xy_");
+		 * GameRegistry.registerBlock(branchEnd2_Xy_, "BranchEnd2_Xy_");
+		 * GameRegistry.registerBlock(branchEnd2_xY_, "BranchEnd2_xY_");
+		 * GameRegistry.registerBlock(branchEnd2_XY_, "BranchEnd2_XY_");
+		 * GameRegistry.registerBlock(branchEnd2__y_, "BranchEnd2__y_");
+		 */
+
+		GameRegistry.registerBlock(branch_xyz, ItemBranch.class, "Branch_xyz");
+		GameRegistry.registerBlock(branch_xyZ, ItemBranch.class, "Branch_xyZ");
+		GameRegistry.registerBlock(branch_xYz, ItemBranch.class, "Branch_xYz");
+		GameRegistry.registerBlock(branch_xYZ, ItemBranch.class, "Branch_xYZ");
+		GameRegistry.registerBlock(branch_Xyz, ItemBranch.class, "Branch_Xyz");
+		GameRegistry.registerBlock(branch_XyZ, ItemBranch.class, "Branch_XyZ");
+		GameRegistry.registerBlock(branch_XYz, ItemBranch.class, "Branch_XYz");
+		GameRegistry.registerBlock(branch_XYZ, ItemBranch.class, "Branch_XYZ");
+		GameRegistry.registerBlock(branch_x_z, ItemBranch.class, "Branch_x_z");
+		GameRegistry.registerBlock(branch_x_Z, ItemBranch.class, "Branch_x_Z");
+		GameRegistry.registerBlock(branch_X_z, ItemBranch.class, "Branch_X_z");
+		GameRegistry.registerBlock(branch_X_Z, ItemBranch.class, "Branch_X_Z");
+		GameRegistry.registerBlock(branch__Yz, ItemBranch.class, "Branch__Yz");
+		GameRegistry.registerBlock(branch__YZ, ItemBranch.class, "Branch__YZ");
+		GameRegistry.registerBlock(branch__yz, ItemBranch.class, "Branch__yz");
+		GameRegistry.registerBlock(branch__yZ, ItemBranch.class, "Branch__yZ");
+		GameRegistry.registerBlock(branch___z, ItemBranch.class, "Branch___z");
+		GameRegistry.registerBlock(branch___Z, ItemBranch.class, "Branch___Z");
+		GameRegistry.registerBlock(branch_x__, ItemBranch.class, "Branch_x__");
+		GameRegistry.registerBlock(branch_X__, ItemBranch.class, "Branch_X__");
+		GameRegistry.registerBlock(branch_xy_, ItemBranch.class, "Branch_xy_");
+		GameRegistry.registerBlock(branch_Xy_, ItemBranch.class, "Branch_Xy_");
+		GameRegistry.registerBlock(branch_xY_, ItemBranch.class, "Branch_xY_");
+		GameRegistry.registerBlock(branch_XY_, ItemBranch.class, "Branch_XY_");
+		GameRegistry.registerBlock(branch__y_, ItemBranch.class, "Branch__y_");
+		// 2
+		GameRegistry.registerBlock(branch2_xyz, ItemBranch2.class, "Branch2_xyz");
+		GameRegistry.registerBlock(branch2_xyZ, ItemBranch2.class, "Branch2_xyZ");
+		GameRegistry.registerBlock(branch2_xYz, ItemBranch2.class, "Branch2_xYz");
+		GameRegistry.registerBlock(branch2_xYZ, ItemBranch2.class, "Branch2_xYZ");
+		GameRegistry.registerBlock(branch2_Xyz, ItemBranch2.class, "Branch2_Xyz");
+		GameRegistry.registerBlock(branch2_XyZ, ItemBranch2.class, "Branch2_XyZ");
+		GameRegistry.registerBlock(branch2_XYz, ItemBranch2.class, "Branch2_XYz");
+		GameRegistry.registerBlock(branch2_XYZ, ItemBranch2.class, "Branch2_XYZ");
+		GameRegistry.registerBlock(branch2_x_z, ItemBranch2.class, "Branch2_x_z");
+		GameRegistry.registerBlock(branch2_x_Z, ItemBranch2.class, "Branch2_x_Z");
+		GameRegistry.registerBlock(branch2_X_z, ItemBranch2.class, "Branch2_X_z");
+		GameRegistry.registerBlock(branch2_X_Z, ItemBranch2.class, "Branch2_X_Z");
+		GameRegistry.registerBlock(branch2__Yz, ItemBranch2.class, "Branch2__Yz");
+		GameRegistry.registerBlock(branch2__YZ, ItemBranch2.class, "Branch2__YZ");
+		GameRegistry.registerBlock(branch2__yz, ItemBranch2.class, "Branch2__yz");
+		GameRegistry.registerBlock(branch2__yZ, ItemBranch2.class, "Branch2__yZ");
+		GameRegistry.registerBlock(branch2___z, ItemBranch2.class, "Branch2___z");
+		GameRegistry.registerBlock(branch2___Z, ItemBranch2.class, "Branch2___Z");
+		GameRegistry.registerBlock(branch2_x__, ItemBranch2.class, "Branch2_x__");
+		GameRegistry.registerBlock(branch2_X__, ItemBranch2.class, "Branch2_X__");
+		GameRegistry.registerBlock(branch2_xy_, ItemBranch2.class, "Branch2_xy_");
+		GameRegistry.registerBlock(branch2_Xy_, ItemBranch2.class, "Branch2_Xy_");
+		GameRegistry.registerBlock(branch2_xY_, ItemBranch2.class, "Branch2_xY_");
+		GameRegistry.registerBlock(branch2_XY_, ItemBranch2.class, "Branch2_XY_");
+		GameRegistry.registerBlock(branch2__y_, ItemBranch2.class, "Branch2__y_");
+		// Terminal branches
+		GameRegistry.registerBlock(branchEnd_xyz, ItemBranch.class, "BranchEnd_xyz");
+		GameRegistry.registerBlock(branchEnd_xyZ, ItemBranch.class, "BranchEnd_xyZ");
+		GameRegistry.registerBlock(branchEnd_xYz, ItemBranch.class, "BranchEnd_xYz");
+		GameRegistry.registerBlock(branchEnd_xYZ, ItemBranch.class, "BranchEnd_xYZ");
+		GameRegistry.registerBlock(branchEnd_Xyz, ItemBranch.class, "BranchEnd_Xyz");
+		GameRegistry.registerBlock(branchEnd_XyZ, ItemBranch.class, "BranchEnd_XyZ");
+		GameRegistry.registerBlock(branchEnd_XYz, ItemBranch.class, "BranchEnd_XYz");
+		GameRegistry.registerBlock(branchEnd_XYZ, ItemBranch.class, "BranchEnd_XYZ");
+		GameRegistry.registerBlock(branchEnd_x_z, ItemBranch.class, "BranchEnd_x_z");
+		GameRegistry.registerBlock(branchEnd_x_Z, ItemBranch.class, "BranchEnd_x_Z");
+		GameRegistry.registerBlock(branchEnd_X_z, ItemBranch.class, "BranchEnd_X_z");
+		GameRegistry.registerBlock(branchEnd_X_Z, ItemBranch.class, "BranchEnd_X_Z");
+		GameRegistry.registerBlock(branchEnd__Yz, ItemBranch.class, "BranchEnd__Yz");
+		GameRegistry.registerBlock(branchEnd__YZ, ItemBranch.class, "BranchEnd__YZ");
+		GameRegistry.registerBlock(branchEnd__yz, ItemBranch.class, "BranchEnd__yz");
+		GameRegistry.registerBlock(branchEnd__yZ, ItemBranch.class, "BranchEnd__yZ");
+		GameRegistry.registerBlock(branchEnd___z, ItemBranch.class, "BranchEnd___z");
+		GameRegistry.registerBlock(branchEnd___Z, ItemBranch.class, "BranchEnd___Z");
+		GameRegistry.registerBlock(branchEnd_x__, ItemBranch.class, "BranchEnd_x__");
+		GameRegistry.registerBlock(branchEnd_X__, ItemBranch.class, "BranchEnd_X__");
+		GameRegistry.registerBlock(branchEnd_xy_, ItemBranch.class, "BranchEnd_xy_");
+		GameRegistry.registerBlock(branchEnd_Xy_, ItemBranch.class, "BranchEnd_Xy_");
+		GameRegistry.registerBlock(branchEnd_xY_, ItemBranch.class, "BranchEnd_xY_");
+		GameRegistry.registerBlock(branchEnd_XY_, ItemBranch.class, "BranchEnd_XY_");
+		GameRegistry.registerBlock(branchEnd__y_, ItemBranch.class, "BranchEnd__y_");
+		// 2
+		GameRegistry.registerBlock(branchEnd2_xyz, ItemBranch2.class, "BranchEnd2_xyz");
+		GameRegistry.registerBlock(branchEnd2_xyZ, ItemBranch2.class, "BranchEnd2_xyZ");
+		GameRegistry.registerBlock(branchEnd2_xYz, ItemBranch2.class, "BranchEnd2_xYz");
+		GameRegistry.registerBlock(branchEnd2_xYZ, ItemBranch2.class, "BranchEnd2_xYZ");
+		GameRegistry.registerBlock(branchEnd2_Xyz, ItemBranch2.class, "BranchEnd2_Xyz");
+		GameRegistry.registerBlock(branchEnd2_XyZ, ItemBranch2.class, "BranchEnd2_XyZ");
+		GameRegistry.registerBlock(branchEnd2_XYz, ItemBranch2.class, "BranchEnd2_XYz");
+		GameRegistry.registerBlock(branchEnd2_XYZ, ItemBranch2.class, "BranchEnd2_XYZ");
+		GameRegistry.registerBlock(branchEnd2_x_z, ItemBranch2.class, "BranchEnd2_x_z");
+		GameRegistry.registerBlock(branchEnd2_x_Z, ItemBranch2.class, "BranchEnd2_x_Z");
+		GameRegistry.registerBlock(branchEnd2_X_z, ItemBranch2.class, "BranchEnd2_X_z");
+		GameRegistry.registerBlock(branchEnd2_X_Z, ItemBranch2.class, "BranchEnd2_X_Z");
+		GameRegistry.registerBlock(branchEnd2__Yz, ItemBranch2.class, "BranchEnd2__Yz");
+		GameRegistry.registerBlock(branchEnd2__YZ, ItemBranch2.class, "BranchEnd2__YZ");
+		GameRegistry.registerBlock(branchEnd2__yz, ItemBranch2.class, "BranchEnd2__yz");
+		GameRegistry.registerBlock(branchEnd2__yZ, ItemBranch2.class, "BranchEnd2__yZ");
+		GameRegistry.registerBlock(branchEnd2___z, ItemBranch2.class, "BranchEnd2___z");
+		GameRegistry.registerBlock(branchEnd2___Z, ItemBranch2.class, "BranchEnd2___Z");
+		GameRegistry.registerBlock(branchEnd2_x__, ItemBranch2.class, "BranchEnd2_x__");
+		GameRegistry.registerBlock(branchEnd2_X__, ItemBranch2.class, "BranchEnd2_X__");
+		GameRegistry.registerBlock(branchEnd2_xy_, ItemBranch2.class, "BranchEnd2_xy_");
+		GameRegistry.registerBlock(branchEnd2_Xy_, ItemBranch2.class, "BranchEnd2_Xy_");
+		GameRegistry.registerBlock(branchEnd2_xY_, ItemBranch2.class, "BranchEnd2_xY_");
+		GameRegistry.registerBlock(branchEnd2_XY_, ItemBranch2.class, "BranchEnd2_XY_");
+		GameRegistry.registerBlock(branchEnd2__y_, ItemBranch2.class, "BranchEnd2__y_");
 
 		GameRegistry.registerBlock(stoneIgInCobble, ItemStone.class, "StoneIgInCobble");
 		GameRegistry.registerBlock(stoneIgExCobble, ItemStone.class, "StoneIgExCobble");
@@ -317,8 +432,8 @@ public class BlockSetup extends TFCBlocks
 		GameRegistry.registerBlock(dirt2, ItemSoil.class, "Dirt2");
 		GameRegistry.registerBlock(sand, ItemSoil.class, "Sand");
 		GameRegistry.registerBlock(sand2, ItemSoil.class, "Sand2");
-		GameRegistry.registerBlock(clay, ItemSoil.class,"Clay");
-		GameRegistry.registerBlock(clay2, ItemSoil.class,"Clay2");
+		GameRegistry.registerBlock(clay, ItemSoil.class, "Clay");
+		GameRegistry.registerBlock(clay2, ItemSoil.class, "Clay2");
 		GameRegistry.registerBlock(grass, ItemSoil.class, "Grass");
 		GameRegistry.registerBlock(grass2, ItemSoil.class, "Grass2");
 		GameRegistry.registerBlock(clayGrass, ItemSoil.class, "ClayGrass");
@@ -349,6 +464,16 @@ public class BlockSetup extends TFCBlocks
 		GameRegistry.registerBlock(leaves2, ItemCustomWood2.class, "leaves2");
 		GameRegistry.registerBlock(sapling, ItemSapling.class, "sapling");
 		GameRegistry.registerBlock(sapling2, ItemSapling2.class, "sapling2");
+		GameRegistry.registerBlock(mudBricks,ItemStone.class, "mudBricks");
+		GameRegistry.registerBlock(mudBricks2,ItemStone.class, "mudBricks2");
+		GameRegistry.registerBlock(dryingBricks, "dryingBricks");
+		GameRegistry.registerBlock(chimneyBricks,ItemStone.class, "chimneyBricks");
+		GameRegistry.registerBlock(chimneyBricks2,ItemStone.class, "chimneyBricks2");
+		GameRegistry.registerBlock(leafLitter, "leafLitter");
+		GameRegistry.registerBlock(undergrowth, "undergrowth");
+		GameRegistry.registerBlock(undergrowthPalm, "undergrowthPalm");
+		GameRegistry.registerBlock(lowUndergrowth, "lowUndergrowth");
+		GameRegistry.registerBlock(fern, "fern");
 		GameRegistry.registerBlock(planks, ItemCustomWood.class, "planks");
 		GameRegistry.registerBlock(planks2, ItemCustomWood2.class, "planks2");
 		GameRegistry.registerBlock(plasterPlanks, ItemPlasterWood.class, "plasterPlanks");
@@ -414,18 +539,23 @@ public class BlockSetup extends TFCBlocks
 		GameRegistry.registerBlock(ice, "Ice");
 
 		GameRegistry.registerBlock(waterPlant, "SeaGrassStill");
+		
+		GameRegistry.registerBlock(tileRoof, "TileRoof");
+		GameRegistry.registerBlock(thatchRoof, "thatchRoof");
 
 		GameRegistry.registerBlock(fireBrick, "FireBrick");
 		GameRegistry.registerBlock(metalSheet, "MetalSheet");
 
 		// Wooden Doors
-		for (int i=0; i < Global.WOOD_ALL.length; i++)
+		for (int i = 0; i < Global.WOOD_ALL.length; i++)
 			GameRegistry.registerBlock(doors[i], "Door" + Global.WOOD_ALL[i].replaceAll(" ", ""));
 
 		GameRegistry.registerBlock(ingotPile, "IngotPile");
 		GameRegistry.registerBlock(barrel, ItemBarrels.class, "Barrel");
+		GameRegistry.registerBlock(bigDrum, ItemBigDrum.class, "BigDrum");
+		GameRegistry.registerBlock(littleDrum, ItemLittleDrum.class, "LittleDrum");
 		GameRegistry.registerBlock(loom, ItemLooms.class, "Loom");
-		GameRegistry.registerBlock(moss, "Moss");
+		GameRegistry.registerBlock(moss, ItemTerraBlock.class, "Moss");
 
 		GameRegistry.registerBlock(flora, ItemFlora.class, "Flora");
 		GameRegistry.registerBlock(pottery, "ClayPottery");
@@ -453,12 +583,13 @@ public class BlockSetup extends TFCBlocks
 		GameRegistry.registerBlock(cactus, ItemTerraBlock.class, "Cactus");
 		GameRegistry.registerBlock(reeds, "Reeds");
 		GameRegistry.registerBlock(pumpkin, ItemTerraBlock.class, "Pumpkin");
+		GameRegistry.registerBlock(melon, ItemTerraBlock.class, "Melon");
 		GameRegistry.registerBlock(litPumpkin, ItemTerraBlock.class, "LitPumpkin");
 		GameRegistry.registerBlock(buttonWood, "ButtonWood");
 		GameRegistry.registerBlock(vine, ItemVine.class, "Vine");
 		GameRegistry.registerBlock(leatherRack, "LeatherRack");
-		GameRegistry.registerBlock(gravel, ItemSoil.class,"Gravel");
-		GameRegistry.registerBlock(gravel2, ItemSoil.class,"Gravel2");
+		GameRegistry.registerBlock(gravel, ItemSoil.class, "Gravel");
+		GameRegistry.registerBlock(gravel2, ItemSoil.class, "Gravel2");
 
 		GameRegistry.registerBlock(grill, ItemGrill.class, "Grill");
 		GameRegistry.registerBlock(metalTrapDoor, ItemMetalTrapDoor.class, "MetalTrapDoor");
@@ -502,25 +633,45 @@ public class BlockSetup extends TFCBlocks
 		Blocks.vine.setCreativeTab(null);
 		Blocks.flower_pot.setCreativeTab(null);
 
-		bookshelf = new BlockCustomBookshelf().setHardness(1.5F).setStepSound(Block.soundTypeWood).setBlockName("Bookshelf").setBlockTextureName("bookshelf");
-		torch = new BlockTorch().setHardness(0.0F).setStepSound(Block.soundTypeWood).setBlockName("Torch").setBlockTextureName("torch_on");
-		torchOff = new BlockTorchOff().setHardness(0.0F).setStepSound(Block.soundTypeWood).setBlockName("TorchOff").setBlockTextureName("torch_on");
+		bookshelf = new BlockCustomBookshelf().setHardness(1.5F).setStepSound(Block.soundTypeWood)
+				.setBlockName("Bookshelf").setBlockTextureName("bookshelf");
+		torch = new BlockTorch().setHardness(0.0F).setStepSound(Block.soundTypeWood).setBlockName("Torch")
+				.setBlockTextureName("torch_on");
+		torchOff = new BlockTorchOff().setHardness(0.0F).setStepSound(Block.soundTypeWood).setBlockName("TorchOff")
+				.setBlockTextureName("torch_on");
 		chest = new BlockChestTFC().setHardness(2.5F).setStepSound(Block.soundTypeWood).setBlockName("Chest");
-		workbench = new BlockWorkbench().setHardness(2.5F).setStepSound(Block.soundTypeWood).setBlockName("Workbench").setBlockTextureName("crafting_table");
-		cactus = new BlockCustomCactus().setHardness(0.4F).setStepSound(Block.soundTypeCloth).setBlockName("Cactus").setBlockTextureName("cactus");
-		reeds = new BlockCustomReed().setHardness(0.0F).setStepSound(Block.soundTypeGrass).setBlockName("Reeds").setBlockTextureName("reeds");
-		pumpkin = new BlockCustomPumpkin(false).setHardness(1.0F).setStepSound(Block.soundTypeWood).setBlockName("Pumpkin").setBlockTextureName("pumpkin");
-		litPumpkin = new BlockCustomPumpkin(true).setHardness(1.0F).setStepSound(Block.soundTypeWood).setLightLevel(1.0F).setBlockName("LitPumpkin").setBlockTextureName("pumpkin");
-		buttonWood = new BlockCustomButtonWood().setHardness(0.5F).setStepSound(Block.soundTypeWood).setBlockName("ButtonWood");
-		vine = new BlockCustomVine().setHardness(0.2F).setStepSound(Block.soundTypeGrass).setBlockName("Vine").setBlockTextureName("vine");
+		workbench = new BlockWorkbench().setHardness(2.5F).setStepSound(Block.soundTypeWood).setBlockName("Workbench")
+				.setBlockTextureName("crafting_table");
+		cactus = new BlockCustomCactus().setHardness(0.4F).setStepSound(Block.soundTypeCloth).setBlockName("Cactus")
+				.setBlockTextureName("cactus");
+		reeds = new BlockCustomReed().setHardness(0.0F).setStepSound(Block.soundTypeGrass).setBlockName("Reeds")
+				.setBlockTextureName("reeds");
+		pumpkin = new BlockCustomPumpkin(false).setHardness(1.0F).setStepSound(Block.soundTypeWood)
+				.setBlockName("Pumpkin").setBlockTextureName("pumpkin");
+		melon = new BlockCustomMelon().setHardness(1.0F).setStepSound(Block.soundTypeWood).setBlockName("Melon")
+				.setBlockTextureName("melon");
+		litPumpkin = new BlockCustomPumpkin(true).setHardness(1.0F).setStepSound(Block.soundTypeWood)
+				.setLightLevel(1.0F).setBlockName("LitPumpkin").setBlockTextureName("pumpkin");
+		buttonWood = new BlockCustomButtonWood().setHardness(0.5F).setStepSound(Block.soundTypeWood)
+				.setBlockName("ButtonWood");
+		vine = new BlockCustomVine().setHardness(0.2F).setStepSound(Block.soundTypeGrass).setBlockName("Vine")
+				.setBlockTextureName("vine");
 
 		// This is not used anywhere
-		//Block.blockRegistry.addObject(Block.getIdFromBlock(Blocks.oak_stairs), "oak_stairs", (new BlockStair(Material.wood)).setBlockName("stairsWood"));
+		// Block.blockRegistry.addObject(Block.getIdFromBlock(Blocks.oak_stairs),
+		// "oak_stairs", (new
+		// BlockStair(Material.wood)).setBlockName("stairsWood"));
 
-		/*Block.blockRegistry.addObject(Block.getIdFromBlock(Blocks.snow_layer), "snow_layer",
-				(new BlockCustomSnow()).setHardness(0.1F).setStepSound(Block.soundTypeSnow).setBlockName("snow").setLightOpacity(1).setBlockTextureName("snow"));*/
-		//Snow = (Block)Block.blockRegistry.getObject("snow_layer");
-		snow = new BlockCustomSnow().setHardness(0.1F).setStepSound(Block.soundTypeSnow).setBlockName("snow").setLightOpacity(0).setBlockTextureName("snow");
+		/*
+		 * Block.blockRegistry.addObject(Block.getIdFromBlock(Blocks.snow_layer)
+		 * , "snow_layer", (new
+		 * BlockCustomSnow()).setHardness(0.1F).setStepSound(Block.soundTypeSnow
+		 * ).setBlockName("snow").setLightOpacity(1).setBlockTextureName("snow")
+		 * );
+		 */
+		// Snow = (Block)Block.blockRegistry.getObject("snow_layer");
+		snow = new BlockCustomSnow().setHardness(0.1F).setStepSound(Block.soundTypeSnow).setBlockName("snow")
+				.setLightOpacity(0).setBlockTextureName("snow");
 		Blocks.snow_layer = snow;
 		stoneIgInCobble = new BlockIgInCobble(Material.rock).setHardness(16F).setBlockName("IgInRockCobble");
 		stoneIgIn = new BlockIgIn(Material.rock).setHardness(8F).setBlockName("IgInRock");
@@ -548,14 +699,16 @@ public class BlockSetup extends TFCBlocks
 		clay = new BlockClay(0).setHardness(3F).setStepSound(Block.soundTypeGravel).setBlockName("clay");
 		clay2 = new BlockClay(16).setHardness(3F).setStepSound(Block.soundTypeGravel).setBlockName("clay");
 		clayGrass = new BlockClayGrass(0).setHardness(3F).setStepSound(Block.soundTypeGrass).setBlockName("ClayGrass");
-		clayGrass2 = new BlockClayGrass(16).setHardness(3F).setStepSound(Block.soundTypeGrass).setBlockName("ClayGrass");
+		clayGrass2 = new BlockClayGrass(16).setHardness(3F).setStepSound(Block.soundTypeGrass)
+				.setBlockName("ClayGrass");
 		grass = new BlockGrass().setHardness(3F).setStepSound(Block.soundTypeGrass).setBlockName("Grass");
 		grass2 = new BlockGrass(16).setHardness(3F).setStepSound(Block.soundTypeGrass).setBlockName("Grass");
 		peat = new BlockPeat().setHardness(3F).setStepSound(Block.soundTypeGravel).setBlockName("Peat");
 		peatGrass = new BlockPeatGrass().setHardness(3F).setStepSound(Block.soundTypeGrass).setBlockName("PeatGrass");
 		dryGrass = new BlockDryGrass(0).setHardness(3F).setStepSound(Block.soundTypeGrass).setBlockName("DryGrass");
-		dryGrass2 =new BlockDryGrass(16).setHardness(3F).setStepSound(Block.soundTypeGrass).setBlockName("DryGrass");
-		tallGrass = new BlockCustomTallGrass().setHardness(0.0F).setStepSound(Block.soundTypeGrass).setBlockName("TallGrass");
+		dryGrass2 = new BlockDryGrass(16).setHardness(3F).setStepSound(Block.soundTypeGrass).setBlockName("DryGrass");
+		tallGrass = new BlockCustomTallGrass().setHardness(0.0F).setStepSound(Block.soundTypeGrass)
+				.setBlockName("TallGrass");
 		sand = new BlockSand(0).setHardness(0.5F).setStepSound(Block.soundTypeSand).setBlockName("sand");
 		sand2 = new BlockSand(16).setHardness(0.5F).setStepSound(Block.soundTypeSand).setBlockName("sand");
 
@@ -566,23 +719,32 @@ public class BlockSetup extends TFCBlocks
 		sulfur = new BlockSulfur(Material.rock).setBlockName("Sulfur").setHardness(0.5F).setResistance(1F);
 
 		logPile = new BlockLogPile().setHardness(10F).setResistance(1F).setBlockName("LogPile");
-		woodSupportV = new BlockWoodSupport(Material.wood).setBlockName("WoodSupportV").setHardness(0.5F).setResistance(1F);
-		woodSupportH = new BlockWoodSupport(Material.wood).setBlockName("WoodSupportH").setHardness(0.5F).setResistance(1F);
-		woodSupportV2 = new BlockWoodSupport2(Material.wood).setBlockName("WoodSupportV2").setHardness(0.5F).setResistance(1F);
-		woodSupportH2 = new BlockWoodSupport2(Material.wood).setBlockName("WoodSupportH2").setHardness(0.5F).setResistance(1F);
+		woodSupportV = new BlockWoodSupport(Material.wood).setBlockName("WoodSupportV").setHardness(0.5F)
+				.setResistance(1F);
+		woodSupportH = new BlockWoodSupport(Material.wood).setBlockName("WoodSupportH").setHardness(0.5F)
+				.setResistance(1F);
+		woodSupportV2 = new BlockWoodSupport2(Material.wood).setBlockName("WoodSupportV2").setHardness(0.5F)
+				.setResistance(1F);
+		woodSupportH2 = new BlockWoodSupport2(Material.wood).setBlockName("WoodSupportH2").setHardness(0.5F)
+				.setResistance(1F);
 
-		tilledSoil = new BlockFarmland(TFCBlocks.dirt, 0).setHardness(2F).setStepSound(Block.soundTypeGravel).setBlockName("tilledSoil");
-		tilledSoil2 = new BlockFarmland(TFCBlocks.dirt2, 16).setHardness(2F).setStepSound(Block.soundTypeGravel).setBlockName("tilledSoil");
+		tilledSoil = new BlockFarmland(TFCBlocks.dirt, 0).setHardness(2F).setStepSound(Block.soundTypeGravel)
+				.setBlockName("tilledSoil");
+		tilledSoil2 = new BlockFarmland(TFCBlocks.dirt2, 16).setHardness(2F).setStepSound(Block.soundTypeGravel)
+				.setBlockName("tilledSoil");
 
 		fruitTreeWood = new BlockFruitWood().setBlockName("fruitTreeWood").setHardness(5.5F).setResistance(2F);
-		fruitTreeLeaves = new BlockFruitLeaves(0).setBlockName("fruitTreeLeaves").setHardness(0.5F).setResistance(1F).setStepSound(Block.soundTypeGrass);
-		fruitTreeLeaves2 = new BlockFruitLeaves(8).setBlockName("fruitTreeLeaves2").setHardness(0.5F).setResistance(1F).setStepSound(Block.soundTypeGrass);
+		fruitTreeLeaves = new BlockFruitLeaves(0).setBlockName("fruitTreeLeaves").setHardness(0.5F).setResistance(1F)
+				.setStepSound(Block.soundTypeGrass);
+		fruitTreeLeaves2 = new BlockFruitLeaves(8).setBlockName("fruitTreeLeaves2").setHardness(0.5F).setResistance(1F)
+				.setStepSound(Block.soundTypeGrass);
 
-		woodConstruct = new BlockWoodConstruct().setHardness(4F).setStepSound(Block.soundTypeWood).setBlockName("WoodConstruct");
+		woodConstruct = new BlockWoodConstruct().setHardness(4F).setStepSound(Block.soundTypeWood)
+				.setBlockName("WoodConstruct");
 
 		firepit = new BlockFirepit().setBlockName("Firepit").setHardness(1).setLightLevel(0F);
 		bellows = new BlockBellows(Material.wood).setBlockName("Bellows").setHardness(2);
-		forge= new BlockForge().setBlockName("Forge").setHardness(20).setLightLevel(0F);
+		forge = new BlockForge().setBlockName("Forge").setHardness(20).setLightLevel(0F);
 		anvil = new BlockAnvil().setBlockName("Anvil").setHardness(3).setResistance(100F);
 		anvil2 = new BlockAnvil(8).setBlockName("Anvil2").setHardness(3).setResistance(100F);
 
@@ -600,134 +762,674 @@ public class BlockSetup extends TFCBlocks
 
 		detailed = new BlockDetailed().setBlockName("StoneDetailed").setHardness(10);
 
-		planks = new BlockPlanks(Material.wood).setHardness(4.0F).setResistance(5.0F).setStepSound(Block.soundTypeWood).setBlockName("wood");
-		planks2 = new BlockPlanks2(Material.wood).setHardness(4.0F).setResistance(5.0F).setStepSound(Block.soundTypeWood).setBlockName("wood2");
-		plasterPlanks = new BlockPlasterPlanks(Material.wood).setHardness(6.0F).setResistance(7.0F).setStepSound(Block.soundTypeStone).setBlockName("plaster wood");
-		plasterPlanks2 = new BlockPlasterPlanks2(Material.wood).setHardness(6.0F).setResistance(7.0F).setStepSound(Block.soundTypeStone).setBlockName("plaster wood2");
-		leaves = new BlockCustomLeaves().setHardness(0.2F).setLightOpacity(1).setStepSound(Block.soundTypeGrass).setBlockName("leaves").setCreativeTab(TFCTabs.TFC_DECORATION);
-		leaves2 = new BlockCustomLeaves2().setHardness(0.2F).setLightOpacity(1).setStepSound(Block.soundTypeGrass).setBlockName("leaves2");
+		planks = new BlockPlanks(Material.wood).setHardness(4.0F).setResistance(5.0F).setStepSound(Block.soundTypeWood)
+				.setBlockName("wood");
+		planks2 = new BlockPlanks2(Material.wood).setHardness(4.0F).setResistance(5.0F)
+				.setStepSound(Block.soundTypeWood).setBlockName("wood2");
+		plasterPlanks = new BlockPlasterPlanks(Material.wood).setHardness(6.0F).setResistance(7.0F)
+				.setStepSound(Block.soundTypeStone).setBlockName("plaster wood");
+		plasterPlanks2 = new BlockPlasterPlanks2(Material.wood).setHardness(6.0F).setResistance(7.0F)
+				.setStepSound(Block.soundTypeStone).setBlockName("plaster wood2");
+		leaves = new BlockCustomLeaves().setHardness(0.2F).setLightOpacity(1).setStepSound(Block.soundTypeGrass)
+				.setBlockName("leaves").setCreativeTab(TFCTabs.TFC_DECORATION);
+		leaves2 = new BlockCustomLeaves2().setHardness(0.2F).setLightOpacity(1).setStepSound(Block.soundTypeGrass)
+				.setBlockName("leaves2");
 		sapling = new BlockSapling().setHardness(0.0F).setStepSound(Block.soundTypeGrass).setBlockName("sapling");
 		sapling2 = new BlockSapling2().setHardness(0.0F).setStepSound(Block.soundTypeGrass).setBlockName("sapling2");
 
+		mudBricks = new BlockMudBricks(0).setDirt(TFCBlocks.dirt).setHardness(12.0F).setBlockName("mudBricks");
+		mudBricks2 = new BlockMudBricks(16).setDirt(TFCBlocks.dirt2).setHardness(12.0F).setBlockName("mudBricks2");;
+		
+		dryingBricks = new BlockDryingBricks().setBlockName("dryingBricks");
+		chimneyBricks = new BlockChimney(0).setHardness(12f).setBlockName("chimneyBricks");
+		chimneyBricks2 = new BlockChimney(16).setHardness(12f).setBlockName("chimneyBricks2");
+		
+		leafLitter = new BlockLeafLitter().setHardness(0.5F).setStepSound(Block.soundTypeGrass)
+				.setBlockName("leafLitter");
+		undergrowthPalm = new BlockUndergrowth().setHardness(1.0F).setStepSound(Block.soundTypeWood).setBlockName("undergrowth");
+		undergrowth = new BlockUndergrowth().setHardness(1.0F).setStepSound(Block.soundTypeWood)
+				.setBlockName("undergrowth");
+		lowUndergrowth = new BlockUndergrowth(Material.plants).setHardness(1.0F).setStepSound(Block.soundTypeGrass)
+				.setBlockName("lowUndergrowth");
+		fern = new BlockUndergrowth(Material.plants).setHardness(1.0F).setStepSound(Block.soundTypeGrass)
+				.setBlockName("fern");
+
 		logNatural = new BlockLogNatural().setHardness(50.0F).setStepSound(Block.soundTypeWood).setBlockName("log");
 		logNatural2 = new BlockLogNatural2().setHardness(50.0F).setStepSound(Block.soundTypeWood).setBlockName("log2");
-		skinnyLogNatural = new BlockSkinnyLogNatural().setHardness(30.0F).setStepSound(Block.soundTypeWood).setBlockName("skinnyLog");
-		skinnyLogNatural2 = new BlockSkinnyLogNatural2().setHardness(30.0F).setStepSound(Block.soundTypeWood).setBlockName("skinnyLog2");
-		woodVert = new BlockLogVert().setBlockName("WoodVert").setHardness(20).setResistance(15F).setStepSound(Block.soundTypeWood);
-		woodVert2 = new BlockLogVert2().setBlockName("WoodVert2").setHardness(20).setResistance(15F).setStepSound(Block.soundTypeWood);
-		woodHoriz = new BlockLogHoriz(0).setBlockName("WoodHoriz").setHardness(20).setResistance(15F).setStepSound(Block.soundTypeWood);
-		woodHoriz2 = new BlockLogHoriz(8).setBlockName("WoodHoriz2").setHardness(20).setResistance(15F).setStepSound(Block.soundTypeWood);
-		woodHoriz3 = new BlockLogHoriz2(0).setBlockName("WoodHoriz3").setHardness(20).setResistance(15F).setStepSound(Block.soundTypeWood);
-		//Use 8 instead of 0 if Global.WOOD_ALL.length > 24
-		woodHoriz4 = new BlockLogHoriz2(/*8*/0).setBlockName("WoodHoriz4").setHardness(20).setResistance(15F).setStepSound(Block.soundTypeWood);
+		skinnyLogNatural = new BlockSkinnyLogNatural().setHardness(30.0F).setStepSound(Block.soundTypeWood)
+				.setBlockName("skinnyLog");
+		skinnyLogNatural2 = new BlockSkinnyLogNatural2().setHardness(30.0F).setStepSound(Block.soundTypeWood)
+				.setBlockName("skinnyLog2");
+		woodVert = new BlockLogVert().setBlockName("WoodVert").setHardness(20).setResistance(15F)
+				.setStepSound(Block.soundTypeWood);
+		woodVert2 = new BlockLogVert2().setBlockName("WoodVert2").setHardness(20).setResistance(15F)
+				.setStepSound(Block.soundTypeWood);
+		woodHoriz = new BlockLogHoriz(0).setBlockName("WoodHoriz").setHardness(20).setResistance(15F)
+				.setStepSound(Block.soundTypeWood);
+		woodHoriz2 = new BlockLogHoriz(8).setBlockName("WoodHoriz2").setHardness(20).setResistance(15F)
+				.setStepSound(Block.soundTypeWood);
+		woodHoriz3 = new BlockLogHoriz2(0).setBlockName("WoodHoriz3").setHardness(20).setResistance(15F)
+				.setStepSound(Block.soundTypeWood);
+		// Use 8 instead of 0 if Global.WOOD_ALL.length > 24
+		woodHoriz4 = new BlockLogHoriz2(/* 8 */0).setBlockName("WoodHoriz4").setHardness(20).setResistance(15F)
+				.setStepSound(Block.soundTypeWood);
 
 		fauxPalm = new BlockFauxPalm().setBlockName("Fake Palm");
-		
-		branch_xyz = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,-1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch_xyz");
-		branch_xyZ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,-1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch_xyZ");
-		branch_xYz = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch_xYz");
-		branch_xYZ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch_xYZ");
-		branch_Xyz = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(1,-1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch_Xyz");
-		branch_XyZ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(1,-1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch_XyZ");
-		branch_XYz = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(1,1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch_XYz");
-		branch_XYZ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(1,1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch_XYZ");	
-		branch_x_z = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,0,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch_x_z");
-		branch_x_Z = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,0,1).setStepSound(Block.soundTypeWood).setBlockName("Branch_x_Z");
-		branch_X_z = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(1,0,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch_X_z");
-		branch_X_Z = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(1,0,1).setStepSound(Block.soundTypeWood).setBlockName("Branch_X_Z");	
-		branch__Yz = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(0,1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch__Yz");
-		branch__YZ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(0,1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch__YZ");
-		branch__yz = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(0,-1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch__yz");
-		branch__yZ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(0,-1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch__yZ");	
-		branch___z = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(0,0,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch___z");
-		branch___Z = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(0,0,1).setStepSound(Block.soundTypeWood).setBlockName("Branch___Z");
-		branch_x__ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,0,0).setStepSound(Block.soundTypeWood).setBlockName("Branch_x__");
-		branch_X__ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(1,0,0).setStepSound(Block.soundTypeWood).setBlockName("Branch_X__");	
-		branch_xy_ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,-1,0).setStepSound(Block.soundTypeWood).setBlockName("Branch_xy_");
-		branch_Xy_ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(1,-1,0).setStepSound(Block.soundTypeWood).setBlockName("Branch_Xy_");	
-		branch_xY_ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,1,0).setStepSound(Block.soundTypeWood).setBlockName("Branch_xY_");
-		branch_XY_ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(1,1,0).setStepSound(Block.soundTypeWood).setBlockName("Branch_XY_");	
-		branch__y_ = ((BlockBranch) new BlockBranch().setHardness(20.0f)).setSourceXYZ(0,-1,0).setStepSound(Block.soundTypeWood).setBlockName("Branch__y_");
-		//2
-		branch2_xyz = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,-1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_xyz");
-		branch2_xyZ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,-1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_xyZ");
-		branch2_xYz = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_xYz");
-		branch2_xYZ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_xYZ");
-		branch2_Xyz = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,-1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_Xyz");
-		branch2_XyZ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,-1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_XyZ");
-		branch2_XYz = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_XYz");
-		branch2_XYZ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_XYZ");	
-		branch2_x_z = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,0,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_x_z");
-		branch2_x_Z = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,0,1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_x_Z");
-		branch2_X_z = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,0,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_X_z");
-		branch2_X_Z = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,0,1).setStepSound(Block.soundTypeWood).setBlockName("Branch2_X_Z");	
-		branch2__Yz = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch2__Yz");
-		branch2__YZ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch2__YZ");
-		branch2__yz = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,-1,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch2__yz");
-		branch2__yZ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,-1,1).setStepSound(Block.soundTypeWood).setBlockName("Branch2__yZ");	
-		branch2___z = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,0,-1).setStepSound(Block.soundTypeWood).setBlockName("Branch2___z");
-		branch2___Z = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,0,1).setStepSound(Block.soundTypeWood).setBlockName("Branch2___Z");
-		branch2_x__ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,0,0).setStepSound(Block.soundTypeWood).setBlockName("Branch2_x__");
-		branch2_X__ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,0,0).setStepSound(Block.soundTypeWood).setBlockName("Branch2_X__");	
-		branch2_xy_ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,-1,0).setStepSound(Block.soundTypeWood).setBlockName("Branch2_xy_");
-		branch2_Xy_ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,-1,0).setStepSound(Block.soundTypeWood).setBlockName("Branch2_Xy_");	
-		branch2_xY_ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,1,0).setStepSound(Block.soundTypeWood).setBlockName("Branch2_xY_");
-		branch2_XY_ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,1,0).setStepSound(Block.soundTypeWood).setBlockName("Branch2_XY_");	
-		branch2__y_ = ((BlockBranch) new BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,-1,0).setStepSound(Block.soundTypeWood).setBlockName("Branch2__y_");
-		//Terminal branches
-		branchEnd_xyz = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,-1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xyz");
-		branchEnd_xyZ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,-1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xyZ");
-		branchEnd_xYz = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xYz");
-		branchEnd_xYZ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xYZ");
-		branchEnd_Xyz = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(1,-1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_Xyz");
-		branchEnd_XyZ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(1,-1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_XyZ");
-		branchEnd_XYz = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(1,1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_XYz");
-		branchEnd_XYZ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(1,1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_XYZ");	
-		branchEnd_x_z = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,0,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_x_z");
-		branchEnd_x_Z = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,0,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_x_Z");
-		branchEnd_X_z = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(1,0,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_X_z");
-		branchEnd_X_Z = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(1,0,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_X_Z");	
-		branchEnd__Yz = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(0,1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd__Yz");
-		branchEnd__YZ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(0,1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd__YZ");
-		branchEnd__yz = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(0,-1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd__yz");
-		branchEnd__yZ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(0,-1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd__yZ");	
-		branchEnd___z = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(0,0,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd___z");
-		branchEnd___Z = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(0,0,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd___Z");
-		branchEnd_x__ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,0,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_x__");
-		branchEnd_X__ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(1,0,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_X__");	
-		branchEnd_xy_ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,-1,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xy_");
-		branchEnd_Xy_ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(1,-1,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_Xy_");	
-		branchEnd_xY_ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,1,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xY_");
-		branchEnd_XY_ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(1,1,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_XY_");	
-		branchEnd__y_ = ((BlockBranch) new BlockBranch().setHardness(10.0f)).setSourceXYZ(0,-1,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd__y_");
-		//2
-		branchEnd2_xyz = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,-1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xyz");
-		branchEnd2_xyZ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,-1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xyZ");
-		branchEnd2_xYz = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xYz");
-		branchEnd2_xYZ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xYZ");
-		branchEnd2_Xyz = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,-1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_Xyz");
-		branchEnd2_XyZ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,-1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_XyZ");
-		branchEnd2_XYz = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_XYz");
-		branchEnd2_XYZ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_XYZ");	
-		branchEnd2_x_z = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,0,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_x_z");
-		branchEnd2_x_Z = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,0,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_x_Z");
-		branchEnd2_X_z = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,0,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_X_z");
-		branchEnd2_X_Z = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,0,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_X_Z");	
-		branchEnd2__Yz = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2__Yz");
-		branchEnd2__YZ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2__YZ");
-		branchEnd2__yz = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,-1,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2__yz");
-		branchEnd2__yZ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,-1,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2__yZ");	
-		branchEnd2___z = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,0,-1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2___z");
-		branchEnd2___Z = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,0,1).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2___Z");
-		branchEnd2_x__ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,0,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_x__");
-		branchEnd2_X__ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,0,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_X__");	
-		branchEnd2_xy_ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,-1,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xy_");
-		branchEnd2_Xy_ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,-1,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_Xy_");	
-		branchEnd2_xY_ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,1,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xY_");
-		branchEnd2_XY_ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,1,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_XY_");	
-		branchEnd2__y_ = ((BlockBranch) new BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,-1,0).setEnd(true).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2__y_");
-		
-		
+
+		/*
+		 * branch_xyz = ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,-1,-1).setStepSound
+		 * (Block.soundTypeWood).setBlockName("Branch_xyz"); branch_xyZ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,-1,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_xyZ"); branch_xYz =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,1,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_xYz"); branch_xYZ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,1,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_xYZ"); branch_Xyz =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(1,-1,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_Xyz"); branch_XyZ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(1,-1,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_XyZ"); branch_XYz =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(1,1,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_XYz"); branch_XYZ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(1,1,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_XYZ"); branch_x_z =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,0,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_x_z"); branch_x_Z =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,0,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_x_Z"); branch_X_z =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(1,0,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_X_z"); branch_X_Z =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(1,0,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_X_Z"); branch__Yz =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(0,1,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch__Yz"); branch__YZ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(0,1,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch__YZ"); branch__yz =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(0,-1,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch__yz"); branch__yZ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(0,-1,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch__yZ"); branch___z =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(0,0,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch___z"); branch___Z =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(0,0,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch___Z"); branch_x__ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,0,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_x__"); branch_X__ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(1,0,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_X__"); branch_xy_ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,-1,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_xy_"); branch_Xy_ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(1,-1,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_Xy_"); branch_xY_ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(-1,1,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_xY_"); branch_XY_ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(1,1,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch_XY_"); branch__y_ =
+		 * ((BlockBranch) new
+		 * BlockBranch().setHardness(20.0f)).setSourceXYZ(0,-1,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch__y_"); //2 branch2_xyz =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,-1,-1).
+		 * setStepSound(Block.soundTypeWood).setBlockName("Branch2_xyz");
+		 * branch2_xyZ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,-1,1).setStepSound
+		 * (Block.soundTypeWood).setBlockName("Branch2_xyZ"); branch2_xYz =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,1,-1).setStepSound
+		 * (Block.soundTypeWood).setBlockName("Branch2_xYz"); branch2_xYZ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,1,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_xYZ"); branch2_Xyz =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,-1,-1).setStepSound
+		 * (Block.soundTypeWood).setBlockName("Branch2_Xyz"); branch2_XyZ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,-1,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_XyZ"); branch2_XYz =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,1,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_XYz"); branch2_XYZ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,1,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_XYZ"); branch2_x_z =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,0,-1).setStepSound
+		 * (Block.soundTypeWood).setBlockName("Branch2_x_z"); branch2_x_Z =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,0,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_x_Z"); branch2_X_z =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,0,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_X_z"); branch2_X_Z =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,0,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_X_Z"); branch2__Yz =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,1,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2__Yz"); branch2__YZ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,1,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2__YZ"); branch2__yz =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,-1,-1).setStepSound
+		 * (Block.soundTypeWood).setBlockName("Branch2__yz"); branch2__yZ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,-1,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2__yZ"); branch2___z =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,0,-1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2___z"); branch2___Z =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,0,1).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2___Z"); branch2_x__ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,0,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_x__"); branch2_X__ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,0,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_X__"); branch2_xy_ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,-1,0).setStepSound
+		 * (Block.soundTypeWood).setBlockName("Branch2_xy_"); branch2_Xy_ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,-1,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_Xy_"); branch2_xY_ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(-1,1,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_xY_"); branch2_XY_ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(1,1,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2_XY_"); branch2__y_ =
+		 * ((BlockBranch) new
+		 * BlockBranch2().setHardness(20.0f)).setSourceXYZ(0,-1,0).setStepSound(
+		 * Block.soundTypeWood).setBlockName("Branch2__y_"); //Terminal branches
+		 * branchEnd_xyz = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,-1,-1).setEnd(true)
+		 * .setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xyz");
+		 * branchEnd_xyZ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,-1,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xyZ");
+		 * branchEnd_xYz = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,1,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xYz");
+		 * branchEnd_xYZ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,1,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xYZ");
+		 * branchEnd_Xyz = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(1,-1,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_Xyz");
+		 * branchEnd_XyZ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(1,-1,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_XyZ");
+		 * branchEnd_XYz = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(1,1,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_XYz");
+		 * branchEnd_XYZ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(1,1,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_XYZ");
+		 * branchEnd_x_z = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,0,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_x_z");
+		 * branchEnd_x_Z = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,0,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_x_Z");
+		 * branchEnd_X_z = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(1,0,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_X_z");
+		 * branchEnd_X_Z = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(1,0,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_X_Z");
+		 * branchEnd__Yz = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(0,1,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd__Yz");
+		 * branchEnd__YZ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(0,1,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd__YZ");
+		 * branchEnd__yz = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(0,-1,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd__yz");
+		 * branchEnd__yZ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(0,-1,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd__yZ");
+		 * branchEnd___z = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(0,0,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd___z");
+		 * branchEnd___Z = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(0,0,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd___Z");
+		 * branchEnd_x__ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,0,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_x__");
+		 * branchEnd_X__ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(1,0,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_X__");
+		 * branchEnd_xy_ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,-1,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xy_");
+		 * branchEnd_Xy_ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(1,-1,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_Xy_");
+		 * branchEnd_xY_ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(-1,1,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_xY_");
+		 * branchEnd_XY_ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(1,1,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd_XY_");
+		 * branchEnd__y_ = ((BlockBranch) new
+		 * BlockBranch().setHardness(10.0f)).setSourceXYZ(0,-1,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd__y_"); //2
+		 * branchEnd2_xyz = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,-1,-1).setEnd(true
+		 * ).setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xyz");
+		 * branchEnd2_xyZ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,-1,1).setEnd(true)
+		 * .setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xyZ");
+		 * branchEnd2_xYz = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,1,-1).setEnd(true)
+		 * .setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xYz");
+		 * branchEnd2_xYZ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,1,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xYZ");
+		 * branchEnd2_Xyz = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,-1,-1).setEnd(true)
+		 * .setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_Xyz");
+		 * branchEnd2_XyZ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,-1,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_XyZ");
+		 * branchEnd2_XYz = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,1,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_XYz");
+		 * branchEnd2_XYZ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,1,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_XYZ");
+		 * branchEnd2_x_z = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,0,-1).setEnd(true)
+		 * .setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_x_z");
+		 * branchEnd2_x_Z = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,0,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_x_Z");
+		 * branchEnd2_X_z = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,0,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_X_z");
+		 * branchEnd2_X_Z = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,0,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_X_Z");
+		 * branchEnd2__Yz = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,1,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2__Yz");
+		 * branchEnd2__YZ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,1,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2__YZ");
+		 * branchEnd2__yz = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,-1,-1).setEnd(true)
+		 * .setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2__yz");
+		 * branchEnd2__yZ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,-1,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2__yZ");
+		 * branchEnd2___z = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,0,-1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2___z");
+		 * branchEnd2___Z = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,0,1).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2___Z");
+		 * branchEnd2_x__ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,0,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_x__");
+		 * branchEnd2_X__ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,0,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_X__");
+		 * branchEnd2_xy_ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,-1,0).setEnd(true)
+		 * .setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xy_");
+		 * branchEnd2_Xy_ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,-1,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_Xy_");
+		 * branchEnd2_xY_ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(-1,1,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_xY_");
+		 * branchEnd2_XY_ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(1,1,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2_XY_");
+		 * branchEnd2__y_ = ((BlockBranch) new
+		 * BlockBranch2().setHardness(10.0f)).setSourceXYZ(0,-1,0).setEnd(true).
+		 * setStepSound(Block.soundTypeWood).setBlockName("BranchEnd2__y_");
+		 */
+
+		branch_xyz = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(-1, -1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_xyZ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(-1, -1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_xYz = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(-1, 1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_xYZ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(-1, 1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_Xyz = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(1, -1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_XyZ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(1, -1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_XYz = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(1, 1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_XYZ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(1, 1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_x_z = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(-1, 0, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_x_Z = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(-1, 0, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_X_z = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(1, 0, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_X_Z = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(1, 0, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch__Yz = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(0, 1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch__YZ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(0, 1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch__yz = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(0, -1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch__yZ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(0, -1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch___z = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(0, 0, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch___Z = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(0, 0, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_x__ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(-1, 0, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_X__ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(1, 0, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_xy_ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(-1, -1, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_Xy_ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(1, -1, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_xY_ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(-1, 1, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch_XY_ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(1, 1, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branch__y_ = ((BlockBranch) new BlockBranch().setHardness(30.0f)).setSourceXYZ(0, -1, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		// 2
+		branch2_xyz = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(-1, -1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_xyZ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(-1, -1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_xYz = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(-1, 1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_xYZ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(-1, 1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_Xyz = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(1, -1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_XyZ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(1, -1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_XYz = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(1, 1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_XYZ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(1, 1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_x_z = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(-1, 0, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_x_Z = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(-1, 0, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_X_z = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(1, 0, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_X_Z = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(1, 0, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2__Yz = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(0, 1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2__YZ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(0, 1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2__yz = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(0, -1, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2__yZ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(0, -1, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2___z = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(0, 0, -1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2___Z = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(0, 0, 1)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_x__ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(-1, 0, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_X__ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(1, 0, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_xy_ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(-1, -1, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_Xy_ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(1, -1, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_xY_ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(-1, 1, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2_XY_ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(1, 1, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branch2__y_ = ((BlockBranch) new BlockBranch2().setHardness(30.0f)).setSourceXYZ(0, -1, 0)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		// Terminal branches
+		branchEnd_xyz = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(-1, -1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_xyZ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(-1, -1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_xYz = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(-1, 1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_xYZ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(-1, 1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_Xyz = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(1, -1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_XyZ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(1, -1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_XYz = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(1, 1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_XYZ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(1, 1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_x_z = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(-1, 0, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_x_Z = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(-1, 0, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_X_z = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(1, 0, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_X_Z = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(1, 0, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd__Yz = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(0, 1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd__YZ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(0, 1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd__yz = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(0, -1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd__yZ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(0, -1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd___z = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(0, 0, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd___Z = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(0, 0, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_x__ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(-1, 0, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_X__ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(1, 0, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_xy_ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(-1, -1, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_Xy_ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(1, -1, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_xY_ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(-1, 1, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd_XY_ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(1, 1, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		branchEnd__y_ = ((BlockBranch) new BlockBranch().setHardness(18.0f)).setSourceXYZ(0, -1, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch");
+		// 2
+		branchEnd2_xyz = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(-1, -1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_xyZ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(-1, -1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_xYz = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(-1, 1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_xYZ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(-1, 1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_Xyz = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(1, -1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_XyZ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(1, -1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_XYz = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(1, 1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_XYZ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(1, 1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_x_z = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(-1, 0, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_x_Z = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(-1, 0, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_X_z = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(1, 0, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_X_Z = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(1, 0, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2__Yz = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(0, 1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2__YZ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(0, 1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2__yz = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(0, -1, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2__yZ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(0, -1, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2___z = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(0, 0, -1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2___Z = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(0, 0, 1).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_x__ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(-1, 0, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_X__ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(1, 0, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_xy_ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(-1, -1, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_Xy_ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(1, -1, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_xY_ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(-1, 1, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2_XY_ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(1, 1, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+		branchEnd2__y_ = ((BlockBranch) new BlockBranch2().setHardness(18.0f)).setSourceXYZ(0, -1, 0).setEnd(true)
+				.setStepSound(Block.soundTypeWood).setBlockName("Branch2");
+
+		// The way this map works is that the X,Y,Z spaces are the directions in
+		// which that branch is. N represents regular, 2, terminal, terminal 2
+		// X, Y, Z, N
+		TFC_Core.branchMap[0][0][0][0] = branch_xyz;
+		TFC_Core.branchMap[0][0][2][0] = branch_xyZ;
+		TFC_Core.branchMap[0][2][0][0] = branch_xYz;
+		TFC_Core.branchMap[0][2][2][0] = branch_xYZ;
+		TFC_Core.branchMap[2][0][0][0] = branch_Xyz;
+		TFC_Core.branchMap[2][0][2][0] = branch_XyZ;
+		TFC_Core.branchMap[2][2][0][0] = branch_XYz;
+		TFC_Core.branchMap[2][2][2][0] = branch_XYZ;
+		TFC_Core.branchMap[0][1][0][0] = branch_x_z;
+		TFC_Core.branchMap[0][1][2][0] = branch_x_Z;
+		TFC_Core.branchMap[2][1][0][0] = branch_X_z;
+		TFC_Core.branchMap[2][1][2][0] = branch_X_Z;
+		TFC_Core.branchMap[1][2][0][0] = branch__Yz;
+		TFC_Core.branchMap[1][2][2][0] = branch__YZ;
+		TFC_Core.branchMap[1][0][0][0] = branch__yz;
+		TFC_Core.branchMap[1][0][2][0] = branch__yZ;
+		TFC_Core.branchMap[1][1][0][0] = branch___z;
+		TFC_Core.branchMap[1][1][2][0] = branch___Z;
+		TFC_Core.branchMap[0][1][1][0] = branch_x__;
+		TFC_Core.branchMap[2][1][1][0] = branch_X__;
+		TFC_Core.branchMap[0][0][1][0] = branch_xy_;
+		TFC_Core.branchMap[2][0][1][0] = branch_Xy_;
+		TFC_Core.branchMap[0][2][1][0] = branch_xY_;
+		TFC_Core.branchMap[2][2][1][0] = branch_XY_;
+		TFC_Core.branchMap[1][0][1][0] = branch__y_;
+
+		TFC_Core.branchMap[0][0][0][1] = branch2_xyz;
+		TFC_Core.branchMap[0][0][2][1] = branch2_xyZ;
+		TFC_Core.branchMap[0][2][0][1] = branch2_xYz;
+		TFC_Core.branchMap[0][2][2][1] = branch2_xYZ;
+		TFC_Core.branchMap[2][0][0][1] = branch2_Xyz;
+		TFC_Core.branchMap[2][0][2][1] = branch2_XyZ;
+		TFC_Core.branchMap[2][2][0][1] = branch2_XYz;
+		TFC_Core.branchMap[2][2][2][1] = branch2_XYZ;
+		TFC_Core.branchMap[0][1][0][1] = branch2_x_z;
+		TFC_Core.branchMap[0][1][2][1] = branch2_x_Z;
+		TFC_Core.branchMap[2][1][0][1] = branch2_X_z;
+		TFC_Core.branchMap[2][1][2][1] = branch2_X_Z;
+		TFC_Core.branchMap[1][2][0][1] = branch2__Yz;
+		TFC_Core.branchMap[1][2][2][1] = branch2__YZ;
+		TFC_Core.branchMap[1][0][0][1] = branch2__yz;
+		TFC_Core.branchMap[1][0][2][1] = branch2__yZ;
+		TFC_Core.branchMap[1][1][0][1] = branch2___z;
+		TFC_Core.branchMap[1][1][2][1] = branch2___Z;
+		TFC_Core.branchMap[0][1][1][1] = branch2_x__;
+		TFC_Core.branchMap[2][1][1][1] = branch2_X__;
+		TFC_Core.branchMap[0][0][1][1] = branch2_xy_;
+		TFC_Core.branchMap[2][0][1][1] = branch2_Xy_;
+		TFC_Core.branchMap[0][2][1][1] = branch2_xY_;
+		TFC_Core.branchMap[2][2][1][1] = branch2_XY_;
+		TFC_Core.branchMap[1][0][1][1] = branch2__y_;
+
+		TFC_Core.branchMap[0][0][0][2] = branchEnd_xyz;
+		TFC_Core.branchMap[0][0][2][2] = branchEnd_xyZ;
+		TFC_Core.branchMap[0][2][0][2] = branchEnd_xYz;
+		TFC_Core.branchMap[0][2][2][2] = branchEnd_xYZ;
+		TFC_Core.branchMap[2][0][0][2] = branchEnd_Xyz;
+		TFC_Core.branchMap[2][0][2][2] = branchEnd_XyZ;
+		TFC_Core.branchMap[2][2][0][2] = branchEnd_XYz;
+		TFC_Core.branchMap[2][2][2][2] = branchEnd_XYZ;
+		TFC_Core.branchMap[0][1][0][2] = branchEnd_x_z;
+		TFC_Core.branchMap[0][1][2][2] = branchEnd_x_Z;
+		TFC_Core.branchMap[2][1][0][2] = branchEnd_X_z;
+		TFC_Core.branchMap[2][1][2][2] = branchEnd_X_Z;
+		TFC_Core.branchMap[1][2][0][2] = branchEnd__Yz;
+		TFC_Core.branchMap[1][2][2][2] = branchEnd__YZ;
+		TFC_Core.branchMap[1][0][0][2] = branchEnd__yz;
+		TFC_Core.branchMap[1][0][2][2] = branchEnd__yZ;
+		TFC_Core.branchMap[1][1][0][2] = branchEnd___z;
+		TFC_Core.branchMap[1][1][2][2] = branchEnd___Z;
+		TFC_Core.branchMap[0][1][1][2] = branchEnd_x__;
+		TFC_Core.branchMap[2][1][1][2] = branchEnd_X__;
+		TFC_Core.branchMap[0][0][1][2] = branchEnd_xy_;
+		TFC_Core.branchMap[2][0][1][2] = branchEnd_Xy_;
+		TFC_Core.branchMap[0][2][1][2] = branchEnd_xY_;
+		TFC_Core.branchMap[2][2][1][2] = branchEnd_XY_;
+		TFC_Core.branchMap[1][0][1][2] = branchEnd__y_;
+
+		TFC_Core.branchMap[0][0][0][3] = branchEnd2_xyz;
+		TFC_Core.branchMap[0][0][2][3] = branchEnd2_xyZ;
+		TFC_Core.branchMap[0][2][0][3] = branchEnd2_xYz;
+		TFC_Core.branchMap[0][2][2][3] = branchEnd2_xYZ;
+		TFC_Core.branchMap[2][0][0][3] = branchEnd2_Xyz;
+		TFC_Core.branchMap[2][0][2][3] = branchEnd2_XyZ;
+		TFC_Core.branchMap[2][2][0][3] = branchEnd2_XYz;
+		TFC_Core.branchMap[2][2][2][3] = branchEnd2_XYZ;
+		TFC_Core.branchMap[0][1][0][3] = branchEnd2_x_z;
+		TFC_Core.branchMap[0][1][2][3] = branchEnd2_x_Z;
+		TFC_Core.branchMap[2][1][0][3] = branchEnd2_X_z;
+		TFC_Core.branchMap[2][1][2][3] = branchEnd2_X_Z;
+		TFC_Core.branchMap[1][2][0][3] = branchEnd2__Yz;
+		TFC_Core.branchMap[1][2][2][3] = branchEnd2__YZ;
+		TFC_Core.branchMap[1][0][0][3] = branchEnd2__yz;
+		TFC_Core.branchMap[1][0][2][3] = branchEnd2__yZ;
+		TFC_Core.branchMap[1][1][0][3] = branchEnd2___z;
+		TFC_Core.branchMap[1][1][2][3] = branchEnd2___Z;
+		TFC_Core.branchMap[0][1][1][3] = branchEnd2_x__;
+		TFC_Core.branchMap[2][1][1][3] = branchEnd2_X__;
+		TFC_Core.branchMap[0][0][1][3] = branchEnd2_xy_;
+		TFC_Core.branchMap[2][0][1][3] = branchEnd2_Xy_;
+		TFC_Core.branchMap[0][2][1][3] = branchEnd2_xY_;
+		TFC_Core.branchMap[2][2][1][3] = branchEnd2_XY_;
+		TFC_Core.branchMap[1][0][1][3] = branchEnd2__y_;
+
 		toolRack = new BlockToolRack().setHardness(3F).setBlockName("Toolrack");
 		spawnMeter = new BlockSpawnMeter().setHardness(3F).setBlockName("SpawnMeter");
 		foodPrep = new BlockFoodPrep().setHardness(1F).setBlockName("FoodPrep");
@@ -751,15 +1453,19 @@ public class BlockSetup extends TFCBlocks
 		wallSmoothMM = new BlockCustomWall(stoneMMSmooth, 6).setBlockName("WallSmooth");
 
 		// Wooden Doors
-		for (int i=0; i < Global.WOOD_ALL.length; i++)
-			doors[i] = new BlockCustomDoor(i*2).setBlockName("Door "+Global.WOOD_ALL[i]);
+		for (int i = 0; i < Global.WOOD_ALL.length; i++)
+			doors[i] = new BlockCustomDoor(i * 2).setBlockName("Door " + Global.WOOD_ALL[i]);
 
 		ingotPile = new BlockIngotPile().setBlockName("ingotpile").setHardness(3);
 
+		bigDrum = new BlockDrum(true).setBlockName("BigDrum").setHardness(5);
+		littleDrum = new BlockDrum().setBlockName("LittleDrum").setHardness(3);
+
 		barrel = new BlockBarrel().setBlockName("Barrel").setHardness(2);
 		loom = new BlockLoom().setBlockName("Loom").setHardness(2);
-		thatch = new BlockThatch().setBlockName("Thatch").setHardness(1).setStepSound(Block.soundTypeGrass).setCreativeTab(TFCTabs.TFC_BUILDING);
-		moss = new BlockMoss().setBlockName("Moss").setHardness(1).setStepSound(Block.soundTypeGrass);
+		thatch = new BlockThatch().setBlockName("Thatch").setHardness(1).setStepSound(Block.soundTypeGrass)
+				.setCreativeTab(TFCTabs.TFC_BUILDING);
+		moss = new BlockMoss().setBlockName("Moss").setHardness(1).setStepSound(Block.soundTypeCloth);
 
 		flora = new BlockFlora().setBlockName("Flora").setHardness(0.1f).setStepSound(Block.soundTypeGrass);
 		pottery = new BlockPottery().setBlockName("Pottery").setHardness(1.0f);
@@ -778,26 +1484,39 @@ public class BlockSetup extends TFCBlocks
 
 		berryBush = new BlockBerryBush().setBlockName("BerryBush").setHardness(0.3f).setStepSound(Block.soundTypeGrass);
 		crops = new BlockCrop().setBlockName("crops").setHardness(0.3F).setStepSound(Block.soundTypeGrass);
-		lilyPad = new BlockCustomLilyPad().setHardness(0.0F).setStepSound(Block.soundTypeGrass).setBlockName("LilyPad").setBlockTextureName("waterlily");
+		lilyPad = new BlockCustomLilyPad().setHardness(0.0F).setStepSound(Block.soundTypeGrass).setBlockName("LilyPad")
+				.setBlockTextureName("waterlily");
 		flowers = new BlockFlower().setHardness(0.0F).setStepSound(Block.soundTypeGrass).setBlockName("Flowers");
 		flowers2 = new BlockFlower2().setHardness(0.0F).setStepSound(Block.soundTypeGrass).setBlockName("Flowers2");
 		fungi = new BlockFungi().setHardness(0.0F).setStepSound(Block.soundTypeGrass).setBlockName("Fungi");
 
-		saltWater = new BlockSaltWater(TFCFluids.SALTWATER).setHardness(100.0F).setLightOpacity(3).setBlockName("SaltWater");
-		saltWaterStationary = new BlockLiquidStatic(TFCFluids.SALTWATER, Material.water, saltWater).setHardness(100.0F).setLightOpacity(3).setBlockName("SaltWaterStationary");
+		saltWater = new BlockSaltWater(TFCFluids.SALTWATER).setHardness(100.0F).setLightOpacity(3)
+				.setBlockName("SaltWater");
+		saltWaterStationary = new BlockLiquidStatic(TFCFluids.SALTWATER, Material.water, saltWater).setHardness(100.0F)
+				.setLightOpacity(3).setBlockName("SaltWaterStationary");
 
-		freshWater = new BlockFreshWater(TFCFluids.FRESHWATER).setHardness(100.0F).setLightOpacity(3).setBlockName("FreshWater");
-		freshWaterStationary = new BlockLiquidStatic(TFCFluids.FRESHWATER, Material.water, freshWater).setHardness(100.0F).setLightOpacity(3).setBlockName("FreshWaterStationary");
+		freshWater = new BlockFreshWater(TFCFluids.FRESHWATER).setHardness(100.0F).setLightOpacity(1)
+				.setBlockName("FreshWater");
+		freshWaterStationary = new BlockLiquidStatic(TFCFluids.FRESHWATER, Material.water, freshWater)
+				.setHardness(100.0F).setLightOpacity(1).setBlockName("FreshWaterStationary");
 
-		hotWater = new BlockHotWater(TFCFluids.HOTWATER).setHardness(100.0F).setLightOpacity(3).setBlockName("HotWater");
-		hotWaterStationary = new BlockHotWaterStatic(TFCFluids.HOTWATER, Material.water, hotWater).setHardness(100.0F).setLightOpacity(3).setBlockName("HotWaterStationary");
+		hotWater = new BlockHotWater(TFCFluids.HOTWATER).setHardness(100.0F).setLightOpacity(3)
+				.setBlockName("HotWater");
+		hotWaterStationary = new BlockHotWaterStatic(TFCFluids.HOTWATER, Material.water, hotWater).setHardness(100.0F)
+				.setLightOpacity(3).setBlockName("HotWaterStationary");
 
 		lava = new BlockLava().setHardness(0.0F).setLightLevel(1.0F).setLightOpacity(255).setBlockName("Lava");
-		lavaStationary = new BlockLiquidStatic(TFCFluids.LAVA, Material.lava, lava).setHardness(0.0F).setLightLevel(1.0F).setLightOpacity(255).setBlockName("LavaStationary");
-		ice = new BlockCustomIce().setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundTypeGlass).setBlockName("Ice").setBlockTextureName("ice");
+		lavaStationary = new BlockLiquidStatic(TFCFluids.LAVA, Material.lava, lava).setHardness(0.0F)
+				.setLightLevel(1.0F).setLightOpacity(255).setBlockName("LavaStationary");
+		ice = new BlockCustomIce().setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundTypeGlass)
+				.setBlockName("Ice").setBlockTextureName("ice");
 
-		waterPlant = new BlockWaterPlant(0).setBlockName("SeaGrassStill").setHardness(0.5f).setStepSound(Block.soundTypeGravel);
+		waterPlant = new BlockWaterPlant(0).setBlockName("SeaGrassStill").setHardness(0.5f)
+				.setStepSound(Block.soundTypeGravel);
 
+		tileRoof = new BlockTileRoof().setBlockName("TileRoof").setHardness(8);
+		thatchRoof = new BlockTileRoof(Material.grass).setBlockName("ThatchRoof").setHardness(2);
+		
 		fireBrick = new BlockFireBrick().setBlockName("FireBrick").setHardness(8);
 		metalSheet = new BlockMetalSheet().setBlockName("MetalSheet").setHardness(80);
 		leatherRack = new BlockLeatherRack().setBlockName("LeatherRack").setHardness(1);
@@ -814,7 +1533,8 @@ public class BlockSetup extends TFCBlocks
 
 		oilLamp = new BlockOilLamp().setHardness(1F).setBlockName("OilLamp");
 		hopper = new BlockHopper().setHardness(2F).setBlockName("Hopper");
-		flowerPot = new BlockCustomFlowerPot().setHardness(0.0F).setStepSound(Block.soundTypeStone).setBlockName("FlowerPot").setBlockTextureName("flower_pot");
+		flowerPot = new BlockCustomFlowerPot().setHardness(0.0F).setStepSound(Block.soundTypeStone)
+				.setBlockName("FlowerPot").setBlockTextureName("flower_pot");
 
 		stoneIgIn.setHarvestLevel("pickaxe", 0);
 		stoneIgEx.setHarvestLevel("pickaxe", 0);
@@ -850,6 +1570,24 @@ public class BlockSetup extends TFCBlocks
 		detailed.setHarvestLevel("axe", 0);
 		Blocks.oak_stairs.setHarvestLevel("axe", 0);
 		woodConstruct.setHarvestLevel("axe", 0);
+
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				for (int k = 0; k < 3; k++)
+				{
+					for (int m = 0; m < 4; m++)
+					{
+						if (TFC_Core.branchMap[i][j][k][m] != null)
+						{
+							TFC_Core.branchMap[i][j][k][m].setHarvestLevel("axe", 1);
+						}
+					}
+				}
+			}
+		}
+
 		logNatural.setHarvestLevel("axe", 1);
 		logNatural2.setHarvestLevel("axe", 1);
 		skinnyLogNatural.setHarvestLevel("axe", 1);
@@ -875,6 +1613,22 @@ public class BlockSetup extends TFCBlocks
 	{
 		Blocks.fire.setFireInfo(logNatural, 5, 5);
 		Blocks.fire.setFireInfo(logNatural2, 5, 5);
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				for (int k = 0; k < 3; k++)
+				{
+					for (int m = 0; m < 4; m++)
+					{
+						if (TFC_Core.branchMap[i][j][k][m] != null)
+						{
+							Blocks.fire.setFireInfo(TFC_Core.branchMap[i][j][k][m], 5, 5);
+						}
+					}
+				}
+			}
+		}
 		Blocks.fire.setFireInfo(skinnyLogNatural, 5, 5);
 		Blocks.fire.setFireInfo(skinnyLogNatural2, 5, 5);
 		Blocks.fire.setFireInfo(woodSupportV, 5, 20);
@@ -893,6 +1647,7 @@ public class BlockSetup extends TFCBlocks
 		Blocks.fire.setFireInfo(chest, 5, 20);
 		Blocks.fire.setFireInfo(strawHideBed, 20, 20);
 		Blocks.fire.setFireInfo(thatch, 20, 20);
+		Blocks.fire.setFireInfo(thatchRoof, 20, 20);
 		Blocks.fire.setFireInfo(woodVert, 5, 5);
 		Blocks.fire.setFireInfo(woodVert2, 5, 5);
 		Blocks.fire.setFireInfo(woodHoriz, 5, 5);
@@ -904,10 +1659,12 @@ public class BlockSetup extends TFCBlocks
 		Blocks.fire.setFireInfo(woodConstruct, 5, 20);
 		Blocks.fire.setFireInfo(berryBush, 20, 20);
 		Blocks.fire.setFireInfo(barrel, 5, 20);
+		Blocks.fire.setFireInfo(bigDrum, 5, 20);
+		Blocks.fire.setFireInfo(littleDrum, 5, 5);
 		Blocks.fire.setFireInfo(crops, 20, 20);
 		Blocks.fire.setFireInfo(logPile, 10, 10);
-		//Blocks.fire.setFireInfo(Charcoal, 100, 20);
-		for (int i=0; i < Global.WOOD_ALL.length; i++)
+		// Blocks.fire.setFireInfo(Charcoal, 100, 20);
+		for (int i = 0; i < Global.WOOD_ALL.length; i++)
 			Blocks.fire.setFireInfo(doors[i], 5, 20);
 	}
 }

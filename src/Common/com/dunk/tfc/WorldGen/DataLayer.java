@@ -34,21 +34,36 @@ public class DataLayer
 	public static final DataLayer NO_TREE = new DataLayer(29, "No Tree", -1);
 	public static final DataLayer ASH = new DataLayer(30, "Ash", 7);
 	public static final DataLayer ASPEN = new DataLayer(31, "Aspen", 1);
+	public static final DataLayer BAOBAB = new DataLayer(49, "Baobab", 4);
+	public static final DataLayer BAMBOO = new DataLayer(53, "Bamboo", 8);
 	public static final DataLayer BIRCH = new DataLayer(32, "Birch", 2);
 	public static final DataLayer CHESTNUT = new DataLayer(33, "Chestnut", 3);
 	public static final DataLayer DOUGLASFIR = new DataLayer(34, "Douglas Fir", 4);
+	public static final DataLayer EBONY = new DataLayer(47, "Ebony", 2);
+	public static final DataLayer FEVERTREE = new DataLayer(48, "Fevertree", 3);
+	public static final DataLayer GINGKO = new DataLayer(54, "Gingko", 9);
 	public static final DataLayer HICKORY = new DataLayer(35, "Hickory", 5);
 	public static final DataLayer KOA = new DataLayer(45, "Acacia Koa", 0);
+	public static final DataLayer LIMBA = new DataLayer(50, "Limba", 5);
+	public static final DataLayer MAHOGANY = new DataLayer(51, "Mahogany", 6);
 	public static final DataLayer MAPLE = new DataLayer(36, "Maple", 6);
 	public static final DataLayer OAK = new DataLayer(37, "Oak", 0);
+	public static final DataLayer PALM = new DataLayer(46, "Palm", 1);
 	public static final DataLayer PINE = new DataLayer(38, "Pine", 8);
 	public static final DataLayer REDWOOD = new DataLayer(39, "Sequoia", 9);
 	public static final DataLayer SPRUCE = new DataLayer(40, "Spruce", 10);
 	public static final DataLayer SYCAMORE = new DataLayer(41, "Sycamore", 11);
 	public static final DataLayer SAVANNAHACACIA = new DataLayer(46, "Acacia Savannah", 0);
+	public static final DataLayer TEAK = new DataLayer(52, "Teak", 7);
 	public static final DataLayer WHITECEDAR = new DataLayer(42, "White Cedar", 12);
 	public static final DataLayer WHITEELM = new DataLayer(43, "White Elm", 13);
 	public static final DataLayer WILLOW = new DataLayer(44, "Willow", 14);
+
+	public static final DataLayer AMERICAS = new DataLayer(248,"Americas",0);
+	public static final DataLayer EUROPE = new DataLayer(249,"Europe",1);
+	public static final DataLayer AFRICA = new DataLayer(250,"Africa",2);
+	public static final DataLayer ASIA = new DataLayer(251,"Asia",3);
+
 
 	public static final DataLayer EVT_0_125 = new DataLayer(80, "0.125", 0.125f);
 	public static final DataLayer EVT_0_25 = new DataLayer(81, "0.25", 0.25f);
@@ -59,9 +74,9 @@ public class DataLayer
 	public static final DataLayer EVT_8 = new DataLayer(86, "8", 8f);
 	public static final DataLayer EVT_16 = new DataLayer(87, "16", 16f);
 
-	public static final DataLayer RAIN_62_5 = new DataLayer(90, "62.5", 62.5f);
-	public static final DataLayer RAIN_125 = new DataLayer(91, "125", 125f);
-	public static final DataLayer RAIN_250 = new DataLayer(92, "250", 250f);
+	public static final DataLayer RAIN_350 = new DataLayer(90, "350", 350f);
+	public static final DataLayer RAIN_400 = new DataLayer(91, "400", 400f);
+	public static final DataLayer RAIN_450 = new DataLayer(92, "450", 450f);
 	public static final DataLayer RAIN_500 = new DataLayer(93, "500", 500f);
 	public static final DataLayer RAIN_1000 = new DataLayer(94, "1000", 1000f);
 	public static final DataLayer RAIN_2000 = new DataLayer(95, "2000", 2000f);

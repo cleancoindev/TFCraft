@@ -215,6 +215,10 @@ public class EntityCowTFC extends EntityCow implements IAnimal
 		this.entityDropItem(new ItemStack(TFCItems.hide, 1, Math.max(0, Math.min(2, (int) (ageMod * 3 - 1)))), 0);
 		this.dropItem(TFCItems.bone, (int) ((rand.nextInt(6) + 3) * ageMod));
 		this.dropItem(TFCItems.sinew, (int) ((rand.nextInt(4) + 3) * ageMod));
+		if(rand.nextInt(20)==0 && ageMod >=1 && this.sex == 0)
+		{
+			this.dropItem(TFCItems.hollowBone, 1);
+		}
 		//EntityCorpse myCorpse = getCorpse();
 		//myCorpse.setLocationAndAngles(posX, posY, posZ, 0.0F, 0.0F);
 		///myCorpse.rotationYawHead = myCorpse.rotationYaw;

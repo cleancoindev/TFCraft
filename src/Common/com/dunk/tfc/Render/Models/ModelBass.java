@@ -5,11 +5,14 @@
 // - ZeuX
 package com.dunk.tfc.Render.Models;
 
+import org.lwjgl.opengl.GL11;
+
 import com.dunk.tfc.Core.TFC_Time;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.Vec3;
 
 public class ModelBass extends ModelBase
 {
@@ -128,6 +131,12 @@ public class ModelBass extends ModelBase
   @Override
 public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
   {
+	
+	if(!entity.isInWater() && entity.onGround)
+	{
+		GL11.glRotatef((float) 90, 0, 0, 1);
+	}
+	GL11.glRotatef((float) (entity.motionY * 100f), -1, 0, 0);
     super.render(entity, f, f1, f2, f3, f4, f5);
     setRotationAngles(f, f1, f2, f3, f4, f5,entity);
     head.render(f5);
@@ -144,6 +153,12 @@ public void render(Entity entity, float f, float f1, float f2, float f3, float f
     analFin.render(f5);
     pelvicFinBox.render(f5);
     pectoralFinBox.render(f5);
+    GL11.glRotatef((float) -(entity.motionY*100f), -1, 0, 0);
+    if(!entity.isInWater() && entity.onGround)
+	{
+		GL11.glRotatef((float) -90, 0, 0, 1);
+	}
+    
   }
   
   private void setRotation(ModelRenderer model, float x, float y, float z)
@@ -157,23 +172,27 @@ public void render(Entity entity, float f, float f1, float f2, float f3, float f
   public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
   {
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+		body.rotateAngleX = 0;
 
 		n = TFC_Time.getTotalTicks() % 30;
 		rotateMouth = (n) * (n - 30) * (0.0044f * 0.5f);
-		rotateSwim = (n) * (n - 30) * ( -0.0044f);
+		rotateSwim =  (float) Math.sin(n * (Math.PI/15d));//(n) /** (n - 30)*/ * ( -0.0044f) * 5f * (((n %60)-30)>0?-1f:1f) ;
 
 		setRotation(mouth, -0.2617994F + -0.2617994F * rotateMouth, 0F, 0F);
-
+		Vec3 entityMotion = Vec3.createVectorHelper(entity.motionX, entity.motionY, entity.motionZ);
+		float speed = (float) entityMotion.lengthVector();
+		speed += 0.25f;
 		if (entity.isInWater() || entity.isAirBorne)
 		{
-			setRotation(tailEnd, 0F, -0.2617994F + 0.2617994F * rotateSwim * (entity.isAirBorne ? 4 : 2), 0F);
-			setRotation(tailFin, 0F, -0.2617994F + 0.2617994F * rotateSwim * (entity.isAirBorne ? 4 : 2), 0F);
+			setRotation(tailEnd, 0F, 0.2617994F * rotateSwim * (entity.isAirBorne ? 4f : 2f)*speed, 0F);
+			setRotation(tailFin, 0F,  0.2617994F * rotateSwim * (entity.isAirBorne ? 4f : 2f)*speed, 0F);
 		}
 		else
 		{
 			setRotation(tailEnd, 0F, 0F, 0F);
 			setRotation(tailFin, 0F, 0F, 0F);
 		}
+		
   }
 
 }

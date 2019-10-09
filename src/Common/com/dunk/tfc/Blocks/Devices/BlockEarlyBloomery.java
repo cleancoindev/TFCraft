@@ -7,6 +7,7 @@ import com.dunk.tfc.Blocks.BlockTerraContainer;
 import com.dunk.tfc.Core.CollisionRayTraceStandard;
 import com.dunk.tfc.Core.TFCTabs;
 import com.dunk.tfc.Core.TFC_Core;
+import com.dunk.tfc.Items.Tools.ItemFirestarter;
 import com.dunk.tfc.TileEntities.TEBloomery;
 import com.dunk.tfc.api.TFCBlocks;
 import com.dunk.tfc.api.TFCItems;
@@ -72,7 +73,7 @@ public class BlockEarlyBloomery extends BlockTerraContainer implements ICustomCo
 			TEBloomery te = (TEBloomery) world.getTileEntity(x, y, z);
 			ItemStack is = entityplayer.getCurrentEquippedItem();
 
-			if (is != null && (is.getItem() == TFCItems.fireStarter || is.getItem() == TFCItems.flintSteel))
+			if (is != null && (is.getItem() instanceof ItemFirestarter || is.getItem() == TFCItems.flintSteel))
 			{
 				if (te.canLight())
 					entityplayer.getCurrentEquippedItem().damageItem(1, entityplayer);

@@ -476,6 +476,11 @@ public class TFC_Climate
 	{
 		return getCacheManager(world).getTreeLayerAt(x, z, index).data1;
 	}
+	
+	public static int getRegionLayer(World world, int x, int y, int z)
+	{
+		return getCacheManager(world).getRegionLayerAt(x, z).data1;
+	}
 
 	public static DataLayer getRockLayer(World world, int x, int y, int z, int index)
 	{

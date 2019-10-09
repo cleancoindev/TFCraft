@@ -15,6 +15,8 @@ import com.dunk.tfc.Items.ItemQuiver;
 import com.dunk.tfc.Render.RenderClothing;
 import com.dunk.tfc.Render.RenderLargeItem;
 import com.dunk.tfc.Render.RenderQuiver;
+import com.dunk.tfc.api.TFCBlocks;
+import com.dunk.tfc.api.TFCOptions;
 import com.dunk.tfc.api.Interfaces.IEquipable;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -23,6 +25,7 @@ import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
@@ -74,7 +77,7 @@ public class PlayerRenderHandler
 
 		if (e.entityPlayer.getCurrentArmor(0) != null && !e.entityPlayer.isSneaking())
 		{
-			GL11.glTranslatef(0, 1f / 16f, 0f);
+			GL11.glTranslatef(0, 0.5f / 16f, 0f);
 		}
 
 		/*
@@ -115,45 +118,51 @@ public class PlayerRenderHandler
 		 * i,e.partialRenderTick,e.renderer); } } // }
 		 */
 	}
-	 private static FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
-	 
-	 
-	 /**
-	     * Update and return colorBuffer with the RGBA values passed as arguments
-	     */
-	    private static FloatBuffer setColorBuffer(double p_74517_0_, double p_74517_2_, double p_74517_4_, double p_74517_6_)
-	    {
-	        /**
-	         * Update and return colorBuffer with the RGBA values passed as arguments
-	         */
-	        return setColorBuffer((float)p_74517_0_, (float)p_74517_2_, (float)p_74517_4_, (float)p_74517_6_);
-	    }
 
-	    /**
-	     * Update and return colorBuffer with the RGBA values passed as arguments
-	     */
-	    private static FloatBuffer setColorBuffer(float p_74521_0_, float p_74521_1_, float p_74521_2_, float p_74521_3_)
-	    {
-	        colorBuffer.clear();
-	        colorBuffer.put(p_74521_0_).put(p_74521_1_).put(p_74521_2_).put(p_74521_3_);
-	        colorBuffer.flip();
-	        /** Float buffer used to set OpenGL material colors */
-	        return colorBuffer;
-	    }
+	private static FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
 
-	 
+	/**
+	 * Update and return colorBuffer with the RGBA values passed as arguments
+	 */
+	private static FloatBuffer setColorBuffer(double p_74517_0_, double p_74517_2_, double p_74517_4_,
+			double p_74517_6_)
+	{
+		/**
+		 * Update and return colorBuffer with the RGBA values passed as
+		 * arguments
+		 */
+		return setColorBuffer((float) p_74517_0_, (float) p_74517_2_, (float) p_74517_4_, (float) p_74517_6_);
+	}
+
+	/**
+	 * Update and return colorBuffer with the RGBA values passed as arguments
+	 */
+	private static FloatBuffer setColorBuffer(float p_74521_0_, float p_74521_1_, float p_74521_2_, float p_74521_3_)
+	{
+		colorBuffer.clear();
+		colorBuffer.put(p_74521_0_).put(p_74521_1_).put(p_74521_2_).put(p_74521_3_);
+		colorBuffer.flip();
+		/** Float buffer used to set OpenGL material colors */
+		return colorBuffer;
+	}
+
 	@SubscribeEvent()
 	public void onPlayerRenderTickPost(RenderPlayerEvent.Post e)
 	{
+
 		UUID uuid = e.entityPlayer.getPersistentID();
 		EntityPlayer el = e.entityPlayer;
+
 		PlayerInfo f = PlayerManagerTFC.getInstance().getPlayerInfoFromName(el.getDisplayName());
 		if (f != null && f.chiselMode != 0)
 		{
 			// This seems to work!!!!
 			// System.out.println(f.chiselMode);
 		}
-
+		if (e.entityPlayer.getCurrentArmor(0) != null && !e.entityPlayer.isSneaking())
+		{
+			GL11.glTranslatef(0, 0.5f / 16f, 0f);
+		}
 		// if(((EntityPlayer)el).inventory instanceof InventoryPlayerTFC){
 		// System.out.println("The inventory was found");
 		ItemStack[] equipables = el == Minecraft.getMinecraft().thePlayer ? f.myExtraItems// ((InventoryPlayerTFC)
@@ -162,17 +171,18 @@ public class PlayerRenderHandler
 				: f != null ? f.myExtraItems : null;// ((InventoryPlayerTFC)((EntityPlayer)el).inventory).extraEquipInventory;*/
 		if (RenderManager.instance.playerViewY == 180)
 		{
-			
-			//GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-			//RenderHelper.enableStandardItemLighting();
+
+			// GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+			// RenderHelper.enableStandardItemLighting();
 			float f0 = 0.4F;
-	        float f1 = 0.6F;
-	        float f2 = 0.0F;
-			//GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, setColorBuffer(0.4f, 0.4f, 0.4f, 1.0F));
-	        GL11.glEnable(GL11.GL_ALPHA_TEST);
-	        GL11.glDisable(GL11.GL_CULL_FACE);
-	        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-	        //GL11.glDisable(GL11.GL_DEPTH_TEST);
+			float f1 = 0.6F;
+			float f2 = 0.0F;
+			// GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT,
+			// setColorBuffer(0.4f, 0.4f, 0.4f, 1.0F));
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GL11.glDisable(GL11.GL_CULL_FACE);
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			// GL11.glDisable(GL11.GL_DEPTH_TEST);
 		}
 		if (equipables != null)
 		{
@@ -189,15 +199,11 @@ public class PlayerRenderHandler
 					float rotateAngle;
 					if (entity.ridingEntity != null && entity.ridingEntity instanceof EntityLiving)
 					{
-						rotateAngle = ((EntityLiving) entity.ridingEntity).prevRenderYawOffset
-								+ (((EntityLiving) entity.ridingEntity).renderYawOffset
-										- ((EntityLiving) entity.ridingEntity).prevRenderYawOffset)
-										* e.partialRenderTick;
+						rotateAngle = ((EntityLiving) entity.ridingEntity).prevRenderYawOffset + (((EntityLiving) entity.ridingEntity).renderYawOffset - ((EntityLiving) entity.ridingEntity).prevRenderYawOffset) * e.partialRenderTick;
 					}
 					else
 					{
-						rotateAngle = entity.prevRenderYawOffset
-								+ (entity.renderYawOffset - entity.prevRenderYawOffset) * e.partialRenderTick;
+						rotateAngle = entity.prevRenderYawOffset + (entity.renderYawOffset - entity.prevRenderYawOffset) * e.partialRenderTick;
 					}
 
 					// System.out.println(rotateAngle);
@@ -232,6 +238,26 @@ public class PlayerRenderHandler
 							e.entityPlayer.inventory.armorInventory);
 					GL11.glPopMatrix();
 				}
+			}
+		}
+		if (TFCOptions.enableDebugInventoryRendering)
+		{
+			if (e.entityPlayer.getHeldItem() != null && e.entityPlayer.getHeldItem().getItem() instanceof ItemBlock)
+			{
+				// This is used to get images of item renders for the wiki
+				GL11.glPushMatrix();
+
+				GL11.glColor3f(1f, 1f, 1f);
+				GL11.glTranslatef(4, 0f, 0);
+				// GL11.glRotatef(90, 0, 1, 0);
+				GL11.glScalef(1.8f, 1.8f, 1.8f);
+				if (el != Minecraft.getMinecraft().thePlayer)
+				{
+					GL11.glTranslatef(0, -0.8f, 0);
+
+				}
+				RENDER_LARGE.render(e.entityPlayer, e.entityPlayer.getHeldItem(), e.partialRenderTick);
+				GL11.glPopMatrix();
 			}
 		}
 		for (ItemStack i : e.entityPlayer.inventory.armorInventory)

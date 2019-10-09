@@ -517,7 +517,7 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 	}
 
 	@Override
-	public EnumDamageType getDamageType()
+	public EnumDamageType getDamageType(EntityLivingBase is)
 	{
 		return EnumDamageType.PIERCING;
 	}

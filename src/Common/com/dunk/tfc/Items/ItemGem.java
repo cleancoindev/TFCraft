@@ -31,6 +31,8 @@ public class ItemGem extends ItemTerra
 		list.add(new ItemStack(this,1, 4));
 	}
 
+	
+	
 	@Override
 	public IIcon getIconFromDamage(int i)
 	{

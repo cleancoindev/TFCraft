@@ -6,6 +6,7 @@ import com.dunk.tfc.Reference;
 import com.dunk.tfc.Core.TFCTabs;
 import com.dunk.tfc.Entities.EntityJavelin;
 import com.dunk.tfc.Items.ItemQuiver;
+import com.dunk.tfc.Render.Item.PoleItemRenderer;
 import com.dunk.tfc.api.TFCBlocks;
 import com.dunk.tfc.api.Crafting.AnvilManager;
 import com.dunk.tfc.api.Enums.EnumAmmo;
@@ -23,6 +24,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +33,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ItemJavelin extends ItemTerraTool implements ICausesDamage, IProjectile, IQuiverAmmo
 {
@@ -63,6 +66,7 @@ public class ItemJavelin extends ItemTerraTool implements ICausesDamage, IProjec
 		name = name.replace("Sed ", "");
 		name = name.replace("MM ", "");
 		this.itemIcon = registerer.registerIcon(Reference.MOD_ID + ":" + "tools/" + name);
+		MinecraftForgeClient.registerItemRenderer(this, new PoleItemRenderer());
 	}
 
 	/**
@@ -211,7 +215,7 @@ public class ItemJavelin extends ItemTerraTool implements ICausesDamage, IProjec
 	}
 
 	@Override
-	public EnumDamageType getDamageType() 
+	public EnumDamageType getDamageType(EntityLivingBase is) 
 	{
 		return EnumDamageType.PIERCING;
 	}

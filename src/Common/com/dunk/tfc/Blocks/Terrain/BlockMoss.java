@@ -4,6 +4,9 @@ import java.util.Random;
 
 import com.dunk.tfc.Reference;
 import com.dunk.tfc.Blocks.BlockTerra;
+import com.dunk.tfc.Core.TFCTabs;
+import com.dunk.tfc.Core.TFC_Climate;
+import com.dunk.tfc.api.TFCBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -20,11 +23,15 @@ import net.minecraft.world.World;
 
 public class BlockMoss extends BlockTerra
 {
+	
+	IIcon[] icons;
 	public BlockMoss()
 	{
 		super(Material.vine);
 		this.setTickRandomly(true);
-		this.setCreativeTab(null);
+		this.canBlockGrass =true;
+		this.setCreativeTab(TFCTabs.TFC_MISC);
+		icons = new IIcon[15];
 	}
 
 	/**
@@ -33,16 +40,28 @@ public class BlockMoss extends BlockTerra
 	@Override
 	public void setBlockBoundsForItemRender()
 	{
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+		this.setBlockBounds(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
 	}
 
+	@Override
+	public boolean isReplaceable(IBlockAccess world, int x, int y, int z)
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z)
+	{
+		return false;
+	}
+	
 	/**
 	 * The type of render function that is called for this block
 	 */
 	@Override
 	public int getRenderType()
 	{
-		return 20;
+		return TFCBlocks.mossRenderId;
 	}
 
 	/**
@@ -68,12 +87,28 @@ public class BlockMoss extends BlockTerra
 	public void registerBlockIcons(IIconRegister iconRegisterer)
 	{
 		this.blockIcon = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss");
+		int i = 0;
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0002");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0003");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0006");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0009");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0010");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0011");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0012");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0013");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0015");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0016");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0017");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0018");
+		this.icons[i++] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "plants/Moss_0019");
 	}
 
 	@Override
 	public IIcon getIcon(int side, int meta)
 	{
-		return this.blockIcon;
+		meta%= icons.length;
+		return this.icons[meta];
 	}
 
 	/**
@@ -82,70 +117,8 @@ public class BlockMoss extends BlockTerra
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
 	{
-		int l = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
-		float f = 1.0F;
-		float f1 = 1.0F;
-		float f2 = 1.0F;
-		float f3 = 0.0F;
-		float f4 = 0.0F;
-		float f5 = 0.0F;
-		boolean flag = l > 0;
-
-		if ((l & 2) != 0)
-		{
-			f3 = Math.max(f3, 0.0625F);
-			f = 0.0F;
-			f1 = 0.0F;
-			f4 = 1.0F;
-			f2 = 0.0F;
-			f5 = 1.0F;
-			flag = true;
-		}
-
-		if ((l & 8) != 0)
-		{
-			f = Math.min(f, 0.9375F);
-			f3 = 1.0F;
-			f1 = 0.0F;
-			f4 = 1.0F;
-			f2 = 0.0F;
-			f5 = 1.0F;
-			flag = true;
-		}
-
-		if ((l & 4) != 0)
-		{
-			f5 = Math.max(f5, 0.0625F);
-			f2 = 0.0F;
-			f = 0.0F;
-			f3 = 1.0F;
-			f1 = 0.0F;
-			f4 = 1.0F;
-			flag = true;
-		}
-
-		if ((l & 1) != 0)
-		{
-			f2 = Math.min(f2, 0.9375F);
-			f5 = 1.0F;
-			f = 0.0F;
-			f3 = 1.0F;
-			f1 = 0.0F;
-			f4 = 1.0F;
-			flag = true;
-		}
-
-		if (!flag && this.canBePlacedOn(par1IBlockAccess.getBlock(par2, par3 + 1, par4)))
-		{
-			f1 = Math.min(f1, 0.9375F);
-			f4 = 1.0F;
-			f = 0.0F;
-			f3 = 1.0F;
-			f2 = 0.0F;
-			f5 = 1.0F;
-		}
-
-		this.setBlockBounds(f, f1, f2, f3, f4, f5);
+		
+		this.setBlockBounds(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
 	}
 
 	/**
@@ -164,6 +137,8 @@ public class BlockMoss extends BlockTerra
 	@Override
 	public boolean canPlaceBlockOnSide(World par1World, int par2, int par3, int par4, int par5)
 	{
+		return true;
+		/*
 		switch (par5)
 		{
 		case 1:
@@ -178,7 +153,7 @@ public class BlockMoss extends BlockTerra
 			return this.canBePlacedOn(par1World.getBlock(par2 - 1, par3, par4));
 		default:
 			return false;
-		}
+		}*/
 	}
 
 	/**
@@ -186,18 +161,27 @@ public class BlockMoss extends BlockTerra
 	 */
 	private boolean canBePlacedOn(Block block)
 	{
-		if (block == Blocks.air)
-			return false;
-		else
-			return block.renderAsNormalBlock() && block.getMaterial().blocksMovement();
+		return true;
+	//	if (block == Blocks.air)
+	//		return false;
+	//	else
+	//		return block.renderAsNormalBlock() && block.getMaterial().blocksMovement();
 	}
 
 	/**
 	 * Returns if the vine can stay in the world. It also changes the metadata according to neighboring blocks.
 	 */
-	private boolean canVineStay(World par1World, int par2, int par3, int par4)
+	private boolean canVineStay(World world, int x, int y, int z)
 	{
-		int l = par1World.getBlockMetadata(par2, par3, par4);
+		if(!world.isRemote)
+		{
+			if(TFC_Climate.getHeightAdjustedTemp(world, x, y, z) < 5)
+			{
+				return false;
+			}
+		}
+		
+		int l = world.getBlockMetadata(x, y, z);
 		int i1 = l;
 
 		if (l > 0)
@@ -205,19 +189,19 @@ public class BlockMoss extends BlockTerra
 			for (int j1 = 0; j1 <= 3; ++j1)
 			{
 				int k1 = 1 << j1;
-				if ((l & k1) != 0 && !this.canBePlacedOn(par1World.getBlock(par2 + Direction.offsetX[j1], par3, par4 + Direction.offsetZ[j1])) && (par1World.getBlock(par2, par3 + 1, par4) != this || (par1World.getBlockMetadata(par2, par3 + 1, par4) & k1) == 0))
+				if ((l & k1) != 0 && !this.canBePlacedOn(world.getBlock(x + Direction.offsetX[j1], y, z + Direction.offsetZ[j1])) && (world.getBlock(x, y + 1, z) != this || (world.getBlockMetadata(x, y + 1, z) & k1) == 0))
 					i1 &= ~k1;
 			}
 		}
 
-		if (i1 == 0 && !this.canBePlacedOn(par1World.getBlock(par2, par3 + 1, par4)))
+		if (i1 == 0 && !this.canBePlacedOn(world.getBlock(x, y + 1, z)))
 		{
 			return false;
 		}
 		else
 		{
 			if (i1 != l)
-				par1World.setBlockMetadataWithNotify(par2, par3, par4, i1, 2);
+				world.setBlockMetadataWithNotify(x, y, z, i1, 2);
 
 			return true;
 		}
@@ -374,7 +358,7 @@ public class BlockMoss extends BlockTerra
 			break;
 		}
 
-		return b0 != 0 ? b0 : par9;
+		return 0;//b0 != 0 ? b0 : par9;
 	}
 
 	/**

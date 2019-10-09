@@ -56,6 +56,10 @@ public class BlockRenderHandler implements ISimpleBlockRenderingHandler
 		{
 			return TFC_CoreRender.renderSnow(block, i, j, k, renderer);
 		}
+		else if (modelId == TFCBlocks.mossRenderId)
+		{
+			return TFC_CoreRender.renderMoss(block, i, j, k, renderer);
+		}
 		else if (modelId == TFCBlocks.firepitRenderId)
 		{
 			return TFC_CoreRender.renderFirepit(block, i, j, k, renderer);
@@ -87,6 +91,10 @@ public class BlockRenderHandler implements ISimpleBlockRenderingHandler
 		else if (modelId == TFCBlocks.leavesFruitRenderId)
 		{
 			return TFC_CoreRender.renderFruitLeaves(block, i, j, k, renderer);
+		}
+		else if (modelId == TFCBlocks.leavesNewFruitRenderId)
+		{
+			return TFC_CoreRender.renderNewFruitLeaves(block, i, j, k, renderer);
 		}
 		else if (modelId == TFCBlocks.stairRenderId)
 		{

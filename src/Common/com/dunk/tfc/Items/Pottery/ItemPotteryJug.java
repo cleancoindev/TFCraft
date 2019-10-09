@@ -6,6 +6,7 @@ import com.dunk.tfc.Reference;
 import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Core.TFC_Sounds;
 import com.dunk.tfc.Core.TFC_Time;
+import com.dunk.tfc.Core.Player.BodyTempStats;
 import com.dunk.tfc.Core.Player.FoodStatsTFC;
 import com.dunk.tfc.api.Enums.EnumSize;
 import com.dunk.tfc.api.Enums.EnumWeight;
@@ -24,6 +25,7 @@ import net.minecraft.world.World;
 public class ItemPotteryJug extends ItemPotteryBase
 {
 	private IIcon waterIcon;
+	private long heatProtectionDuration = 2400;
 
 	public ItemPotteryJug()
 	{
@@ -43,6 +45,16 @@ public class ItemPotteryJug extends ItemPotteryBase
 			if(is.getItemDamage() == 2)
 			{
 				TFC_Core.getPlayerFoodStats(player).restoreWater(player, 24000);
+				BodyTempStats bodyTemp = TFC_Core.getBodyTempStats(player);
+				if(bodyTemp.temporaryHeatProtection < 1)
+				{
+					bodyTemp.temporaryHeatProtection++;
+				}
+				if(bodyTemp.tempHeatTimeRemaining < heatProtectionDuration)
+				{
+					bodyTemp.tempHeatTimeRemaining = heatProtectionDuration;
+				}
+				TFC_Core.setBodyTempStats(player, bodyTemp);
 			}
 
 			if (is.getItemDamage() > 1 && !player.capabilities.isCreativeMode)

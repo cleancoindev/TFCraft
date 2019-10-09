@@ -5,6 +5,8 @@ import com.dunk.tfc.Blocks.Terrain.BlockCobble;
 import com.dunk.tfc.Blocks.Terrain.BlockSand;
 import com.dunk.tfc.Core.TFCTabs;
 import com.dunk.tfc.Core.TFC_Core;
+import com.dunk.tfc.Core.TFC_Sounds;
+import com.dunk.tfc.api.TFCItems;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,20 +39,21 @@ public class BlockThatch extends BlockTerra
 	@Override
 	public void harvestBlock(World world, EntityPlayer entityplayer, int i, int j, int k, int l)
 	{
-		//Random R = new Random();
-		//dropBlockAsItem(world, i, j, k, new ItemStack(idDropped(0,R,l), 1, l+13));
+		// Random R = new Random();
+		// dropBlockAsItem(world, i, j, k, new ItemStack(idDropped(0,R,l), 1,
+		// l+13));
 
-		//super.harvestBlock(world, entityplayer, i, j, k, l);
+		// super.harvestBlock(world, entityplayer, i, j, k, l);
 		dropBlockAsItem(world, i, j, k, new ItemStack(this, 1, l));
 	}
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
 	{
-		if(!world.isRemote)
+		if (!world.isRemote)
 		{
-			Block b = world.getBlock(x, y+1, z);
-			if(TFC_Core.isSoilOrGravel(b) || b instanceof BlockCobble || b instanceof BlockSand)
+			Block b = world.getBlock(x, y + 1, z);
+			if (TFC_Core.isSoilOrGravel(b) || b instanceof BlockCobble || b instanceof BlockSand)
 			{
 				TFC_Core.setBlockToAirWithDrops(world, x, y, z);
 			}

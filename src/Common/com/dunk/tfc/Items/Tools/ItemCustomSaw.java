@@ -2,6 +2,7 @@ package com.dunk.tfc.Items.Tools;
 
 import java.util.List;
 
+import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Items.ItemTerra;
 import com.dunk.tfc.api.Enums.EnumItemReach;
 import com.dunk.tfc.api.Enums.EnumSize;
@@ -32,6 +33,7 @@ public class ItemCustomSaw extends ItemCustomAxe implements ISize
 	public void addInformation(ItemStack is, EntityPlayer player, List arraylist, boolean flag) 
 	{
 		ItemTerra.addSizeInformation(is, arraylist);
+		arraylist.add(TFC_Core.translate("gui."+this.getReach(is).getName()));
 		ItemTerraTool.addSmithingBonusInformation(is, arraylist);
 	}
 

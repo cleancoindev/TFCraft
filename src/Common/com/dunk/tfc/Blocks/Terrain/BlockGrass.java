@@ -244,10 +244,12 @@ public class BlockGrass extends BlockTerra
 			if(world.getBlock(i, j + 1, k) == Blocks.snow && !TFC_Core.isDryGrass(this))
 			{
 				world.setBlock(i, j, k, TFC_Core.getTypeForDryGrassFromSoil(this), meta, 0x2);
+				world.markBlockForUpdate(i, j, k);
 			}
 			else if (world.getBlock(i, j+1, k).isSideSolid(world, i, j+1, k, ForgeDirection.DOWN))
 			{
 				world.setBlock(i, j, k, TFC_Core.getTypeForDirtFromGrass(this), meta, 0x2);
+				world.markBlockForUpdate(i, j, k);
 			}
 			else if (world.canBlockSeeTheSky(i, j + 1, k))
 			{
@@ -265,7 +267,7 @@ public class BlockGrass extends BlockTerra
 				}
 
 				boolean nearWater = false;
-				/*if(j < 250 && j >= Global.SEALEVEL-1){
+				if(j < 250 && j >= Global.SEALEVEL-1){
 					for(int y = 0; y < 2 && !nearWater; y++)
 					{
 						for(int x = -4; x < 5 && !nearWater; x++)
@@ -277,19 +279,21 @@ public class BlockGrass extends BlockTerra
 							}
 						}
 					}
-				}*/
+				}
 
-				if(TFC_Core.isGrass(this) && !TFC_Core.isDryGrass(this) && /*!nearWater &&*/ rain < 200)
+				if(TFC_Core.isGrass(this) && !TFC_Core.isDryGrass(this) && !nearWater && rain < 200)
 				{
 					world.setBlock(i, j, k, TFC_Core.getTypeForDryGrassFromSoil(this), meta, 2);
+					world.markBlockForUpdate(i, j, k);
 				}
-				else if(TFC_Core.isGrass(this) && TFC_Core.isDryGrass(this) && (/*nearWater ||*/ rain>=200) && world.getBlock(i, j+1, k) != Blocks.snow)
+				else if(TFC_Core.isGrass(this) && TFC_Core.isDryGrass(this) && (nearWater || rain>=200) && world.getBlock(i, j+1, k) != Blocks.snow)
 				{
 					world.setBlock(i, j, k, TFC_Core.getTypeForGrassFromSoil(this), meta, 2);
+					world.markBlockForUpdate(i, j, k);
 				}
 			}
 
-			world.markBlockForUpdate(i, j, k);
+			//world.markBlockForUpdate(i, j, k);
 		}
 	}
 

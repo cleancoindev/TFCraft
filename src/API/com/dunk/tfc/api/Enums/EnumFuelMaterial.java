@@ -20,6 +20,16 @@ public enum EnumFuelMaterial
 	KAPOK("KAPOK", 645, 1000, 			new int[]{/*Sweet*/7,/*Sour*/0,/*Salty*/0,/*Bitter*/-7,/*Savory*/0}),
 	PEAT("PEAT", 680, 2500, 			new int[]{/*Sweet*/-10,/*Sour*/0,/*Salty*/0,/*Bitter*/10,/*Savory*/0}),
 	ACACIA("ACACIA",650, 1000, 			new int[]{/*Sweet*/6,/*Sour*/6,/*Salty*/0,/*Bitter*/9,/*Savory*/-6}),
+	PALM("PALM",500, 1000, 				new int[]{/*Sweet*/6,/*Sour*/6,/*Salty*/0,/*Bitter*/5,/*Savory*/0}),
+	GINGKO("GINGKO",600, 1000, 				new int[]{/*Sweet*/6,/*Sour*/6,/*Salty*/0,/*Bitter*/5,/*Savory*/0}),
+	BAOBAB("BAOBAB",450, 1000, 			new int[]{/*Sweet*/6,/*Sour*/6,/*Salty*/0,/*Bitter*/5,/*Savory*/0}),
+	LIMBA("LIMBA",600, 1000, 			new int[]{/*Sweet*/6,/*Sour*/6,/*Salty*/0,/*Bitter*/5,/*Savory*/0}),
+	FRUITWOOD("FRUITWOOD",650, 1000, 		new int[]{/*Sweet*/6,/*Sour*/6,/*Salty*/6,/*Bitter*/5,/*Savory*/6}),
+	FEVER("FEVER",550, 1000, 			new int[]{/*Sweet*/6,/*Sour*/6,/*Salty*/0,/*Bitter*/5,/*Savory*/0}),
+	MAHOGANY("MAHOGANY",750, 1000, 			new int[]{/*Sweet*/6,/*Sour*/6,/*Salty*/0,/*Bitter*/5,/*Savory*/0}),
+	TEAK("TEAK",700, 1000, 				new int[]{/*Sweet*/6,/*Sour*/6,/*Salty*/0,/*Bitter*/5,/*Savory*/0}),
+	BAMBOO("BAMBOO",400, 1000, 			new int[]{/*Sweet*/6,/*Sour*/6,/*Salty*/0,/*Bitter*/5,/*Savory*/0}),
+	EBONY("EBONY",800, 1000, 			new int[]{/*Sweet*/-6,/*Sour*/6,/*Salty*/0,/*Bitter*/15,/*Savory*/0}),
 	CHARCOAL("CHARCOAL", 1350, 1800, 	new int[]{/*Sweet*/-10,/*Sour*/8,/*Salty*/0,/*Bitter*/4,/*Savory*/15}),
 	COAL("COAL", 1400, 2200, 			new int[]{/*Sweet*/-18,/*Sour*/13,/*Salty*/0,/*Bitter*/20,/*Savory*/12});
 
@@ -30,7 +40,7 @@ public enum EnumFuelMaterial
 	private EnumFuelMaterial(String s, int i, int j, int[] taste)
 	{
 		burnTempMax = i;
-		burnTimeMax = j;
+		burnTimeMax = j*2;
 		tasteProfile = taste.clone();
 	}
 

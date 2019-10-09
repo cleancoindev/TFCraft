@@ -6,6 +6,8 @@ import java.util.Random;
 import com.dunk.tfc.TerraFirmaCraft;
 import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Core.TFC_Time;
+import com.dunk.tfc.Food.ItemFoodTFC;
+import com.dunk.tfc.api.Enums.EnumFoodGroup;
 import com.dunk.tfc.api.Interfaces.IFood;
 import com.dunk.tfc.api.Util.Helper;
 
@@ -13,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 
-public class Food 
+public class Food
 {
 	public static final String DECAY_TAG = "foodDecay";
 	public static final String DECAY_TIMER_TAG = "decayTimer";
@@ -39,6 +41,7 @@ public class Food
 	public static final String FOOD_LIST_TAG = "List";
 	public static final String FOOD_LIST_SIZE_TAG = "ListSize";
 	public static final String FOOD_LIST_DECAY_TAG = "ListDecay";
+	protected static final String WATER_LOSS_TAG = "WaterLoss";
 	public static final int DRYHOURS = 4;
 	public static final int SMOKEHOURS = 12;
 
@@ -54,7 +57,7 @@ public class Food
 
 	private static void setProcTag(ItemStack is, NBTTagCompound nbt)
 	{
-		if(!is.hasTagCompound())
+		if (!is.hasTagCompound())
 			is.setTagCompound(new NBTTagCompound());
 		is.getTagCompound().setTag(PROCESSING_TAG, nbt);
 	}
@@ -67,23 +70,19 @@ public class Food
 		}
 		else
 		{
-			TerraFirmaCraft.LOG.error(TFC_Core.translate("error.error") + " " + is.getUnlocalizedName() + " " +
-					TFC_Core.translate("error.NBT") + " " + TFC_Core.translate("error.Contact"));
+			TerraFirmaCraft.LOG.error(TFC_Core.translate("error.error") + " " + is.getUnlocalizedName() + " "
+					+ TFC_Core.translate("error.NBT") + " " + TFC_Core.translate("error.Contact"));
 			return new NBTTagCompound();
 		}
 	}
 
 	public static boolean areEqual(ItemStack is1, ItemStack is2)
 	{
-		return isBrined(is1) == isBrined(is2) &&
-				isPickled(is1) == isPickled(is2) &&
-				isCooked(is1) == isCooked(is2) &&
-				isDried(is1) == isDried(is2) &&
-				isSalted(is1) == isSalted(is2) &&
-				(isInfused(is1) && isInfused(is2) && getInfusion(is1).equals(getInfusion(is2)) ||
-					!isInfused(is1) && !isInfused(is2)) &&
-				(isSmoked(is1) && isSmoked(is2) && isSameSmoked(is1, is2) ||
-					!isSmoked(is1) && !isSmoked(is2));
+		return isBrined(is1) == isBrined(is2) && isPickled(is1) == isPickled(is2) && isCooked(is1) == isCooked(is2)
+				&& isDried(is1) == isDried(is2) && isSalted(is1) == isSalted(is2)
+				&& (isInfused(is1) && isInfused(is2) && getInfusion(is1).equals(getInfusion(is2))
+						|| !isInfused(is1) && !isInfused(is2))
+				&& (isSmoked(is1) && isSmoked(is2) && isSameSmoked(is1, is2) || !isSmoked(is1) && !isSmoked(is2));
 	}
 
 	public static boolean isBrined(ItemStack is)
@@ -97,6 +96,15 @@ public class Food
 		NBTTagCompound nbt = getProcTag(is);
 		nbt.setBoolean(BRINED_TAG, value);
 		setProcTag(is, nbt);
+	}
+	
+	public static boolean hasNutritionWhenRaw(ItemStack is)
+	{
+		if(is != null && is.getItem() instanceof ItemFoodTFC)
+		{
+			return ((ItemFoodTFC)is.getItem()).nutritionAsIfCooked;
+		}
+		return false;
 	}
 
 	public static boolean isPickled(ItemStack is)
@@ -140,25 +148,63 @@ public class Food
 			return 0.0F;
 	}
 
-	//We cook small foods faster
+	// We cook small foods faster
 	public static void setCookedByWeight(ItemStack is, float value)
 	{
 		value -= getCooked(is);
-		value *= (12.65f/MathHelper.sqrt_float(getWeight(is)));
+		value *= (12.65f / MathHelper.sqrt_float(getWeight(is)));
 		value += getCooked(is);
 		setCooked(is, value);
-		
+
 	}
-	
+
 	public static void setCooked(ItemStack is, float value)
 	{
-		//The value passed in is the increase due to fire temperature. We want to make smaller food cook faster.
-		//value -= getCooked(is);
-		//value *= 160f / getWeight(is);
-		//value += getCooked(is);
+		// The value passed in is the increase due to fire temperature. We want
+		// to make smaller food cook faster.
+		// value -= getCooked(is);
+		// value *= 160f / getWeight(is);
+		// value += getCooked(is);
+		
+		//If we have a high water content, we want to reduce our weight
+		
 		NBTTagCompound nbt = getProcTag(is);
+		byte currentCooked = 0;
+		if(is.hasTagCompound() && is.stackTagCompound.hasKey(WATER_LOSS_TAG))
+		{
+			currentCooked = is.stackTagCompound.getByte(WATER_LOSS_TAG);
+		}
+		int cookDif = ((int)value/(int)100)-5 - currentCooked;
+		if(is.hasTagCompound() && cookDif > 0)
+		{
+			for(int i = 0; i < cookDif;i++)
+			{
+				is.stackTagCompound = reduceWater(is,is.stackTagCompound);
+			}
+		}
 		nbt.setFloat(COOKED_TAG, value);
 		setProcTag(is, nbt);
+	}
+	
+	//When we cook a food, we might reduce the weight due to water loss
+	public static NBTTagCompound reduceWater(ItemStack is, NBTTagCompound nbt)
+	{
+		float waterPercentage = 0;
+		if(is != null && is.getItem() instanceof ItemFoodTFC)
+		{
+			ItemFoodTFC theFood = (ItemFoodTFC)is.getItem();
+			waterPercentage = theFood.waterPercentage;
+			nbt.setFloat(WEIGHT_TAG, nbt.getFloat(WEIGHT_TAG) * (float)(1f - 0.1f * Math.pow(waterPercentage, 4)));
+			if(nbt.hasKey(WATER_LOSS_TAG))
+			{
+				nbt.setByte(WATER_LOSS_TAG,(byte) (is.stackTagCompound.getByte(WATER_LOSS_TAG)+1));
+			}
+			else
+			{
+				nbt.setByte(WATER_LOSS_TAG, (byte)1);
+			}
+		}
+		return nbt;
 	}
 
 	public static int[] getCookedProfile(ItemStack is)
@@ -167,7 +213,7 @@ public class Food
 		if (nbt.hasKey(COOKED_PROFILE_TAG))
 			return nbt.getIntArray(COOKED_PROFILE_TAG);
 		else
-			return new int[] {0,0,0,0,0};
+			return new int[] { 0, 0, 0, 0, 0 };
 	}
 
 	public static void setCookedProfile(ItemStack is, int[] value)
@@ -183,7 +229,7 @@ public class Food
 		if (nbt.hasKey(FUEL_PROFILE_TAG))
 			return nbt.getIntArray(FUEL_PROFILE_TAG);
 		else
-			return new int[] {0,0,0,0,0};
+			return new int[] { 0, 0, 0, 0, 0 };
 	}
 
 	public static void setFuelProfile(ItemStack is, int[] value)
@@ -196,8 +242,7 @@ public class Food
 	public static boolean isSmoked(ItemStack is)
 	{
 		NBTTagCompound nbt = getProcTag(is);
-		return nbt.hasKey(FUEL_PROFILE_TAG) && !isSameSmoked(getFuelProfile(is), new int[]
-		{ 0, 0, 0, 0, 0 });
+		return nbt.hasKey(FUEL_PROFILE_TAG) && !isSameSmoked(getFuelProfile(is), new int[] { 0, 0, 0, 0, 0 });
 	}
 
 	public static boolean isSameSmoked(ItemStack is1, ItemStack is2)
@@ -216,7 +261,7 @@ public class Food
 	{
 		NBTTagCompound nbt = getNBT(is);
 		nbt.setFloat(DECAY_TAG, Helper.roundNumber(value, 10000));
-		if(value > getWeight(is))
+		if (value > getWeight(is))
 			is.stackSize = 0;
 	}
 
@@ -227,6 +272,24 @@ public class Food
 			return nbt.getFloat(DECAY_TAG);
 		else
 			return 0.0F;
+	}
+
+	public static float getWater(ItemStack is)
+	{
+		if (is.getItem() instanceof ItemFoodTFC && ((ItemFoodTFC) (is.getItem())).waterRestoreAmount > 0)
+		{
+			return ((ItemFoodTFC) (is.getItem())).waterRestoreAmount;
+		}
+		return 0f;
+	}
+	
+	public static byte getWaterLoss(ItemStack is)
+	{
+		NBTTagCompound nbt = getNBT(is);
+		if (nbt.hasKey(WATER_LOSS_TAG))
+			return nbt.getByte(WATER_LOSS_TAG);
+		else
+			return (byte)0;
 	}
 
 	public static void setDecayTimer(ItemStack is, int value)
@@ -248,8 +311,14 @@ public class Food
 	{
 		NBTTagCompound nbt = getNBT(is);
 		nbt.setFloat(WEIGHT_TAG, Helper.roundNumber(value, 100));
-		if(getDecay(is) > value || value <= 0)
+		if (getDecay(is) > value || value <= 0)
 			is.stackSize = 0;
+	}
+	
+	public static void setWaterLoss(ItemStack is, byte waterLoss)
+	{
+		NBTTagCompound nbt = getNBT(is);
+		nbt.setByte(WATER_LOSS_TAG, waterLoss);
 	}
 
 	public static float getWeight(ItemStack is)
@@ -302,9 +371,9 @@ public class Food
 	public static int getCookedColorMultiplier(ItemStack is)
 	{
 		float cookedLevel = Food.getCooked(is);
-		int r = 255 - (int)(160 * (Math.max(cookedLevel-600, 0) / 600f)); 
-		int b = 255 - (int)(160 * (Math.max(cookedLevel-600, 0) / 600f));
-		int g = 255 - (int)(160 * (Math.max(cookedLevel-600, 0) / 600f));
+		int r = 255 - (int) (160 * (Math.max(cookedLevel - 600, 0) / 600f));
+		int b = 255 - (int) (160 * (Math.max(cookedLevel - 600, 0) / 600f));
+		int g = 255 - (int) (160 * (Math.max(cookedLevel - 600, 0) / 600f));
 		return (r << 16) + (b << 8) + g;
 	}
 
@@ -416,13 +485,13 @@ public class Food
 	public static int[] getFoodTasteProfile(ItemStack is)
 	{
 		int[] profile = new int[5];
-		if(is != null && is.getItem() instanceof IFood)
+		if (is != null && is.getItem() instanceof IFood)
 		{
-			profile[0] = ((IFood)is.getItem()).getTasteSweet(is);
-			profile[1] = ((IFood)is.getItem()).getTasteSour(is);
-			profile[2] = ((IFood)is.getItem()).getTasteSalty(is);
-			profile[3] = ((IFood)is.getItem()).getTasteBitter(is);
-			profile[4] = ((IFood)is.getItem()).getTasteSavory(is);
+			profile[0] = ((IFood) is.getItem()).getTasteSweet(is);
+			profile[1] = ((IFood) is.getItem()).getTasteSour(is);
+			profile[2] = ((IFood) is.getItem()).getTasteSalty(is);
+			profile[3] = ((IFood) is.getItem()).getTasteBitter(is);
+			profile[4] = ((IFood) is.getItem()).getTasteSavory(is);
 		}
 		return profile;
 	}
@@ -458,9 +527,17 @@ public class Food
 	{
 		NBTTagCompound nbt = getNBT(is);
 		if (nbt.hasKey(FOOD_GROUP_TAG))
+		{
 			return nbt.getIntArray(FOOD_GROUP_TAG);
+		}
+		else if(is != null && is.getItem() instanceof ItemFoodTFC)
+		{
+			return new int[] {((ItemFoodTFC)is.getItem()).foodID,-1,-1,-1,-1};
+		}
 		else
+		{
 			return new int[] { -1, -1, -1, -1 };
+		}
 	}
 
 	public static void setDecayRate(ItemStack is, float val)
@@ -477,35 +554,37 @@ public class Food
 		else
 			return 1.0F;
 	}
-	
+
 	public static ArrayList<float[]> getFoodsInStack(ItemStack is)
 	{
 		NBTTagCompound nbt = getNBT(is);
-		if (nbt.hasKey(FOOD_LIST_SIZE_TAG+0))
+		if (nbt.hasKey(FOOD_LIST_SIZE_TAG + 0))
 		{
 			ArrayList<float[]> foodList = new ArrayList<float[]>();
 			int count = 0;
-			while(nbt.hasKey(FOOD_LIST_SIZE_TAG + count))
+			while (nbt.hasKey(FOOD_LIST_SIZE_TAG + count))
 			{
-				foodList.add(new float[] {nbt.getFloat(FOOD_LIST_SIZE_TAG + count),nbt.getFloat(FOOD_LIST_DECAY_TAG + count)});
+				foodList.add(new float[] { nbt.getFloat(FOOD_LIST_SIZE_TAG + count),
+						nbt.getFloat(FOOD_LIST_DECAY_TAG + count) });
 				count++;
 			}
 			return foodList;
 		}
 		return null;
 	}
-	
+
 	public static ArrayList<float[]> getFoodsInStackVerifySize(ItemStack is)
 	{
 		NBTTagCompound nbt = getNBT(is);
-		if (nbt.hasKey(FOOD_LIST_SIZE_TAG+0))
+		if (nbt.hasKey(FOOD_LIST_SIZE_TAG + 0))
 		{
 			ArrayList<float[]> foodList = new ArrayList<float[]>();
 			int count = 0;
-			while(nbt.hasKey(FOOD_LIST_SIZE_TAG + count))
+			while (nbt.hasKey(FOOD_LIST_SIZE_TAG + count))
 			{
-				foodList.add(new float[] {nbt.getFloat(FOOD_LIST_SIZE_TAG + count),nbt.getFloat(FOOD_LIST_DECAY_TAG + count)});
-				if(count >= is.stackSize)
+				foodList.add(new float[] { nbt.getFloat(FOOD_LIST_SIZE_TAG + count),
+						nbt.getFloat(FOOD_LIST_DECAY_TAG + count) });
+				if (count >= is.stackSize)
 				{
 					foodList.remove(0);
 				}
@@ -515,33 +594,34 @@ public class Food
 		}
 		return null;
 	}
-	
-	//The foods are a byte array of 
+
+	// The foods are a byte array of
 	public static void setFoodsInStack(ItemStack is, ArrayList<float[]> foodList)
 	{
 		NBTTagCompound nbt = getNBT(is);
 		int count = 0;
 		float size = 0;
 		float decay = 0;
-		while(nbt.hasKey(FOOD_LIST_SIZE_TAG+count))
+		while (nbt.hasKey(FOOD_LIST_SIZE_TAG + count))
 		{
-			nbt.removeTag(FOOD_LIST_SIZE_TAG+count);
-			nbt.removeTag(FOOD_LIST_DECAY_TAG+count);
+			nbt.removeTag(FOOD_LIST_SIZE_TAG + count);
+			nbt.removeTag(FOOD_LIST_DECAY_TAG + count);
 			count++;
 		}
 		count = 0;
-		if(foodList != null)
+		if (foodList != null)
 		{
-		for(float[] food : foodList)
-		{
-			nbt.setFloat(FOOD_LIST_SIZE_TAG + count, food[0]);
-			size+= food[0];
-			decay+=food[1];
-			nbt.setFloat(FOOD_LIST_DECAY_TAG + count, food[1]);
-			count++;
-		}
+			for (float[] food : foodList)
+			{
+				nbt.setFloat(FOOD_LIST_SIZE_TAG + count, food[0]);
+				size += food[0];
+				decay += food[1];
+				nbt.setFloat(FOOD_LIST_DECAY_TAG + count, food[1]);
+				count++;
+			}
 		}
 		Food.setWeight(is, size);
-		Food.setDecay(is, decay/count);
+		//Food.setDecay(is, decay / count);
+		Food.setDecay(is, decay / 1);
 	}
 }

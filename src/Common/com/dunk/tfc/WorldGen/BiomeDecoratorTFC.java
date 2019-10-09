@@ -13,6 +13,8 @@ import com.dunk.tfc.WorldGen.Generators.WorldGenCustomSand;
 import com.dunk.tfc.WorldGen.Generators.WorldGenGrowCrops;
 import com.dunk.tfc.WorldGen.Generators.WorldGenWaterPlants;
 import com.dunk.tfc.api.TFCBlocks;
+import com.dunk.tfc.api.Constant.Global;
+import com.dunk.tfc.api.Enums.EnumRegion;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -79,17 +81,24 @@ public class BiomeDecoratorTFC extends BiomeDecorator
 		int yCoord;
 		int zCoord;
 
+		
+		//Only generate crops from this region?
+		
+		int region = TFC_Climate.getRegionLayer(currentWorld, chunk_X, Global.SEALEVEL, chunk_Z);
+		
 		Random rand = new Random(this.currentWorld.getSeed() + ((chunk_X >> 7) - (chunk_Z >> 7)) * (chunk_Z >> 7));
-		int cropid = rand.nextInt(CropManager.getInstance().getTotalCrops());
-		CropIndex crop = CropManager.getInstance().getCropFromId(cropid);
-		WorldGenGrowCrops cropGen = new WorldGenGrowCrops(cropid);
-
+		CropIndex[] regionCrops = CropManager.getInstance().REGIONS.get(EnumRegion.values()[region]);
+		int regionCropId = rand.nextInt(regionCrops.length);
+		
+		CropIndex crop = regionCrops[regionCropId];//CropManager.getInstance().getCropFromId(cropid);
+		WorldGenGrowCrops cropGen = new WorldGenGrowCrops(crop.cropId);
 		if(randomGenerator.nextInt(20) == 0 && crop != null)
 		{
 			int num = 2 + randomGenerator.nextInt(8);
 			xCoord = this.chunk_X + this.randomGenerator.nextInt(16) + 8;
 			zCoord = this.chunk_Z + this.randomGenerator.nextInt(16) + 8;
 			yCoord = this.currentWorld.getHeightValue(xCoord, zCoord) + 1;
+			
 			for (int count = 0; count < num; ++count)
 			{
 				cropGen.generate(currentWorld, randomGenerator, xCoord, zCoord, 1);
@@ -116,13 +125,13 @@ public class BiomeDecoratorTFC extends BiomeDecorator
 			}
 		}
 
-		if (this.randomGenerator.nextInt(300) == 0)
+		/*if (this.randomGenerator.nextInt(300) == 0)
 		{
 			xCoord = this.chunk_X + this.randomGenerator.nextInt(16) + 8;
 			zCoord = this.chunk_Z + this.randomGenerator.nextInt(16) + 8;
 			yCoord = this.currentWorld.getHeightValue(xCoord, zCoord);
 			new WorldGenCustomPumpkin().generate(this.currentWorld, this.randomGenerator, xCoord, yCoord, zCoord);
-		}
+		}*/
 
 		for (var2 = 0; var2 < this.cactiPerChunk; ++var2)
 		{

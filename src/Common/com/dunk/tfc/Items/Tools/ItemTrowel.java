@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.dunk.tfc.Reference;
 import com.dunk.tfc.Core.TFCTabs;
+import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Core.TFC_Textures;
 import com.dunk.tfc.Items.ItemTerra;
 import com.dunk.tfc.api.Crafting.AnvilManager;
@@ -217,6 +218,7 @@ public class ItemTrowel extends ItemTerra
 	public void addInformation(ItemStack is, EntityPlayer player, List arraylist, boolean flag)
 	{
 		ItemTerra.addSizeInformation(is, arraylist);
+		arraylist.add(TFC_Core.translate("gui."+this.getReach(is).getName()));
 		ItemTerraTool.addSmithingBonusInformation(is, arraylist);
 	}
 }

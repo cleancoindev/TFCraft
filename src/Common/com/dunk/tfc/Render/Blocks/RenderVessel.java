@@ -2,6 +2,12 @@ package com.dunk.tfc.Render.Blocks;
 
 import org.lwjgl.opengl.GL11;
 
+import com.dunk.tfc.Blocks.Flora.BlockFruitLeaves;
+import com.dunk.tfc.Core.TFC_Core;
+import com.dunk.tfc.Food.FloraManager;
+import com.dunk.tfc.Food.ItemFoodTFC;
+import com.dunk.tfc.Items.ItemFruitTreeSapling;
+import com.dunk.tfc.Render.RenderBlocksWithRotation;
 import com.dunk.tfc.TileEntities.TEBarrel;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -35,6 +41,39 @@ public class RenderVessel implements ISimpleBlockRenderingHandler
 			}
 			else
 			{
+				boolean fruitSapling = true;
+				for(int i = 0; i <9 && fruitSapling;i++)
+				{
+					if(te.storage[i] != null)
+					{
+						if(i!=4)
+						{
+							if(!TFC_Core.isDirt(Block.getBlockFromItem(te.storage[i].getItem())))
+							{
+								fruitSapling = false;
+							}
+						}
+						else if (!(te.storage[i].getItem() instanceof ItemFruitTreeSapling))
+						{
+							fruitSapling = false;
+						}
+					}
+					else
+					{
+						fruitSapling = false;
+					}
+				}
+				if(fruitSapling)
+				{
+					renderer = new RenderBlocksWithRotation(renderer);
+					((RenderBlocksWithRotation)renderer).rotation = 0;
+					IIcon fSap = BlockFruitLeaves.getSaplingIcon(te.storage[4].getItemDamage());
+					//IIcon fSap = te.storage[4].getItem().getIconFromDamage(te.storage[4].getItemDamage());
+					((RenderBlocksWithRotation)renderer).drawCrossedSquares(fSap, x, y+0.3, z, 1);
+					((RenderBlocksWithRotation) renderer).yRotation = 0;
+					((RenderBlocksWithRotation) renderer).rotation = 0;
+				}
+				
 				renderer.setRenderBounds(MIN+0.05F, 0, MIN+0.05F, MAX-0.05F, 0.05F, MAX-0.05F);
 				renderer.renderStandardBlock(block, x, y, z);
 

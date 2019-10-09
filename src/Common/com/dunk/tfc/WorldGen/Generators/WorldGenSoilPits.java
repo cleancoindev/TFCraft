@@ -11,6 +11,7 @@ import com.dunk.tfc.api.Constant.Global;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
@@ -65,17 +66,26 @@ public class WorldGenSoilPits implements IWorldGenerator
 						for (int y = yCoord - var7; y <= yCoord + var7; ++y)
 						{
 							Block block = world.getBlock(x, y, z);
+							Block blockUp = world.getBlock(x, y, z);
 							if(TFC_Climate.isSwamp(world, x, y, z))
 							{
 								if (TFC_Core.isDirt(block) || TFC_Core.isClay(block) || TFC_Core.isPeat(block))
 								{
 									world.setBlock(x, y, z, TFCBlocks.peat, 0, 2);
 									flag = true;
+									if(blockUp.isReplaceable(world, x, y, z))
+									{
+										world.setBlock(x, y+1, z, TFCBlocks.moss,0,2);
+									}
 								}
 								else if(TFC_Core.isGrass(block))
 								{
 									world.setBlock(x, y, z, TFCBlocks.peatGrass, 0, 2);
 									flag = true;
+									if(blockUp.isReplaceable(world, x, y, z))
+									{
+										world.setBlock(x, y+1, z, TFCBlocks.moss,0,2);
+									}
 								}
 							}
 						}

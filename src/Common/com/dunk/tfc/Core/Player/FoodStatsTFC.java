@@ -218,7 +218,7 @@ public class FoodStatsTFC
 
 			boolean dead = false;
 			//adjust the temperatureDeathTimer
-			if(Math.abs(bodyTemp.discomfort) >= 4)
+			if(Math.abs(bodyTemp.discomfort) >= 4 && !TFCOptions.enableDebugMode && !player.capabilities.isCreativeMode)
 			{
 				//50% faster for each additional level of discomfort
 				temperatureDeathTimer -= 64 * Math.pow(1.5, Math.abs(bodyTemp.discomfort) - 4);
@@ -490,27 +490,71 @@ public class FoodStatsTFC
 		return new int[]
 				{ 20 + r.nextInt(70), 20 + r.nextInt(70), 20 + r.nextInt(70), 20 + r.nextInt(70), 20 + r.nextInt(70) };
 	}
+	
+	
+	public int[] getPrefTaste(ItemStack food)
+	{
+		Random r = new Random(getPlayerFoodSeed());
+		int[] tastePref = new int[]
+				{ 20 + r.nextInt(70), 20 + r.nextInt(70), 20 + r.nextInt(70), 20 + r.nextInt(70), 20 + r.nextInt(70) };
+		int[] tasteIdeals = new int[]{0,0,0,0,0};
+		
+		float totalTaste = ((IFood)food.getItem()).getTasteSweet(food) + ((IFood)food.getItem()).getTasteSour(food)
+				+ ((IFood)food.getItem()).getTasteSalty(food) + ((IFood)food.getItem()).getTasteBitter(food)
+			+((IFood)food.getItem()).getTasteSavory(food);
+		
+		
+		
+		int[] fgs = Food.getFoodGroups(food);
+		int numFgs = 0;
+		for(int i = 0; i < fgs.length;i++)
+		{
+			if(fgs[i] != -1)
+			{
+				EnumFoodGroup fg = FoodRegistry.getInstance().getFoodGroup(fgs[i]);
+				for(int j = 0; j < 5; j++)
+				{
+					tasteIdeals[j] += fg.tastePreferences[j]*totalTaste;
+				}
+				numFgs++;
+			}
+		}
+		for(int j = 0; j < 5; j++)
+		{
+			tastePref[j] = (tastePref[j] + tasteIdeals[j]*(3+numFgs))/(4+numFgs);
+		}
+		return tastePref;
+	}
 
 	public float getTasteFactor(ItemStack food)
 	{
 		//Random R = new Random(getPlayerFoodSeed());
 		float tasteFactor = 0.85f;
-		int[] tastePref = getPrefTaste();
-
+		int[] tastePref = getPrefTaste(food);
+		
 		tasteFactor += getTasteDistanceFactor(tastePref[0], ((IFood)food.getItem()).getTasteSweet(food));
 		tasteFactor += getTasteDistanceFactor(tastePref[1], ((IFood)food.getItem()).getTasteSour(food));
 		tasteFactor += getTasteDistanceFactor(tastePref[2], ((IFood)food.getItem()).getTasteSalty(food));
 		tasteFactor += getTasteDistanceFactor(tastePref[3], ((IFood)food.getItem()).getTasteBitter(food));
 		tasteFactor += getTasteDistanceFactor(tastePref[4], ((IFood)food.getItem()).getTasteSavory(food));
-
+		
+		System.out.println("tasteFactor: "+tasteFactor);
 		return tasteFactor;
 	}
-
+	
+	public float getTasteDistanceSq(int pref, int actual)
+	{
+		float difSq = (float)Math.pow((pref-actual)/100f, 1);
+		return difSq;
+	}
+	
 	public float getTasteDistanceFactor(int pref, int val)
 	{
-		int abs = Math.abs(pref-val);
-		if(abs < 11)
-			return (10-abs)*0.01f;
+		float abs = Math.abs(pref-val)/100f;
+		abs *= abs;
+		abs*=100f;
+		if(abs < 10)
+			return (10-abs)*0.005f;
 		return 0;
 	}
 
@@ -555,7 +599,8 @@ public class FoodStatsTFC
 
 	public void addNutrition(EnumFoodGroup fg, float foodAmt)
 	{
-		foodAmt*=3;
+		//foodAmt*=3;
+		//foodAmt*=3;
 		addNutrition(fg, foodAmt, true);
 	}
 
@@ -564,7 +609,7 @@ public class FoodStatsTFC
 		float amount = foodAmt;
 		if(shouldDoMath)
 			amount = foodAmt/5f/50f;//converts it to 5% if it is 5oz of food
-		amount*=3;
+		amount*=5;
 		switch(fg)
 		{
 		case Dairy:

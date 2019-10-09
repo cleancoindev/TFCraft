@@ -4,6 +4,8 @@ import java.util.Random;
 
 import com.dunk.tfc.Reference;
 import com.dunk.tfc.Blocks.BlockTerra;
+import com.dunk.tfc.Blocks.Flora.BlockBranch;
+import com.dunk.tfc.Blocks.Flora.BlockLeafLitter;
 import com.dunk.tfc.Core.TFC_Climate;
 import com.dunk.tfc.api.TFCBlocks;
 
@@ -38,7 +40,7 @@ public class BlockCustomSnow extends BlockTerra
 		
 		if (block == TFCBlocks.ice || block == TFCBlocks.pottery)
 			return false;
-		if (block == TFCBlocks.leaves || block == TFCBlocks.leaves2 || block == TFCBlocks.thatch)
+		if (block == TFCBlocks.leaves || block == TFCBlocks.leaves2 || block == TFCBlocks.thatch || block instanceof BlockBranch)
 			return true;
 		return World.doesBlockHaveSolidTopSurface(world, i, j - 1, k);
 	}
@@ -176,6 +178,29 @@ public class BlockCustomSnow extends BlockTerra
 		{
 			if (r.nextInt(20) == 0)
 			{
+				if(world.getBlock(x, y-1, z) instanceof BlockBranch)
+				{
+					for(int i = -1; i >-20 && y + i > 0;i--)
+					{
+						if(world.getBlock(x, y+i+1, z).isReplaceable(world, x, y+i+1, z) && world.isSideSolid(x, y+i, z, ForgeDirection.UP))
+						{
+							world.setBlock(x, y+1+i, z, this);
+							return;
+						}
+					}
+				}
+				for(int i = -1; i < 2; i++)
+				{
+					for(int j = -1;j<2;j++)
+					{
+						if(world.getBlock(x+i, y, z+j) instanceof BlockLeafLitter || 
+								(world.isAirBlock(x+i, y, z+j) && world.isSideSolid(x+i, y-1, z+j, ForgeDirection.UP)))
+						{
+							world.setBlock(x+i, y, z+j, this);
+							return;
+						}
+					}
+				}
 				int max = (world.getBlock(x, y - 1, z).getMaterial() == Material.leaves) ? 3 : 7;
 				if(meta < max && canAddSnow(world, x, y, z, meta))
 				{

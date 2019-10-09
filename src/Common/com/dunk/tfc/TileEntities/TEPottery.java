@@ -102,31 +102,9 @@ public class TEPottery extends NetworkTileEntity implements IInventory
 			if (blockAbove == Blocks.fire && TFC_Time.getTotalTicks() >= burnStart + (TFCOptions.pitKilnBurnTime * TFC_Time.HOUR_LENGTH))
 			{
 				worldObj.setBlockToAir(xCoord, yCoord + 1, zCoord);
-				if(inventory[0] != null)
-				{
-					inventory[0] = KilnCraftingManager.getInstance().findCompleteRecipe(new KilnRecipe(inventory[0], 0)).copy();
-					if(inventory[0].getItem() instanceof ItemPotteryBase)
-						((ItemPotteryBase)inventory[0].getItem()).onDoneCooking(worldObj, inventory[0], Alloy.EnumTier.TierI);
-				}
-				if(inventory[1] != null)
-				{
-					inventory[1] = KilnCraftingManager.getInstance().findCompleteRecipe(new KilnRecipe(inventory[1], 0)).copy();
-					if(inventory[1].getItem() instanceof ItemPotteryBase)
-						((ItemPotteryBase)inventory[1].getItem()).onDoneCooking(worldObj, inventory[1], Alloy.EnumTier.TierI);
-				}
-				if(inventory[2] != null)
-				{
-					inventory[2] = KilnCraftingManager.getInstance().findCompleteRecipe(new KilnRecipe(inventory[2], 0)).copy();
-					if(inventory[2].getItem() instanceof ItemPotteryBase)
-						((ItemPotteryBase)inventory[2].getItem()).onDoneCooking(worldObj, inventory[2], Alloy.EnumTier.TierI);
-				}
-				if(inventory[3] != null)
-				{
-					inventory[3] = KilnCraftingManager.getInstance().findCompleteRecipe(new KilnRecipe(inventory[3], 0)).copy();
-					if(inventory[3].getItem() instanceof ItemPotteryBase)
-						((ItemPotteryBase)inventory[3].getItem()).onDoneCooking(worldObj, inventory[3], Alloy.EnumTier.TierI);
-				}
-
+				
+				cookItems();
+				
 				wood = 0;
 				inventory[4] = null;inventory[5] = null;inventory[6] = null;inventory[7] = null;
 				inventory[8] = null;inventory[9] = null;inventory[10] = null;inventory[11] = null;
@@ -135,6 +113,35 @@ public class TEPottery extends NetworkTileEntity implements IInventory
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 		}
+	}
+	
+	public void cookItems()
+	{
+		if(inventory[0] != null)
+		{
+			inventory[0] = KilnCraftingManager.getInstance().findCompleteRecipe(new KilnRecipe(inventory[0], 0)).copy();
+			if(inventory[0].getItem() instanceof ItemPotteryBase)
+				((ItemPotteryBase)inventory[0].getItem()).onDoneCooking(worldObj, inventory[0], Alloy.EnumTier.TierI);
+		}
+		if(inventory[1] != null)
+		{
+			inventory[1] = KilnCraftingManager.getInstance().findCompleteRecipe(new KilnRecipe(inventory[1], 0)).copy();
+			if(inventory[1].getItem() instanceof ItemPotteryBase)
+				((ItemPotteryBase)inventory[1].getItem()).onDoneCooking(worldObj, inventory[1], Alloy.EnumTier.TierI);
+		}
+		if(inventory[2] != null)
+		{
+			inventory[2] = KilnCraftingManager.getInstance().findCompleteRecipe(new KilnRecipe(inventory[2], 0)).copy();
+			if(inventory[2].getItem() instanceof ItemPotteryBase)
+				((ItemPotteryBase)inventory[2].getItem()).onDoneCooking(worldObj, inventory[2], Alloy.EnumTier.TierI);
+		}
+		if(inventory[3] != null)
+		{
+			inventory[3] = KilnCraftingManager.getInstance().findCompleteRecipe(new KilnRecipe(inventory[3], 0)).copy();
+			if(inventory[3].getItem() instanceof ItemPotteryBase)
+				((ItemPotteryBase)inventory[3].getItem()).onDoneCooking(worldObj, inventory[3], Alloy.EnumTier.TierI);
+		}
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	private Boolean isFireNear()

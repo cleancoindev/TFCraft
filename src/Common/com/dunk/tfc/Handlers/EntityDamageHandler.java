@@ -7,7 +7,9 @@ import com.dunk.tfc.Core.TFC_MobData;
 import com.dunk.tfc.Core.Player.FoodStatsTFC;
 import com.dunk.tfc.Entities.EntityJavelin;
 import com.dunk.tfc.Items.ItemTFCArmor;
+import com.dunk.tfc.Items.ItemTerra;
 import com.dunk.tfc.api.Enums.EnumDamageType;
+import com.dunk.tfc.api.Enums.EnumItemReach;
 import com.dunk.tfc.api.Events.EntityArmorCalcEvent;
 import com.dunk.tfc.api.Interfaces.ICausesDamage;
 import com.dunk.tfc.api.Interfaces.IInnateArmor;
@@ -208,7 +210,7 @@ public class EntityDamageHandler
 			EntityPlayer player = (EntityPlayer)source.getSourceOfDamage();
 			if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ICausesDamage)
 			{
-				return ((ICausesDamage)player.getCurrentEquippedItem().getItem()).getDamageType();
+				return ((ICausesDamage)player.getCurrentEquippedItem().getItem()).getDamageType(player);
 			}
 		}
 
@@ -217,13 +219,13 @@ public class EntityDamageHandler
 			EntityLiving el = (EntityLiving)source.getSourceOfDamage();
 			if(el.getHeldItem() != null && el.getHeldItem().getItem() instanceof ICausesDamage)
 			{
-				return ((ICausesDamage)el.getHeldItem().getItem()).getDamageType();
+				return ((ICausesDamage)el.getHeldItem().getItem()).getDamageType(el);
 			}
 		}
 
 		if(source.getSourceOfDamage() instanceof ICausesDamage)
 		{
-			return ((ICausesDamage)source.getSourceOfDamage()).getDamageType();
+			return ((ICausesDamage)source.getSourceOfDamage()).getDamageType(null);
 		}
 
 		return EnumDamageType.GENERIC;
@@ -293,6 +295,18 @@ public class EntityDamageHandler
 					{
 						damageAmount = TFC_MobData.STEVE_DAMAGE;
 						//i = player.inventory.getCurrentItem().getItem().getDamageVsEntity(target, player.inventory.getCurrentItem());
+					}
+					if(stack.getItem() instanceof ItemTerra)
+					{
+						EnumItemReach r = ((ItemTerra)stack.getItem()).getReach(stack);
+						if(r == EnumItemReach.FAR)
+						{
+							damageAmount *= 1.25;
+						}
+						else if(r == EnumItemReach.MEDIUM)
+						{
+							damageAmount *=1.125;
+						}
 					}
 				}
 

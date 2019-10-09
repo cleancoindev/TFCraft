@@ -2,6 +2,7 @@ package com.dunk.tfc.TileEntities;
 
 import java.util.Random;
 
+import com.dunk.tfc.Blocks.BlockChimney;
 import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Items.ItemBloom;
 import com.dunk.tfc.Items.ItemMeltedMetal;
@@ -45,7 +46,7 @@ public class TEForge extends TEFireEntity implements IInventory
 
 	private boolean validateSmokeStack()
 	{
-		if (!TFC_Core.isExposedToRain(worldObj, xCoord, yCoord, zCoord))
+		if (!TFC_Core.isExposedToRain(worldObj, xCoord, yCoord, zCoord) && TFC_Core.isExposed(worldObj, xCoord, yCoord, zCoord))
 			return true;
 		else if (checkChimney(xCoord + 1, yCoord + 1, zCoord))
 			return true;
@@ -67,7 +68,7 @@ public class TEForge extends TEFireEntity implements IInventory
 
 	private boolean checkChimney(int x, int y, int z)
 	{
-		return notOpaque(x, y, z) && worldObj.canBlockSeeTheSky(x, y, z);
+		return (notOpaque(x, y, z) && worldObj.canBlockSeeTheSky(x, y, z)) || BlockChimney.canChimneySeeSky(worldObj, x, y, z);
 	}
 
 	private boolean notOpaque(int x, int y, int z)

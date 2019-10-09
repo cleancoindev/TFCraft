@@ -27,11 +27,78 @@
       "firestarter10"
     ]
   },
-  
+  "item.horn": {
+    "category": "ambient",
+    "sounds": [
+      "horn"
+    ]
+  },
+  "item.brasshorn": {
+    "category": "ambient",
+    "sounds": [
+      "bugle"
+    ]
+  },
+  "item.conch": {
+    "category": "ambient",
+    "sounds": [
+      "conch"
+    ]
+  },
+  "block.branch.snap2": {
+    "category": "ambient",
+    "sounds": [
+      "branch snap"
+    ]
+  },
+  "block.branch.snap1": {
+    "category": "ambient",
+    "sounds": [
+      "twig snap"
+    ]
+  },
+  "item.lyre.strum": {
+    "category": "ambient",
+    "sounds": [
+      "lyrestring"
+    ]
+  }
+  ,"item.bongo.hit": {
+    "category": "ambient",
+    "sounds": [
+      "bongo"
+    ]
+  },
+  "item.drum.rim": {
+    "category": "ambient",
+    "sounds": [
+      "drumRim"
+    ]
+  },
+  "item.drum.hit": {
+    "category": "ambient",
+    "sounds": [
+      "drum"
+    ]
+  },
   "item.jug.blow": {
     "category": "ambient",
     "sounds": [
       "jugblow1"
+    ]
+  },
+  
+  "item.jug.blow2": {
+    "category": "ambient",
+    "sounds": [
+      "jugblow2"
+    ]
+  },
+  
+  "item.jug.blow3": {
+    "category": "ambient",
+    "sounds": [
+      "jugblow3"
     ]
   },
 

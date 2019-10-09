@@ -20,7 +20,7 @@ import net.minecraft.world.WorldType;
 public abstract class GenRainLayerTFC extends GenLayerTFC
 {
 	public static final int WET = DataLayer.RAIN_4000.layerID;
-	public static final int DRY = DataLayer.RAIN_125.layerID;
+	public static final int DRY = DataLayer.RAIN_400.layerID;
 
 	public static GenLayerTFC initialize(long seed, WorldType worldType)
 	{

@@ -11,7 +11,7 @@ public class Global
 {
 	/* FruitTree Meta Names, also used for fruit items and FloraManager */
 	public static final String[] FRUIT_META_NAMES = new String[] {
-		"Red Apple", "Banana", "Orange", "Green Apple", "Lemon", "Olive", "Cherry", "Peach", "Plum"
+		"Red Apple", "Banana", "Orange", "Green Apple", "Lemon", "Olive", "Cherry", "Peach", "Plum", "Papaya", "Date"
 	};
 
 	/* Flower Meta Names
@@ -89,7 +89,10 @@ public class Global
 		"Oak","Aspen","Birch","Chestnut",
 		"Douglas Fir","Hickory","Maple","Ash",
 		"Pine","Sequoia","Spruce","Sycamore",
-		"White Cedar","White Elm","Willow","Kapok","Acacia"
+		"White Cedar","White Elm","Willow","Kapok",
+		"Acacia","Palm","Ebony","Fever",
+		"Baobab","Limba","Mahogany","Teak",
+		"Bamboo","Gingko","Fruitwood"
 	};
 
 	public static final String SKILL_GENERAL_SMITHING = "skill.gensmith";

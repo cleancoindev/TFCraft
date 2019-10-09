@@ -10,6 +10,7 @@ import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Core.TFC_Time;
 import com.dunk.tfc.TileEntities.TESapling;
 import com.dunk.tfc.WorldGen.TFCBiome;
+import com.dunk.tfc.api.TFCBlocks;
 import com.dunk.tfc.api.TFCOptions;
 import com.dunk.tfc.api.Constant.Global;
 
@@ -77,7 +78,12 @@ public class BlockSapling extends BlockTerraContainer
 	{
 		int meta = world.getBlockMetadata(i, j, k);
 		world.setBlockToAir(i, j, k);
-		WorldGenerator worldGen = TFCBiome.getTreeGen(meta, rand.nextBoolean());
+		int m2 = 0;
+		if(this == TFCBlocks.sapling2)
+		{
+			m2=16;
+		}
+		WorldGenerator worldGen = TFCBiome.getTreeGen(rand.nextBoolean(),true,TFCBiome.getEnumTreeFromId(m2+meta));
 
 		if (worldGen != null && !worldGen.generate(world, rand, i, j, k))
 		{
@@ -177,7 +183,7 @@ public class BlockSapling extends BlockTerraContainer
 	 */
 	protected boolean canThisPlantGrowOnThisBlockID(Block b)
 	{
-		return TFC_Core.isSoil(b);
+		return TFC_Core.isSoil(b) || TFC_Core.isSand(b);
 	}
 
 	/**

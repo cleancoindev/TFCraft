@@ -82,6 +82,7 @@ public class BlockPlanks extends BlockTerra
 	{
 		boolean hasHammer = false;
 		int plaster = -1;
+		boolean wooden = false;
 
 		for(int i = 0; i < 9;i++)
 		{
@@ -89,7 +90,16 @@ public class BlockPlanks extends BlockTerra
 				hasHammer = true;
 			if(entityplayer.inventory.mainInventory[i] != null && entityplayer.inventory.mainInventory[i].getItem().equals(TFCItems.woodenBucketPlaster)
 					&& entityplayer.inventory.mainInventory[i].getItemDamage() < entityplayer.inventory.mainInventory[i].getMaxDamage())
+			{
 				plaster = i;
+				wooden = true;
+			}
+			else if(entityplayer.inventory.mainInventory[i] != null && entityplayer.inventory.mainInventory[i].getItem().equals(TFCItems.clayBucketPlaster)
+					&& entityplayer.inventory.mainInventory[i].getItemDamage() < entityplayer.inventory.mainInventory[i].getMaxDamage())
+			{
+				plaster = i;
+				wooden = false;
+			}
 		}
 		if(!world.isRemote && entityplayer.getCurrentEquippedItem() != null && 
 				entityplayer.getCurrentEquippedItem().getItem() instanceof IToolChisel && 
@@ -107,7 +117,7 @@ public class BlockPlanks extends BlockTerra
 			entityplayer.inventory.mainInventory[plaster].damageItem(plasterDamage, entityplayer);
 			if(entityplayer.inventory.mainInventory[plaster].getItemDamage() > entityplayer.inventory.mainInventory[plaster].getMaxDamage()-plasterDamage)
 			{
-				entityplayer.inventory.mainInventory[plaster] = new ItemStack(TFCItems.woodenBucketEmpty,1);
+				entityplayer.inventory.mainInventory[plaster] = new ItemStack(wooden?TFCItems.woodenBucketEmpty:TFCItems.clayBucketEmpty,1);
 			}
 			if(!world.isRemote)
 			{

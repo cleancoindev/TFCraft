@@ -103,9 +103,9 @@ public class TEFirepit extends TEFireEntity implements IInventory
 						// Otherwise if the first output has an item that doesnt
 						// match the input item then put the item in the second
 						// output slot
-						else if (fireItemStacks[7] != null && fireItemStacks[7].getItem() != TFCItems.ceramicMold
-								&& (fireItemStacks[7].getItem() != fireItemStacks[1].getItem()
-										|| fireItemStacks[7].getItemDamage() == 0))
+						else if (fireItemStacks[7] != null && fireItemStacks[7]
+								.getItem() != TFCItems.ceramicMold && (fireItemStacks[7].getItem() != fireItemStacks[1]
+										.getItem() || fireItemStacks[7].getItemDamage() == 0))
 						{
 							if (fireItemStacks[8] == null)
 							{
@@ -136,8 +136,8 @@ public class TEFirepit extends TEFireEntity implements IInventory
 					int leftover = 0;
 					boolean addLeftover = false;
 					int fromSide = 0;
-					if (fireItemStacks[7] != null && output.getItem() == fireItemStacks[7].getItem()
-							&& fireItemStacks[7].getItemDamage() > 0)
+					if (fireItemStacks[7] != null && output.getItem() == fireItemStacks[7]
+							.getItem() && fireItemStacks[7].getItemDamage() > 0)
 					{
 						int amt1 = 100 - damage;// the percentage of the output
 						int amt2 = 100 - fireItemStacks[7].getItemDamage();// the
@@ -165,8 +165,8 @@ public class TEFirepit extends TEFireEntity implements IInventory
 						if (fireItemStacks[1] == null && mold != null)
 							fireItemStacks[1] = mold;
 					}
-					else if (fireItemStacks[8] != null && output.getItem() == fireItemStacks[8].getItem()
-							&& fireItemStacks[8].getItemDamage() > 0)
+					else if (fireItemStacks[8] != null && output.getItem() == fireItemStacks[8]
+							.getItem() && fireItemStacks[8].getItemDamage() > 0)
 					{
 						int amt1 = 100 - damage;// the percentage of the output
 						int amt2 = 100 - fireItemStacks[8].getItemDamage();// the
@@ -213,8 +213,8 @@ public class TEFirepit extends TEFireEntity implements IInventory
 					if (addLeftover)
 					{
 						int dest = fromSide == 1 ? 7 : 8;
-						if (fireItemStacks[dest] != null && output.getItem() == fireItemStacks[dest].getItem()
-								&& fireItemStacks[dest].getItemDamage() > 0)
+						if (fireItemStacks[dest] != null && output.getItem() == fireItemStacks[dest]
+								.getItem() && fireItemStacks[dest].getItemDamage() > 0)
 						{
 							int amt1 = 100 - leftover;// the percentage of the
 														// output
@@ -245,13 +245,15 @@ public class TEFirepit extends TEFireEntity implements IInventory
 				}
 				else if (output != null)
 				{
-					if (fireItemStacks[7] != null && fireItemStacks[7].getItem() == output.getItem()
-							&& fireItemStacks[7].stackSize + output.stackSize <= fireItemStacks[7].getMaxStackSize())
+					if (fireItemStacks[7] != null && fireItemStacks[7].getItem() == output
+							.getItem() && fireItemStacks[7].stackSize + output.stackSize <= fireItemStacks[7]
+									.getMaxStackSize())
 					{
 						fireItemStacks[7].stackSize += output.stackSize;
 					}
-					else if (fireItemStacks[8] != null && fireItemStacks[8].getItem() == output.getItem()
-							&& fireItemStacks[8].stackSize + output.stackSize <= fireItemStacks[8].getMaxStackSize())
+					else if (fireItemStacks[8] != null && fireItemStacks[8].getItem() == output
+							.getItem() && fireItemStacks[8].stackSize + output.stackSize <= fireItemStacks[8]
+									.getMaxStackSize())
 					{
 						fireItemStacks[8].stackSize += output.stackSize;
 					}
@@ -263,14 +265,15 @@ public class TEFirepit extends TEFireEntity implements IInventory
 					{
 						fireItemStacks[8] = output.copy();
 					}
-					else if (fireItemStacks[7].stackSize == fireItemStacks[7].getMaxStackSize()
-							&& fireItemStacks[8].stackSize == fireItemStacks[8].getMaxStackSize()
-							|| fireItemStacks[7].getItem() != output.getItem()
-									&& fireItemStacks[8].getItem() != output.getItem()
-							|| fireItemStacks[7].stackSize == fireItemStacks[7].getMaxStackSize()
-									&& fireItemStacks[8].getItem() != output.getItem()
-							|| fireItemStacks[7].getItem() != output.getItem()
-									&& fireItemStacks[8].stackSize == fireItemStacks[8].getMaxStackSize())
+					else if (fireItemStacks[7].stackSize == fireItemStacks[7]
+							.getMaxStackSize() && fireItemStacks[8].stackSize == fireItemStacks[8]
+									.getMaxStackSize() || fireItemStacks[7].getItem() != output
+											.getItem() && fireItemStacks[8].getItem() != output
+													.getItem() || fireItemStacks[7].stackSize == fireItemStacks[7]
+															.getMaxStackSize() && fireItemStacks[8].getItem() != output
+																	.getItem() || fireItemStacks[7].getItem() != output
+																			.getItem() && fireItemStacks[8].stackSize == fireItemStacks[8]
+																					.getMaxStackSize())
 					{
 						fireItemStacks[1] = output.copy();
 					}
@@ -357,9 +360,9 @@ public class TEFirepit extends TEFireEntity implements IInventory
 	@Override
 	public ItemStack getStackInSlot(int slot)
 	{
-		if(slot == 11)
+		if (slot == 11)
 		{
-			return new ItemStack(TFCItems.powder,ashNumber,13);
+			return new ItemStack(TFCItems.powder, ashNumber, 13);
 		}
 		return fireItemStacks[slot];
 	}
@@ -453,6 +456,30 @@ public class TEFirepit extends TEFireEntity implements IInventory
 	{
 		if (!worldObj.isRemote)
 		{
+			if (this.fireTemp > 90)
+			{
+				if (worldObj.getBlock(xCoord - 1, yCoord, zCoord) == TFCBlocks.logPile && !((TELogPile) worldObj
+						.getTileEntity(xCoord - 1, yCoord, zCoord)).isOnFire)
+				{
+					worldObj.scheduleBlockUpdate(xCoord-1, yCoord, zCoord,TFCBlocks.logPile,10);
+				}
+				if (worldObj.getBlock(xCoord + 1, yCoord, zCoord) == TFCBlocks.logPile && !((TELogPile) worldObj
+						.getTileEntity(xCoord + 1, yCoord, zCoord)).isOnFire)
+				{
+					worldObj.scheduleBlockUpdate(xCoord + 1, yCoord, zCoord,TFCBlocks.logPile,10);
+				}
+				if (worldObj.getBlock(xCoord, yCoord, zCoord + 1) == TFCBlocks.logPile && !((TELogPile) worldObj
+						.getTileEntity(xCoord, yCoord, zCoord + 1)).isOnFire)
+				{
+					worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord + 1,TFCBlocks.logPile,10);
+				}
+				if (worldObj.getBlock(xCoord, yCoord, zCoord - 1) == TFCBlocks.logPile && !((TELogPile) worldObj
+						.getTileEntity(xCoord, yCoord, zCoord - 1)).isOnFire)
+				{
+					worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord - 1,TFCBlocks.logPile,10);
+				}
+			}
+
 			// Create a list of all the items that are falling onto the firepit
 			List list = worldObj.getEntitiesWithinAABB(EntityItem.class,
 					AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1.1, zCoord + 1));
@@ -506,8 +533,8 @@ public class TEFirepit extends TEFireEntity implements IInventory
 
 			// Here we take care of the item that we are cooking in the fire
 			careForInventorySlot(fireItemStacks[1]);
-			if (fireItemStacks[1] != null && fireItemStacks[1].getItem() instanceof ItemPotterySmallVessel
-					&& this.fireTemp > 0)
+			if (fireItemStacks[1] != null && fireItemStacks[1]
+					.getItem() instanceof ItemPotterySmallVessel && this.fireTemp > 0)
 				((ItemPotterySmallVessel) fireItemStacks[1].getItem()).onUpdateNotTemperature(fireItemStacks[1],
 						worldObj, xCoord, yCoord, zCoord);
 			else if (fireItemStacks[1] != null && fireItemStacks[1].getItem() instanceof ItemPotterySmallVessel)
@@ -551,8 +578,8 @@ public class TEFirepit extends TEFireEntity implements IInventory
 					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				}
 			}
-			else if (fuelTimeLeft <= 0 && fireTemp >= 1 && fireItemStacks[5] != null
-					&& !TFC_Core.isExposedToRain(worldObj, xCoord, yCoord, zCoord))
+			else if (fuelTimeLeft <= 0 && fireTemp >= 1 && fireItemStacks[5] != null && !TFC_Core
+					.isExposedToRain(worldObj, xCoord, yCoord, zCoord))
 			{
 				if (fireItemStacks[5] != null)
 				{
@@ -618,8 +645,8 @@ public class TEFirepit extends TEFireEntity implements IInventory
 
 	private void smokeBlock(int x, int y, int z)
 	{
-		if (worldObj.blockExists(x, y, z) && worldObj.getBlock(x, y, z) == TFCBlocks.smokeRack
-				&& worldObj.getTileEntity(x, y, z) instanceof TESmokeRack)
+		if (worldObj.blockExists(x, y, z) && worldObj.getBlock(x, y, z) == TFCBlocks.smokeRack && worldObj
+				.getTileEntity(x, y, z) instanceof TESmokeRack)
 		{
 			boolean broadcast = false;
 			TESmokeRack te = (TESmokeRack) worldObj.getTileEntity(x, y, z);

@@ -38,6 +38,7 @@ import com.dunk.tfc.api.TFCOptions;
 import com.dunk.tfc.api.Constant.Global;
 import com.dunk.tfc.api.Interfaces.IBoots;
 import com.dunk.tfc.api.Interfaces.IEquipable;
+import com.dunk.tfc.api.Interfaces.IEquipable.ClothingType;
 import com.dunk.tfc.api.Interfaces.IEquipable.EquipType;
 import com.dunk.tfc.api.Interfaces.IFood;
 import com.dunk.tfc.api.Util.Helper;
@@ -62,6 +63,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -76,6 +79,7 @@ public class EntityLivingHandler
 	{
 		if (event.entityLiving instanceof EntityPlayer)
 		{
+
 			EntityPlayer player = (EntityPlayer) event.entityLiving;
 			// Set Max Health
 			float newMaxHealth = FoodStatsTFC.getMaxHealth(player);
@@ -85,7 +89,6 @@ public class EntityLivingHandler
 			{
 				player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(newMaxHealth);
 			}
-
 			if (!player.worldObj.isRemote)
 			{
 				/*
@@ -122,9 +125,43 @@ public class EntityLivingHandler
 				boolean isInRain = player.worldObj.isRaining() && player.worldObj.canBlockSeeTheSky((int) player.posX,
 						(int) player.posY, (int) player.posZ - 1);
 
+				BodyTempStats bodyTemp = TFC_Core.getBodyTempStats(player);
+
+				// Get the ambient temperature and adjust it based on the local
+				// area.
+
+				boolean shouldWarm = TFC_Core.shouldUpdateLocalWarmthFromHeatSource(player, player.worldObj);
+				if (shouldWarm && bodyTemp.tempColdTimeRemaining < 2401)
+				{
+					if (bodyTemp.temporaryColdProtection < 1)
+					{
+						bodyTemp.temporaryColdProtection++;
+					}
+					bodyTemp.tempColdTimeRemaining += 2;
+				}
+				if (bodyTemp.tempColdTimeRemaining > 0)
+				{
+					bodyTemp.tempColdTimeRemaining--;
+					if (bodyTemp.tempColdTimeRemaining == 0)
+					{
+						bodyTemp.temporaryColdProtection = 0;
+					}
+				}
+				if (bodyTemp.tempHeatTimeRemaining > 0)
+				{
+					bodyTemp.tempHeatTimeRemaining--;
+					if (bodyTemp.tempHeatTimeRemaining == 0)
+					{
+						bodyTemp.temporaryHeatProtection = 0;
+					}
+				}
+
 				int[] resistances = TFC_Core.getTemperatureResistanceFromClothes(player, player.worldObj,
 						player.inventory.armorInventory,
 						PlayerManagerTFC.getInstance().getPlayerInfoFromName(player.getDisplayName()).myExtraItems);
+
+				resistances[1] += bodyTemp.temporaryColdProtection;
+				resistances[0] += bodyTemp.temporaryHeatProtection;
 
 				// Now that we have resistances, we should get the ambient
 				// effects of the area.
@@ -140,9 +177,10 @@ public class EntityLivingHandler
 					comfortDelta = Math.min(comfortDelta,
 							40 * TFC_Core.getWarmthTemperatureAdjustmentPercentage(player, player.worldObj));
 				}
-				else
+				else if(comfortDelta < 0)
 				{
-					comfortDelta = 0;
+					comfortDelta = Math.max(comfortDelta,
+							-40 * TFC_Core.getCoolthTemperatureAdjustmentPercentage(player, player.worldObj));
 				}
 
 				temp += comfortDelta;
@@ -152,19 +190,22 @@ public class EntityLivingHandler
 				int lowerSoaked = 0;
 				float waterMovementPenalty = 0;
 				int wearFrequency = TFC_Core.getClothingUpdateFrequency();
-				for (int i = 0; i < 4; i++)
+				for (int i = 0; i < 5; i++)
 				{
 					// hopefully this goes helmet -> feet
-					ItemStack armor = player.inventory.armorInventory[3 - i];
+
+					ItemStack armor = null;
+					if (i > 0 && i < 5)
+						armor = player.inventory.armorInventory[4 - i];
 					ItemStack clothing = null;
 					if (PlayerManagerTFC.getInstance()
 							.getPlayerInfoFromName(player.getDisplayName()).myExtraItems != null)
 						clothing = PlayerManagerTFC.getInstance()
-								.getPlayerInfoFromName(player.getDisplayName()).myExtraItems[i + 1];
+								.getPlayerInfoFromName(player.getDisplayName()).myExtraItems[i];
 					// upper body
 					ItemTFCArmor g;
-					if (armor != null && armor.getItem() instanceof ItemTFCArmor
-							&& (((ItemTFCArmor) (armor.getItem())).armorTypeTFC != Armor.leather))
+					if (armor != null && armor.getItem() instanceof ItemTFCArmor && (((ItemTFCArmor) (armor
+							.getItem())).armorTypeTFC != Armor.leather))
 					{
 						if (feetWet && i >= 2)
 						{
@@ -190,12 +231,11 @@ public class EntityLivingHandler
 					{
 						if (TFC_Time.getTotalTicks() % wearFrequency == 0)
 						{
-							armor = player.inventory.armorInventory[3 - i] = TFC_Core
-									.handleClothingWear(armor, player, isInRain,
-											(headWet && i < 2) || (feetWet && i >= 2), temp, playerOnFire,
-											(armor.getItem() instanceof ItemClothing
-													&& ((ItemClothing) armor.getItem()).isStraw()),
-											false, wearFrequency);
+							armor = player.inventory.armorInventory[4 - i] = TFC_Core.handleClothingWear(armor, player,
+									isInRain, (headWet && i < 2) || (feetWet && i >= 2), temp, playerOnFire,
+									(armor.getItem() instanceof ItemClothing && ((ItemClothing) armor.getItem())
+											.isStraw()),
+									false, wearFrequency);
 						}
 						if (armor != null)
 						{
@@ -238,7 +278,7 @@ public class EntityLivingHandler
 						if (TFC_Time.getTotalTicks() % wearFrequency == 0)
 						{
 							clothing = PlayerManagerTFC.getInstance()
-									.getPlayerInfoFromName(player.getDisplayName()).myExtraItems[i + 1]
+									.getPlayerInfoFromName(player.getDisplayName()).myExtraItems[i]
 							/*
 							 * / ((InventoryPlayerTFC)
 							 * (player.inventory)).extraEquipInventory[i + 1]
@@ -288,12 +328,11 @@ public class EntityLivingHandler
 					AbstractPacket pkt1 = new PlayerUpdatePacket(player, 6);
 					TerraFirmaCraft.PACKET_PIPELINE.sendTo(pkt1, (EntityPlayerMP) player);
 				}
-				if (((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory != null
-						&& PlayerManagerTFC.getInstance()
-								.getPlayerInfoFromName(player.getDisplayName()).myExtraItems != null
-						&& !((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory
-								.equals(PlayerManagerTFC.getInstance()
-										.getPlayerInfoFromName(player.getDisplayName()).myExtraItems))
+				if (((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory != null && PlayerManagerTFC
+						.getInstance().getPlayerInfoFromName(
+								player.getDisplayName()).myExtraItems != null && !((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory
+										.equals(PlayerManagerTFC.getInstance()
+												.getPlayerInfoFromName(player.getDisplayName()).myExtraItems))
 				{
 					// ((InventoryPlayerTFC) ((EntityPlayer)
 					// player).inventory).extraEquipInventory = PlayerManagerTFC
@@ -311,11 +350,6 @@ public class EntityLivingHandler
 				temp += TFC_Core.getTemperatureChangeFromEnvironment(player, player.worldObj, upperDamp > 1,
 						upperSoaked > 0, lowerDamp + upperSoaked > 0);
 
-				BodyTempStats bodyTemp = TFC_Core.getBodyTempStats(player);
-
-				// Get the ambient temperature and adjust it based on the local
-				// area.
-
 				bodyTemp.ambientTemperature = temp;
 				bodyTemp.coldResistance = resistances[1];
 				bodyTemp.heatResistance = resistances[0];
@@ -331,22 +365,16 @@ public class EntityLivingHandler
 					discomfort = (int) Math.ceil(((float) temp - (float) (20 + (5 * bodyTemp.heatResistance))) / 5f);
 				}
 				bodyTemp.discomfort = discomfort;
-				if (Math.abs(discomfort) >= 3)
+				if (Math.abs(discomfort) >= 3 && !player.capabilities.isCreativeMode && !TFCOptions.enableDebugMode)
 				{
 					player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 20, 1));
 				}
-				if (Math.abs(discomfort) > 5)
+				if (Math.abs(discomfort) > 5 && !player.capabilities.isCreativeMode && !TFCOptions.enableDebugMode)
 				{
 					player.addPotionEffect(new PotionEffect(Potion.confusion.id, 20, 1));
 				}
 
 				TFC_Core.setBodyTempStats(player, bodyTemp);
-				if (player.getDisplayName().equals("Kapellini"))
-				{
-					// System.out.println(""+PlayerManagerTFC.getInstance()
-					// .getPlayerInfoFromName(player.
-					// getDisplayName()).clothingWetLock);
-				}
 				AbstractPacket pkt1 = new PlayerUpdatePacket(player, 5);
 				TerraFirmaCraft.PACKET_PIPELINE.sendTo(pkt1, (EntityPlayerMP) player);
 
@@ -397,6 +425,7 @@ public class EntityLivingHandler
 						}
 					}
 				}
+
 				setOverburdened(player, isOverburdened);
 				boolean bootsBonus = false;
 				float speedBonus = 0f;
@@ -408,13 +437,16 @@ public class EntityLivingHandler
 				 * player.worldObj.getBlock((int)player.posX,
 				 * (int)player.posY+iii, (int)player.posZ); }
 				 */
+
 				Material m = player.worldObj.getBlock((int) player.posX, (int) player.posY - 1, (int) player.posZ - 1)
 						.getMaterial();
 				ItemStack bootsI = player.getCurrentArmor(0); // hopefully the
-																// boots
+				// boots
+				ItemStack robeI = player.getCurrentArmor(2); // hopefully the
+				// robes
 				ItemStack socks = null;
-				if (PlayerManagerTFC.getInstance().getPlayerInfoFromName(player.getDisplayName()) != null
-						&& PlayerManagerTFC.getInstance()
+				if (PlayerManagerTFC.getInstance()
+						.getPlayerInfoFromName(player.getDisplayName()) != null && PlayerManagerTFC.getInstance()
 								.getPlayerInfoFromName(player.getDisplayName()).myExtraItems != null)
 				{
 					socks = PlayerManagerTFC.getInstance()
@@ -436,7 +468,24 @@ public class EntityLivingHandler
 						}
 					}
 				}
+				if (robeI != null)
+				{
+					Item robes = robeI.getItem();
+					if (robes != null && robes instanceof ItemClothing && ((ItemClothing) robes)
+							.getClothingType() == ClothingType.ROBE && player.isSprinting())
+					{
+						bootsBonus = true;
+						speedBonus -= 0.1;
+					}
+				}
+				if (player.getHeldItem() != null && player.getHeldItem().getItem() == TFCItems.woodenStaff && !player
+						.isSprinting())
+				{
+					bootsBonus = true;
+					speedBonus += 0.1;
+				}
 				// }
+
 				setSpeedBonus(player, speedBonus, bootsBonus);
 
 				// Handle Spawn Protection
@@ -463,6 +512,16 @@ public class EntityLivingHandler
 			}
 			else
 			{
+				//player.prevSwingProgress =(((TFC_Time.getTotalTicks())%20)/4f)/4f;
+				//player.swingProgress = player.prevSwingProgress + (1f/60f);//((TFC_Time.getTotalTicks()%20)/4f)/4f;
+				//player.isSwingInProgress = true;
+				if (TFC_Time.getTotalTicks() % 20 == 0)
+				{
+					// System.out.println(player.worldObj.getBlock((int)
+					// player.posX, (int) player.posY - 2, (int) player.posZ -
+					// 1));
+				}
+
 				PlayerInfo pi = PlayerManagerTFC.getInstance().getClientPlayer();
 				FoodStatsTFC foodstats = TFC_Core.getPlayerFoodStats(player);
 				foodstats.clientUpdate();
@@ -515,18 +574,16 @@ public class EntityLivingHandler
 				 */
 				for (int i = 0; i < TFC_Core.getExtraEquipInventorySize(); i++)
 				{
-					if (((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory[i] != null
-							&& ((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory[i]
-									.isItemStackDamageable()
-							&& ((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory[i]
+					if (((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory[i] != null && ((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory[i]
+							.isItemStackDamageable() && ((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory[i]
 									.getItemDamage() == ((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory[i]
 											.getMaxDamage())
 					{
 						((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory[i] = null;
 					}
 				}
-				if (pi != null && player != null && player.inventory != null && pi.myExtraItems != null
-						&& player.getDisplayName() == Minecraft.getMinecraft().thePlayer.getDisplayName())
+				if (pi != null && player != null && player.inventory != null && pi.myExtraItems != null && player
+						.getDisplayName() == Minecraft.getMinecraft().thePlayer.getDisplayName())
 				{
 					if (((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory != null)
 					{
@@ -543,8 +600,8 @@ public class EntityLivingHandler
 					TerraFirmaCraft.PACKET_PIPELINE.sendToServer(pkt);
 
 				}
-				else if (pi != null && pi.myExtraItems == null
-						&& player.getDisplayName() == Minecraft.getMinecraft().thePlayer.getDisplayName())
+				else if (pi != null && pi.myExtraItems == null && player
+						.getDisplayName() == Minecraft.getMinecraft().thePlayer.getDisplayName())
 				{
 					if (((InventoryPlayerTFC) ((EntityPlayer) player).inventory).extraEquipInventory != null)
 					{
@@ -652,6 +709,22 @@ public class EntityLivingHandler
 	{
 		IAttributeInstance iattributeinstance = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 
+		if (iattributeinstance.getModifier(TFCAttributes.ROBE_NEGATIVE_3_UUID) != null)
+		{
+			iattributeinstance.removeModifier(TFCAttributes.ROBE_NEGATIVE_3);
+		}
+		if (iattributeinstance.getModifier(TFCAttributes.ROBE_NEGATIVE_5_UUID) != null)
+		{
+			iattributeinstance.removeModifier(TFCAttributes.ROBE_NEGATIVE_5);
+		}
+		if (iattributeinstance.getModifier(TFCAttributes.ROBE_NEGATIVE_8_UUID) != null)
+		{
+			iattributeinstance.removeModifier(TFCAttributes.ROBE_NEGATIVE_8);
+		}
+		if (iattributeinstance.getModifier(TFCAttributes.ROBE_NEGATIVE_10_UUID) != null)
+		{
+			iattributeinstance.removeModifier(TFCAttributes.ROBE_NEGATIVE_10);
+		}
 		if (iattributeinstance.getModifier(TFCAttributes.BOOTS_2_UUID) != null)
 		{
 			iattributeinstance.removeModifier(TFCAttributes.BOOTS_2);
@@ -680,10 +753,41 @@ public class EntityLivingHandler
 		{
 			iattributeinstance.removeModifier(TFCAttributes.BOOTS_17);
 		}
+		if (iattributeinstance.getModifier(TFCAttributes.BOOTS_20_UUID) != null)
+		{
+			iattributeinstance.removeModifier(TFCAttributes.BOOTS_20);
+		}
+		if (iattributeinstance.getModifier(TFCAttributes.BOOTS_22_UUID) != null)
+		{
+			iattributeinstance.removeModifier(TFCAttributes.BOOTS_22);
+		}
+		if (iattributeinstance.getModifier(TFCAttributes.BOOTS_25_UUID) != null)
+		{
+			iattributeinstance.removeModifier(TFCAttributes.BOOTS_25);
+		}
+		if (iattributeinstance.getModifier(TFCAttributes.BOOTS_27_UUID) != null)
+		{
+			iattributeinstance.removeModifier(TFCAttributes.BOOTS_27);
+		}
 		if (b)
 		{
-
-			if (speed == 0.02f)
+			if (speed == -0.03f)
+			{
+				iattributeinstance.applyModifier(TFCAttributes.ROBE_NEGATIVE_3);
+			}
+			else if (speed == -0.05)
+			{
+				iattributeinstance.applyModifier(TFCAttributes.ROBE_NEGATIVE_5);
+			}
+			else if (speed == -0.08f)
+			{
+				iattributeinstance.applyModifier(TFCAttributes.ROBE_NEGATIVE_8);
+			}
+			else if (speed == -0.1f)
+			{
+				iattributeinstance.applyModifier(TFCAttributes.ROBE_NEGATIVE_10);
+			}
+			else if (speed == 0.02f)
 			{
 				iattributeinstance.applyModifier(TFCAttributes.BOOTS_2);
 			}
@@ -710,6 +814,22 @@ public class EntityLivingHandler
 			else if (speed == 0.17f)
 			{
 				iattributeinstance.applyModifier(TFCAttributes.BOOTS_17);
+			}
+			else if (speed == 0.2f)
+			{
+				iattributeinstance.applyModifier(TFCAttributes.BOOTS_20);
+			}
+			else if (speed == 0.22f)
+			{
+				iattributeinstance.applyModifier(TFCAttributes.BOOTS_22);
+			}
+			else if (speed == 0.25f)
+			{
+				iattributeinstance.applyModifier(TFCAttributes.BOOTS_25);
+			}
+			else if (speed == 0.27f)
+			{
+				iattributeinstance.applyModifier(TFCAttributes.BOOTS_27);
 			}
 		}
 	}
@@ -766,9 +886,9 @@ public class EntityLivingHandler
 			if (backItem == null && item.getItem() instanceof IEquipable)
 			{
 				IEquipable equipment = (IEquipable) item.getItem();
-				if (equipment.getEquipType(item) == EquipType.BACK
-						&& TFC_Time.getTotalTicks() % TFC_Core.getClothingUpdateFrequency() != 1
-						&& (equipment == TFCItems.quiver || equipment.getTooHeavyToCarry(item)))
+				if (equipment.getEquipType(item) == EquipType.BACK /*&& TFC_Time.getTotalTicks() % TFC_Core
+						.getClothingUpdateFrequency() != 1*/ && (equipment == TFCItems.quiver || equipment
+								.getTooHeavyToCarry(item)))
 				{
 					player.inventory.setInventorySlotContents(36, item.copy());
 					item.stackSize = 0;
@@ -803,8 +923,8 @@ public class EntityLivingHandler
 					boolean foundJav = false;
 					for (int i = 0; i < 9; i++)
 					{
-						if (player.inventory.getStackInSlot(i) != null
-								&& player.inventory.getStackInSlot(i).getItem() instanceof ItemJavelin)
+						if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i)
+								.getItem() instanceof ItemJavelin)
 							foundJav = true;
 					}
 
@@ -835,8 +955,9 @@ public class EntityLivingHandler
 			player.triggerAchievement(TFC_Achievements.achDiamond);
 		else if (item.getItem().equals(TFCItems.onion) && TFCOptions.onionsAreGross)
 			player.triggerAchievement(TFC_Achievements.achRutabaga);
-		else if (item.getItem().equals(TFCItems.oreChunk)
-				&& (item.getItemDamage() == 11 || item.getItemDamage() == 46 || item.getItemDamage() == 60))
+		else if (item.getItem()
+				.equals(TFCItems.oreChunk) && (item.getItemDamage() == 11 || item.getItemDamage() == 46 || item
+						.getItemDamage() == 60))
 			player.triggerAchievement(TFC_Achievements.achLimonite);
 	}
 
@@ -853,8 +974,8 @@ public class EntityLivingHandler
 			pi.tempSkills = skills;
 
 			// Save the item in the back slot if keepInventory is set to true.
-			if (entity.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory")
-					&& player.inventory instanceof InventoryPlayerTFC)
+			if (entity.worldObj.getGameRules()
+					.getGameRuleBooleanValue("keepInventory") && player.inventory instanceof InventoryPlayerTFC)
 			{
 				pi.tempEquipment = ((InventoryPlayerTFC) player.inventory).extraEquipInventory.clone();
 			}
@@ -868,8 +989,7 @@ public class EntityLivingHandler
 	public void onLivingDrop(LivingDropsEvent event)
 	{
 		boolean processed = false;
-		if (!event.entity.worldObj.isRemote && event.recentlyHit && !(event.entity instanceof EntityPlayer)
-				&& !(event.entity instanceof EntityZombie))
+		if (!event.entity.worldObj.isRemote && event.recentlyHit && !(event.entity instanceof EntityPlayer) && !(event.entity instanceof EntityZombie))
 		{
 			if (event.source.getSourceOfDamage() instanceof EntityPlayer || event.source.isProjectile())
 			{
@@ -902,8 +1022,8 @@ public class EntityLivingHandler
 
 						float oldWeight = Food.getWeight(is);
 						Food.setWeight(is, 0);
-						float newWeight = oldWeight
-								* (TFC_Core.getSkillStats(p).getSkillMultiplier(Global.SKILL_BUTCHERING) + 0.01f);
+						float newWeight = oldWeight * ((TFC_Core.getSkillStats(p)
+								.getSkillMultiplier(Global.SKILL_BUTCHERING) + 0.01f)*0.5f + 0.5f);
 						while (newWeight >= Global.FOOD_MIN_DROP_WEIGHT)
 						{
 							float fw = Helper.roundNumber(Math.min(Global.FOOD_MAX_WEIGHT, newWeight), 10);

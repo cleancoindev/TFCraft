@@ -371,9 +371,9 @@ public class BlockFruitWood extends BlockTerraContainer
 		}
 	}*/
 
-	public static String getType(int meta)
+	public static String getType(int fruitType)
 	{
-		switch(meta)
+		switch(fruitType)
 		{
 		case 0: return Global.FRUIT_META_NAMES[0];
 		case 1: return Global.FRUIT_META_NAMES[1];

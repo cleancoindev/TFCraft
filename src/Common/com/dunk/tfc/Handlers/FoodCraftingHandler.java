@@ -46,7 +46,7 @@ public class FoodCraftingHandler
 
 		ItemStack craftResult = e.crafting;
 		IInventory craftingInv = e.craftMatrix;
-
+		
 		if(craftingInv != null)
 		{
 			if(refiningBlock(craftResult, craftingInv))
@@ -118,6 +118,7 @@ public class FoodCraftingHandler
 	private static ItemStack processFoodInput(EntityPlayer player, ItemStack craftResult, IInventory craftingInv)
 	{
 		float finalWeight = 0;
+		byte intputWaterLoss = (byte)0;
 		float finalDecay = 0;
 		int[] fuelTasteProfile = new int[] {0,0,0,0,0};
 		int[] cookedTasteProfile = new int[] {0,0,0,0,0};
@@ -142,6 +143,8 @@ public class FoodCraftingHandler
 				}
 
 				float inputWeight = Food.getWeight(is);
+				intputWaterLoss = Food.getWaterLoss(is);
+				Food.setWaterLoss(craftResult, intputWaterLoss);
 				final float oldInputWeight = inputWeight;
 				float inputDecayPercent = Food.getDecay(is) / oldInputWeight;
 				float inputDecay = Food.getDecay(is);
@@ -191,6 +194,7 @@ public class FoodCraftingHandler
 				{
 					Food.setWeight(is, inputWeight);
 					Food.setDecay(is, inputDecay);
+					Food.setWaterLoss(is, intputWaterLoss);
 					is.stackSize++;
 					if(is.stackSize > 2)
 						is.stackSize = 2;
@@ -261,6 +265,7 @@ public class FoodCraftingHandler
 						{
 							FoodCraftingHandler.damageItem(player, craftingInv, i, itemstack.getItem());
 							Food.setWeight(craftingInv.getStackInSlot(foodSlot), Helper.roundNumber(finalWeight / 2f, 100));
+							Food.setWaterLoss(craftingInv.getStackInSlot(foodSlot), intputWaterLoss);
 							// Increase the food's stack size so it will remain in the grid when crafting completes
 							craftingInv.getStackInSlot(foodSlot).stackSize++;
 							if (craftingInv.getStackInSlot(foodSlot).stackSize > 2)
@@ -294,6 +299,7 @@ public class FoodCraftingHandler
 		boolean pickled = true;
 		boolean brined = true;
 		boolean dried = true;
+		byte waterLoss = 0;
 		int driedAmt = 0;
 		int foodCount = 0;
 		int itemCount = 0;
@@ -340,7 +346,8 @@ public class FoodCraftingHandler
 					else if (umamiMod != Food.getSavoryMod(is))
 						umamiMod = 0;
 
-					float inputWeight = is.getItem().equals(Item.getItemFromBlock(TFCBlocks.pumpkin))?32F:4F;//Food.getWeight(is);
+					float inputWeight = (is.getItem().equals(Item.getItemFromBlock(TFCBlocks.pumpkin))||
+							is.getItem().equals(Item.getItemFromBlock(TFCBlocks.melon)))?64F:4F;//Food.getWeight(is);
 					final float oldInputWeight = inputWeight;
 					float inputDecayPercent = Food.getDecay(is) / oldInputWeight;
 					float inputDecay = Food.getDecay(is);
@@ -403,6 +410,8 @@ public class FoodCraftingHandler
 				ItemStack is = craftingInv.getStackInSlot(i);
 				if (is.getItem() instanceof ItemFoodTFC && is.hasTagCompound() && is.getTagCompound().hasKey(Food.WEIGHT_TAG))
 				{
+					waterLoss  = Food.getWaterLoss(is);
+					Food.setWaterLoss(craftResult, waterLoss);
 					if (foodCount == 0)
 					{
 						fuelTasteProfile = Food.getFuelProfile(is);
@@ -604,7 +613,8 @@ public class FoodCraftingHandler
 	{
 		return craftResult.getItem().equals(TFCItems.pumpkinGuts) && gridHasItem(iinventory, TFCBlocks.pumpkin)
 				|| craftResult.getItem().equals(TFCItems.mushroomFoodB) && gridHasItem(iinventory, TFCBlocks.fungi)
-				||craftResult.getItem().equals(TFCItems.mushroomFoodR)&& gridHasItem(iinventory, TFCBlocks.fungi);
+				||craftResult.getItem().equals(TFCItems.mushroomFoodR)&& gridHasItem(iinventory, TFCBlocks.fungi)
+				||craftResult.getItem().equals(TFCItems.melonSlice) && gridHasItem(iinventory, TFCBlocks.melon);
 	}
 
 	public static boolean refiningGrain(ItemStack craftResult, IInventory iinventory)

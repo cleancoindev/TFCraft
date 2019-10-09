@@ -47,7 +47,7 @@ public class ChunkData
 		lastVisited = tag.getLong("lastVisited");
 		spawnProtection = tag.getInteger("spawnProtection");
 
-		updateSpawnProtection();
+		//updateSpawnProtection();
 
 		heightmap = tag.getIntArray("heightmap");
 		if(heightmap.length == 0)
@@ -67,7 +67,7 @@ public class ChunkData
 		tag.setInteger("chunkX", chunkX);
 		tag.setInteger("chunkZ", chunkZ);
 		
-		updateSpawnProtection();
+		//updateSpawnProtection();
 		
 		tag.setInteger("spawnProtection", spawnProtection);
 		tag.setLong("lastVisited", lastVisited);

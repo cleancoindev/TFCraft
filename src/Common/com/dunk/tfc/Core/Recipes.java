@@ -22,6 +22,8 @@ import com.dunk.tfc.api.Crafting.QuernManager;
 import com.dunk.tfc.api.Crafting.QuernRecipe;
 import com.dunk.tfc.api.Crafting.SewingPattern;
 import com.dunk.tfc.api.Crafting.SewingRecipe;
+import com.dunk.tfc.api.Crafting.ShapelessRecipesTFC;
+import com.dunk.tfc.api.Enums.EnumRegion;
 import com.dunk.tfc.api.Enums.RuleEnum;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -85,8 +87,23 @@ public class Recipes
 		// compatibility
 		vanillaRecipes();
 
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCBlocks.thatchRoof,2,0), "T ","ST", 'T', TFCBlocks.thatch, 'S',"stickWood"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCBlocks.thatchRoof,2,0), " T","TS", 'T', TFCBlocks.thatch, 'S',"stickWood"));
+		
+		GameRegistry.addRecipe(new ItemStack(TFCBlocks.tileRoof, 1, 0), "X  ", "LX ", " LX", 'L',
+				new ItemStack(TFCItems.singlePlank, 1, WILD), 'X', new ItemStack(TFCItems.clayTile, 1, 1));
+
+		GameRegistry.addRecipe(new ItemStack(TFCBlocks.tileRoof, 1, 0), "  X", " XL", "XL ", 'L',
+				new ItemStack(TFCItems.singlePlank, 1, WILD), 'X', new ItemStack(TFCItems.clayTile, 1, 1));
+
+		GameRegistry.addRecipe(new ItemStack(TFCBlocks.tileRoof, 1, 4), "   ", " X ", "XLX", 'L',
+				new ItemStack(TFCItems.singlePlank, 1, WILD), 'X', new ItemStack(TFCItems.clayTile, 1, 1));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCBlocks.littleDrum, 1), " L ", "SBS", 'L',
+				new ItemStack(TFCItems.leather, 1, 0), 'S', "materialString", 'B',
+				new ItemStack(TFCItems.woodenBucketEmpty, 1, 0)));
 		// Wood Specific Stuff
-		for (int i = 0; i < Global.WOOD_ALL.length; i++)
+		for (int i = 0; i < Global.WOOD_ALL.length && i < doors.length; i++)
 		{
 			GameRegistry.addRecipe(new ItemStack(doors[i]), "WW", "WW", "WW", 'W',
 					new ItemStack(TFCItems.singlePlank, 1, i));
@@ -95,6 +112,10 @@ public class Recipes
 			GameRegistry.addRecipe(new ItemStack(TFCBlocks.toolRack, 1, i), "###", "   ", "###", '#',
 					new ItemStack(TFCItems.singlePlank, 1, i));
 
+			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.pole, 1),
+					new ItemStack(TFCItems.logs, 1, 2 * i), "itemKnife"));
+			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.pole, 1),
+					new ItemStack(TFCItems.logs, 1, 2 * i + 1), "itemKnife"));
 			int l = i % 16;
 
 			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.singlePlank, 8, i),
@@ -105,6 +126,10 @@ public class Recipes
 					new ItemStack(TFCItems.thickLogs, 1, i), "itemSaw"));
 			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.logs, 4, 2 * i + 1),
 					new ItemStack(TFCItems.thickLogs, 1, i), "itemAxe"));
+
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCBlocks.bigDrum, 1), " L ", "SBS", 'L',
+					new ItemStack(TFCItems.leather, 1, 0), 'S', "materialString", 'B',
+					new ItemStack(TFCBlocks.barrel, 1, i)));
 
 			if (i == l)
 			{
@@ -119,6 +144,10 @@ public class Recipes
 				GameRegistry.addRecipe(new ItemStack(TFCBlocks.planks, 1, i), "11", "11", '1',
 						new ItemStack(TFCItems.singlePlank, 1, i));
 
+				// GameRegistry.addRecipe(new ItemStack(TFCBlocks.bigDrum,1), "
+				// L"," B", 'L', new ItemStack(TFCItems.leather,1,0),'B',new
+				// ItemStack(TFCBlocks.barrel,1,i));
+
 				GameRegistry.addRecipe(new ItemStack(TFCBlocks.barrel, 1, i), "# #", "# #", "###", '#',
 						new ItemStack(TFCItems.singlePlank, 1, i));
 
@@ -128,8 +157,10 @@ public class Recipes
 						new ItemStack(TFCItems.logs, 1, 2 * i + 1), 'P', new ItemStack(TFCItems.singlePlank, 1, i));
 				GameRegistry.addRecipe(new ItemStack(TFCBlocks.fenceGate, 2, i), "LPL", "LPL", 'L',
 						new ItemStack(TFCItems.singlePlank, 1, i), 'P', new ItemStack(TFCBlocks.planks, 1, i));
-				GameRegistry.addRecipe(new ItemStack(TFCBlocks.armorStand, 1, i), "###", " # ", "%%%", '#',
-						new ItemStack(TFCItems.singlePlank, 1, i), '%', new ItemStack(TFCBlocks.planks, 1, i));
+				// GameRegistry.addRecipe(new ItemStack(TFCBlocks.armorStand, 1,
+				// i), "###", " # ", "%%%", '#',
+				// new ItemStack(TFCItems.singlePlank, 1, i), '%', new
+				// ItemStack(TFCBlocks.planks, 1, i));
 
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCBlocks.loom, 1, i), "LLL", "LSL", "L L",
 						'L', new ItemStack(TFCItems.singlePlank, 1, i), 'S', "stickWood"));
@@ -157,8 +188,10 @@ public class Recipes
 				GameRegistry.addRecipe(new ItemStack(TFCBlocks.fenceGate2, 2, l), "LPL", "LPL", 'L',
 						new ItemStack(TFCItems.singlePlank, 1, i), 'P', new ItemStack(TFCBlocks.planks2, 1, l));
 
-				GameRegistry.addRecipe(new ItemStack(TFCBlocks.armorStand2, 1, l), "###", " # ", "%%%", '#',
-						new ItemStack(TFCItems.singlePlank, 1, i), '%', new ItemStack(TFCBlocks.planks2, 1, l));
+				// GameRegistry.addRecipe(new ItemStack(TFCBlocks.armorStand2,
+				// 1, l), "###", " # ", "%%%", '#',
+				// new ItemStack(TFCItems.singlePlank, 1, i), '%', new
+				// ItemStack(TFCBlocks.planks2, 1, l));
 
 				GameRegistry.addRecipe(new ItemStack(TFCBlocks.barrel, 1, i), "# #", "# #", "###", '#',
 						new ItemStack(TFCItems.singlePlank, 1, i));
@@ -166,6 +199,12 @@ public class Recipes
 						'L', new ItemStack(TFCItems.singlePlank, 1, i), 'S', "stickWood"));
 			}
 		}
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.lyre, 1, 0), "LSL", " L ", 'S', "stickWood",
+				'L', "woodLumber"));
+		GameRegistry.addRecipe(
+				new ShapelessOreRecipe(new ItemStack(TFCItems.lyre, 1, 1), new ItemStack(TFCItems.lyre, 1, 0),
+						"materialString", "materialString", "materialString", "materialString", "materialString"));
 
 		// Wood Mix & Match
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.sluiceItem, 1), "  1", " 12", "122", '1',
@@ -290,7 +329,7 @@ public class Recipes
 				new ShapedOreRecipe(new ItemStack(Blocks.coal_block, 1), "###", "###", "###", '#', "gemCoal"));
 
 		// Misc Items
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.arrow, 8), "itemRock", "stickWood",
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.arrow, 1), "itemRock", "stickWood",
 				new ItemStack(Items.feather)));
 
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.gunpowder, 2, 0), "gemCharcoal", "dustSulfur",
@@ -340,8 +379,8 @@ public class Recipes
 
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.woolYarn, 8), "materialWool",
 				new ItemStack(TFCItems.spindle, 1, WILD)));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.linenString, 4), new ItemStack(TFCItems.flaxFiber,1),
-				new ItemStack(TFCItems.spindle, 1, WILD)));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.linenString, 4),
+				new ItemStack(TFCItems.flaxFiber, 1), new ItemStack(TFCItems.spindle, 1, WILD)));
 
 		// Markings & Blueprint
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.ink, 16, 0), "2", '2', "dyeBlack"));
@@ -350,11 +389,23 @@ public class Recipes
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.nametag, 1), new ItemStack(TFCItems.ink),
 				new ItemStack(Items.paper, 1), "materialString"));
 
+		for (int j = 0; j < Global.STONE_ALL.length; j++)
+		{
+			GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.mudBrick, 1, j + 32),
+					new ItemStack(TFCItems.mud, 1, j));
+			GameRegistry.addRecipe(new ItemStack(j < 16 ? TFCBlocks.mudBricks : TFCBlocks.mudBricks2, 2, j % 16), "BB",
+					"BB", 'B', new ItemStack(TFCItems.mudBrick, 1, j));
+		}
+
 		// Stone Stuff
 		for (int j = 0; j < Global.STONE_IGIN.length; j++)
 		{
 			// Bricks
 			GameRegistry.addRecipe(new ItemStack(TFCBlocks.stoneIgInBrick, 4, j), "PXP", "XPX", "PXP", 'P',
+					new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_IGIN_START), 'X',
+					new ItemStack(TFCItems.mortar, 1));
+			// Brick Chimneys
+			GameRegistry.addRecipe(new ItemStack(TFCBlocks.chimneyBricks, 2, j), "P P", "X X", "P P", 'P',
 					new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_IGIN_START), 'X',
 					new ItemStack(TFCItems.mortar, 1));
 			GameRegistry.addRecipe(
@@ -385,6 +436,10 @@ public class Recipes
 			GameRegistry.addRecipe(new ItemStack(TFCBlocks.stoneSedBrick, 4, j), "PXP", "XPX", "PXP", 'P',
 					new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_SED_START), 'X',
 					new ItemStack(TFCItems.mortar, 1));
+			// Brick Chimneys
+			GameRegistry.addRecipe(new ItemStack(TFCBlocks.chimneyBricks, 2, j + Global.STONE_SED_START), "P P", "X X",
+					"P P", 'P', new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_SED_START), 'X',
+					new ItemStack(TFCItems.mortar, 1));
 			GameRegistry
 					.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_SED_START),
 							new ItemStack(TFCItems.looseRock, 1, j + Global.STONE_SED_START), "itemChisel"));
@@ -413,6 +468,10 @@ public class Recipes
 			GameRegistry.addRecipe(new ItemStack(TFCBlocks.stoneIgExBrick, 4, j), "PXP", "XPX", "PXP", 'P',
 					new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_IGEX_START), 'X',
 					new ItemStack(TFCItems.mortar, 1));
+			// Brick Chimneys
+			GameRegistry.addRecipe(new ItemStack(TFCBlocks.chimneyBricks, 2, j + Global.STONE_IGEX_START), "P P", "X X",
+					"P P", 'P', new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_IGEX_START), 'X',
+					new ItemStack(TFCItems.mortar, 1));
 			GameRegistry.addRecipe(
 					new ShapelessOreRecipe(new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_IGEX_START),
 							new ItemStack(TFCItems.looseRock, 1, j + Global.STONE_IGEX_START), "itemChisel"));
@@ -438,6 +497,9 @@ public class Recipes
 		for (int j = 0; j < Global.STONE_MM.length; j++)
 		{
 			GameRegistry.addRecipe(new ItemStack(TFCBlocks.stoneMMBrick, 4, j), "PXP", "XPX", "PXP", 'P',
+					new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_MM_START), 'X',
+					new ItemStack(TFCItems.mortar, 1));
+			GameRegistry.addRecipe(new ItemStack((j + Global.STONE_MM_START < 16?TFCBlocks.chimneyBricks:TFCBlocks.chimneyBricks2), 2, j + Global.STONE_MM_START), "P P", "X X", "P P", 'P',
 					new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_MM_START), 'X',
 					new ItemStack(TFCItems.mortar, 1));
 			GameRegistry
@@ -643,16 +705,49 @@ public class Recipes
 		GameRegistry.addRecipe(
 				new ShapedOreRecipe(new ItemStack(TFCItems.fireStarter, 1, 0), "2 ", " 2", '2', "stickWood"));
 
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.bowFireStarter, 1, 0), TFCItems.bow,
+				TFCItems.fireStarter));
+
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.woodenBucketPlaster, 1),
 				TFCItems.woodenBucketWater, new ItemStack(TFCItems.powder, 1, 12)));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.bow, 1), " #$", "# $", " #$", '#',
-				"stickWood", '$', "materialString"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.bow, 1), " #$", "# $", " #$", '#',
-				"stickWood", '$', new ItemStack(TFCItems.sinew)));
+		/*
+		 * GameRegistry.addRecipe(new ShapedOreRecipe(new
+		 * ItemStack(TFCItems.bow, 1), " #$", "# $", " #$", '#', "stickWood",
+		 * '$', "materialString")); GameRegistry.addRecipe(new
+		 * ShapedOreRecipe(new ItemStack(TFCItems.bow, 1), " #$", "# $", " #$",
+		 * '#', "stickWood", '$', new ItemStack(TFCItems.sinew)));
+		 */
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.fishingRod, 1), "  #", " #$", "#N$", '#',
-				"stickWood", '$', "materialString", 'N', "boneNeedle"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.stick, 2), new ItemStack(TFCItems.pole)));
+
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.unstrungBow, 1),
+				new ItemStack(TFCItems.pole), "itemKnife", "materialString"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.unstrungBow, 1),
+				new ItemStack(TFCItems.pole), "itemKnife", new ItemStack(TFCItems.sinew)));
+
+		GameRegistry
+				.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.woodenSpear, 1), TFCItems.pole, "itemKnife"));
+		GameRegistry.addRecipe(
+				new ShapelessOreRecipe(new ItemStack(TFCItems.woodenStaff, 1), TFCItems.pole, TFCItems.leatherStrap));
+
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.bow, 1),
+				new ItemStack(TFCItems.unstrungBow), "materialString"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.bow, 1),
+				new ItemStack(TFCItems.unstrungBow), new ItemStack(TFCItems.sinew)));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.fishingRod, 1), "PS", "SN", 'P',
+				new ItemStack(TFCItems.pole), 'S', "materialString", 'N', "boneNeedle"));
+
+		GameRegistry.addRecipe(
+				new ShapelessOreRecipe(new ItemStack(TFCItems.dye, 1, 15), TFCItems.hollowBone, "itemKnife"));
+
+		GameRegistry.addRecipe(
+				new ShapelessOreRecipe(new ItemStack(TFCItems.blowingHorn, 1, 0), TFCItems.horn, "itemKnife"));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.conchHorn), new ItemStack(TFCItems.seashell, 1, 1));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.seashell, 1, 1), new ItemStack(TFCItems.conchHorn));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.spindle, 1), "P", "#", 'P',
 				new ItemStack(TFCItems.spindleHead, 1, 1), '#', "stickWood"));
@@ -662,13 +757,13 @@ public class Recipes
 
 		// stone javelins
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.igInStoneJavelin, 1, 0), "1", "2", '1',
-				TFCItems.igInStoneJavelinHead, '2', "stickWood"));
+				TFCItems.igInStoneJavelinHead, '2', TFCItems.pole));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.sedStoneJavelin, 1, 0), "1", "2", '1',
-				TFCItems.sedStoneJavelinHead, '2', "stickWood"));
+				TFCItems.sedStoneJavelinHead, '2', TFCItems.pole));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.igExStoneJavelin, 1, 0), "1", "2", '1',
-				TFCItems.igExStoneJavelinHead, '2', "stickWood"));
+				TFCItems.igExStoneJavelinHead, '2', TFCItems.pole));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.mMStoneJavelin, 1, 0), "1", "2", '1',
-				TFCItems.mMStoneJavelinHead, '2', "stickWood"));
+				TFCItems.mMStoneJavelinHead, '2', TFCItems.pole));
 
 		// stone shovels
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.igInShovel, 1, 0), "1", "2", '1',
@@ -726,14 +821,19 @@ public class Recipes
 		GameRegistry.addRecipe(new ItemStack(TFCItems.mMHoe, 1, 0), "1", "2", '1', TFCItems.mMStoneHoeHead, '2',
 				new ItemStack(TFCItems.bone));
 		// bone javelins
-		GameRegistry.addRecipe(new ItemStack(TFCItems.igInStoneJavelin, 1, 0), "1", "2", '1',
-				TFCItems.igInStoneJavelinHead, '2', new ItemStack(TFCItems.bone));
-		GameRegistry.addRecipe(new ItemStack(TFCItems.sedStoneJavelin, 1, 0), "1", "2", '1',
-				TFCItems.sedStoneJavelinHead, '2', new ItemStack(TFCItems.bone));
-		GameRegistry.addRecipe(new ItemStack(TFCItems.igExStoneJavelin, 1, 0), "1", "2", '1',
-				TFCItems.igExStoneJavelinHead, '2', new ItemStack(TFCItems.bone));
-		GameRegistry.addRecipe(new ItemStack(TFCItems.mMStoneJavelin, 1, 0), "1", "2", '1', TFCItems.mMStoneJavelinHead,
-				'2', new ItemStack(TFCItems.bone));
+
+		/*
+		 * GameRegistry.addRecipe(new ItemStack(TFCItems.igInStoneJavelin, 1,
+		 * 0), "1", "2", '1', TFCItems.igInStoneJavelinHead, '2', new
+		 * ItemStack(TFCItems.bone)); GameRegistry.addRecipe(new
+		 * ItemStack(TFCItems.sedStoneJavelin, 1, 0), "1", "2", '1',
+		 * TFCItems.sedStoneJavelinHead, '2', new ItemStack(TFCItems.bone));
+		 * GameRegistry.addRecipe(new ItemStack(TFCItems.igExStoneJavelin, 1,
+		 * 0), "1", "2", '1', TFCItems.igExStoneJavelinHead, '2', new
+		 * ItemStack(TFCItems.bone)); GameRegistry.addRecipe(new
+		 * ItemStack(TFCItems.mMStoneJavelin, 1, 0), "1", "2", '1',
+		 * TFCItems.mMStoneJavelinHead, '2', new ItemStack(TFCItems.bone));
+		 */
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.stoneHammer, 1, 0), "1", "2", '1',
 				TFCItems.stoneHammerHead, '2', "stickWood"));
@@ -1004,23 +1104,23 @@ public class Recipes
 
 		// javelins
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.bismuthBronzeJavelin, 1), "#", "I", '#',
-				new ItemStack(TFCItems.bismuthBronzeJavelinHead, 1, 0), 'I', "stickWood"));
+				new ItemStack(TFCItems.bismuthBronzeJavelinHead, 1, 0), 'I', TFCItems.pole));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.blackBronzeJavelin, 1), "#", "I", '#',
-				new ItemStack(TFCItems.blackBronzeJavelinHead, 1, 0), 'I', "stickWood"));
+				new ItemStack(TFCItems.blackBronzeJavelinHead, 1, 0), 'I', TFCItems.pole));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.blackSteelJavelin, 1), "#", "I", '#',
-				new ItemStack(TFCItems.blackSteelJavelinHead, 1, 0), 'I', "stickWood"));
+				new ItemStack(TFCItems.blackSteelJavelinHead, 1, 0), 'I', TFCItems.pole));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.blueSteelJavelin, 1), "#", "I", '#',
-				new ItemStack(TFCItems.blueSteelJavelinHead, 1, 0), 'I', "stickWood"));
+				new ItemStack(TFCItems.blueSteelJavelinHead, 1, 0), 'I', TFCItems.pole));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.bronzeJavelin, 1), "#", "I", '#',
-				new ItemStack(TFCItems.bronzeJavelinHead, 1, 0), 'I', "stickWood"));
+				new ItemStack(TFCItems.bronzeJavelinHead, 1, 0), 'I', TFCItems.pole));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.copperJavelin, 1), "#", "I", '#',
-				new ItemStack(TFCItems.copperJavelinHead, 1, 0), 'I', "stickWood"));
+				new ItemStack(TFCItems.copperJavelinHead, 1, 0), 'I', TFCItems.pole));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.wroughtIronJavelin, 1), "#", "I", '#',
-				new ItemStack(TFCItems.wroughtIronJavelinHead, 1, 0), 'I', "stickWood"));
+				new ItemStack(TFCItems.wroughtIronJavelinHead, 1, 0), 'I', TFCItems.pole));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.redSteelJavelin, 1), "#", "I", '#',
-				new ItemStack(TFCItems.redSteelJavelinHead, 1, 0), 'I', "stickWood"));
+				new ItemStack(TFCItems.redSteelJavelinHead, 1, 0), 'I', TFCItems.pole));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.steelJavelin, 1), "#", "I", '#',
-				new ItemStack(TFCItems.steelJavelinHead, 1, 0), 'I', "stickWood"));
+				new ItemStack(TFCItems.steelJavelinHead, 1, 0), 'I', TFCItems.pole));
 
 		// clay molds
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.clayMoldPick, 1),
@@ -1079,21 +1179,21 @@ public class Recipes
 		 */
 
 		// This sucks
-		GameRegistry.addRecipe( new ShapelessOreRecipe(new ItemStack(TFCItems.boneNeedleStrung, 1), 
-				getNeedleUnstringed(new ItemStack(TFCItems.boneNeedle, 1, 0)), "materialString") );
-		GameRegistry.addRecipe( new ShapelessOreRecipe(new ItemStack(TFCItems.ironNeedleStrung, 1), 
-				getNeedleUnstringed(new ItemStack(TFCItems.ironNeedle, 1, 0)), "materialString" ));
-		
-		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.boneNeedleStrung, 1), 
-				getNeedleUnstringed(new ItemStack(TFCItems.boneNeedle, 1, 0)), TFCItems.sinew) ;
-		GameRegistry.addShapelessRecipe( new ItemStack(TFCItems.ironNeedleStrung, 1), 
-				getNeedleUnstringed(new ItemStack(TFCItems.ironNeedle, 1, 0)), TFCItems.sinew );
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.boneNeedleStrung, 1),
+				getNeedleUnstringed(new ItemStack(TFCItems.boneNeedle, 1, 0)), "materialString"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.ironNeedleStrung, 1),
+				getNeedleUnstringed(new ItemStack(TFCItems.ironNeedle, 1, 0)), "materialString"));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.boneNeedleStrung, 1),
+				getNeedleUnstringed(new ItemStack(TFCItems.boneNeedle, 1, 0)), TFCItems.sinew);
+		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.ironNeedleStrung, 1),
+				getNeedleUnstringed(new ItemStack(TFCItems.ironNeedle, 1, 0)), TFCItems.sinew);
 
 		// GameRegistry.addShapelessRecipe(getNeedleUnstringed(new
 		// ItemStack(TFCItems.boneNeedle,1,0)), new ItemStack(TFCItems.bone,1));
-		
+
 		// Clothing components
-		
+
 		// Wool
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.shirtSleeves, 1, 0),
 				new Object[] { "## ##", "## ##", "## ##", "## ##", "## ##", '#', TFCItems.flatWool });
@@ -1109,7 +1209,7 @@ public class Recipes
 				new Object[] { "#   #", "## ##", "## ##", "## ##", "## ##", '#', TFCItems.flatWool });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.coatBodyBack, 1, 0),
 				new Object[] { "## ##", "#####", "#####", "#####", "#####", '#', TFCItems.flatWool });
-		
+
 		// Silk
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.shirtSleeves, 1, 1),
 				new Object[] { "## ##", "## ##", "## ##", "## ##", "## ##", '#', TFCItems.flatSilk });
@@ -1125,7 +1225,7 @@ public class Recipes
 				new Object[] { "#   #", "## ##", "## ##", "## ##", "## ##", '#', TFCItems.flatSilk });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.coatBodyBack, 1, 1),
 				new Object[] { "## ##", "#####", "#####", "#####", "#####", '#', TFCItems.flatSilk });
-		
+
 		// Leather
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.bootTop, 1, 0),
 				new Object[] { "  ###", "   ##", "## ##", "##   ", "###  ", '#', TFCItems.flatLeather });
@@ -1139,7 +1239,7 @@ public class Recipes
 				new Object[] { "#   #", "#####", "#####", "#####", "#####", '#', TFCItems.flatLeather });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.pantsPiece, 1, 2),
 				new Object[] { "#####", "#####", "## ##", "## ##", "## ##", '#', TFCItems.flatLeather });
-		
+
 		// Linen
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.shirtSleeves, 1, 3),
 				new Object[] { "## ##", "## ##", "## ##", "## ##", "## ##", '#', TFCItems.flatLinen });
@@ -1155,7 +1255,7 @@ public class Recipes
 				new Object[] { "#   #", "## ##", "## ##", "## ##", "## ##", '#', TFCItems.flatLinen });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.coatBodyBack, 1, 2),
 				new Object[] { "## ##", "#####", "#####", "#####", "#####", '#', TFCItems.flatLinen });
-		
+
 		// Wolf Fur
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.bootTop, 1, 1),
 				new Object[] { "  ###", "   ##", "## ##", "##   ", "###  ", '#', TFCItems.flatWolfFur });
@@ -1166,10 +1266,10 @@ public class Recipes
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.hatPiece, 2, 4),
 				new Object[] { "  #  ", " ### ", "     ", "  #  ", " ### ", '#', TFCItems.flatWolfFur });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.coatBodyFront, 1, 3),
-						new Object[] { "#   #", "## ##", "## ##", "## ##", "## ##", '#', TFCItems.flatWolfFur });
+				new Object[] { "#   #", "## ##", "## ##", "## ##", "## ##", '#', TFCItems.flatWolfFur });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.coatBodyBack, 1, 3),
-						new Object[] { "## ##", "#####", "#####", "#####", "#####", '#', TFCItems.flatWolfFur });
-				
+				new Object[] { "## ##", "#####", "#####", "#####", "#####", '#', TFCItems.flatWolfFur });
+
 		// Bear Fur
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.bootTop, 1, 2),
 				new Object[] { "  ###", "   ##", "## ##", "##   ", "###  ", '#', TFCItems.flatBearFur });
@@ -1180,43 +1280,64 @@ public class Recipes
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.hatPiece, 2, 5),
 				new Object[] { "  #  ", " ### ", "     ", "  #  ", " ### ", '#', TFCItems.flatBearFur });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.coatBodyFront, 1, 4),
-						new Object[] { "#   #", "## ##", "## ##", "## ##", "## ##", '#', TFCItems.flatBearFur });
+				new Object[] { "#   #", "## ##", "## ##", "## ##", "## ##", '#', TFCItems.flatBearFur });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.coatBodyBack, 1, 4),
-						new Object[] { "## ##", "#####", "#####", "#####", "#####", '#', TFCItems.flatBearFur });
+				new Object[] { "## ##", "#####", "#####", "#####", "#####", '#', TFCItems.flatBearFur });
 
-		//Straw
+		// Straw
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.strawBasket, 1, 0),
 				new Object[] { "#   #", "#   #", "#   #", "#   #", "#####", '#', TFCItems.flatStraw });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.grassShirt, 1, 0),
 				new Object[] { "#   #", "#####", "#####", "#####", "#####", '#', TFCItems.flatStraw });
+		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.grassCoat, 1, 0),
+				new Object[] { "## ##", "#####", " ### ", " ### ", " ### ", '#', TFCItems.flatStraw });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.grassSkirt, 1, 0),
 				new Object[] { "     ", " ### ", " ### ", "#####", "#####", '#', TFCItems.flatStraw });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.grassSkirt, 1, 0),
-				new Object[] {  " ### ", " ### ", "#####", "#####","     ", '#', TFCItems.flatStraw });
+				new Object[] { " ### ", " ### ", "#####", "#####", "     ", '#', TFCItems.flatStraw });
+
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.strawHat, 1, 0),
-				new Object[] { "     ", " ### ", "#####",  "     ", "     ", '#', TFCItems.flatStraw });				
+				new EnumRegion[] { EnumRegion.AMERICAS, EnumRegion.AFRICA, EnumRegion.EUROPE },
+				new Object[] { "     ", " ### ", "#####", "     ", "     ", '#', TFCItems.flatStraw });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.strawHat, 1),
-				new Object[] {" ### ", "#####", "     ",  "     ", "     ", '#', TFCItems.flatStraw });
+				new EnumRegion[] { EnumRegion.AMERICAS, EnumRegion.AFRICA, EnumRegion.EUROPE },
+				new Object[] { " ### ", "#####", "     ", "     ", "     ", '#', TFCItems.flatStraw });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.strawHat, 1),
+				new EnumRegion[] { EnumRegion.AMERICAS, EnumRegion.AFRICA, EnumRegion.EUROPE },
 				new Object[] { "     ", "     ", " ### ", "#####", "     ", '#', TFCItems.flatStraw });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.strawHat, 1),
+				new EnumRegion[] { EnumRegion.AMERICAS, EnumRegion.AFRICA, EnumRegion.EUROPE },
 				new Object[] { "     ", "     ", "     ", " ### ", "#####", '#', TFCItems.flatStraw });
+
+		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.strawHat2, 1, 0),
+				new EnumRegion[] { EnumRegion.ASIA },
+				new Object[] { "     ", " ### ", "#####", "     ", "     ", '#', TFCItems.flatStraw });
+		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.strawHat2, 1),
+				new EnumRegion[] { EnumRegion.ASIA },
+				new Object[] { " ### ", "#####", "     ", "     ", "     ", '#', TFCItems.flatStraw });
+		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.strawHat2, 1),
+				new EnumRegion[] { EnumRegion.ASIA },
+				new Object[] { "     ", "     ", " ### ", "#####", "     ", '#', TFCItems.flatStraw });
+		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.strawHat2, 1),
+				new EnumRegion[] { EnumRegion.ASIA },
+				new Object[] { "     ", "     ", "     ", " ### ", "#####", '#', TFCItems.flatStraw });
+
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.grassSandals, 1),
 				new Object[] { "     ", "## ##", "## ##", "## ##", "     ", '#', TFCItems.flatStraw });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.grassSandals, 1),
 				new Object[] { "     ", "     ", "## ##", "## ##", "## ##", '#', TFCItems.flatStraw });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.grassSandals, 1),
-				new Object[] {  "## ##", "## ##", "## ##","     ", "     ", '#', TFCItems.flatStraw });
-		
-		
-		CraftingManagerTFC.getInstance().addShapelessRecipe(new ItemStack(TFCItems.saddleTFC),new Object[]{new ItemStack(Items.saddle)});
-		
-		//Misc non-clothing items
+				new Object[] { "## ##", "## ##", "## ##", "     ", "     ", '#', TFCItems.flatStraw });
+
+		CraftingManagerTFC.getInstance().addShapelessRecipe(new ItemStack(TFCItems.saddleTFC),
+				new Object[] { new ItemStack(Items.saddle) });
+
+		// Misc non-clothing items
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.quiverPiece, 1),
 				new Object[] { "  ###", "  ###", "  ###", "  ###", "  ###", '#', TFCItems.flatLeather });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.saddlePiece, 1),
 				new Object[] { "  #  ", "#####", "#####", "#####", "  #  ", '#', TFCItems.flatLeather });
-		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.leatherStrap,3), 
+		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.leatherStrap, 3),
 				new Object[] { "# # #", "# # #", "# # #", "# # #", "# # #", '#', TFCItems.flatLeather });
 	}
 
@@ -1306,6 +1427,14 @@ public class Recipes
 				" ### ", " ### ", " ### ", "     ", '#', new ItemStack(TFCItems.flatClay, 1, 3) });
 		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCBlocks.vessel, 1), new Object[] { " ### ", " ### ",
 				" ### ", " ### ", "     ", '#', new ItemStack(TFCItems.flatClay, 1, 1) });
+		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.clayBucketUnfired, 1), new Object[] { "#####",
+				" ### ", " ### ", " ### ", "#   #", '#', new ItemStack(TFCItems.flatClay, 1, 1) });
+		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.clayTile, 2, 0), new Object[] { "ff ff",
+				"f   f", "f   f", "f   f", "f f f", 'f', new ItemStack(TFCItems.flatClay, 1, 1) });
+		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.clayTile, 2, 0), new Object[] { "f fff",
+				"   ff", "   ff", "   ff", " f ff", 'f', new ItemStack(TFCItems.flatClay, 1, 1) });
+		CraftingManagerTFC.getInstance().addRecipe(new ItemStack(TFCItems.clayTile, 2, 0), new Object[] { "fff f",
+				"ff   ", "ff   ", "ff   ", "ff f ", 'f', new ItemStack(TFCItems.flatClay, 1, 1) });
 		/*
 		 * Moved to TFC_ConfigFiles.firstLoadCrafting(), as it is dependant on a
 		 * configureation option. CraftingManagerTFC.getInstance().addRecipe(new
@@ -1575,16 +1704,16 @@ public class Recipes
 		////////////////////////////////////////////////////////////////
 		// Actual Tools
 		////////////////////////////////////////////////////////////////
-		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.copperSheet),new Object[]{
-				getStackNoTemp(new ItemStack(TFCItems.clayMoldSheet, 1, 2))});
-		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.bronzeSheet),new Object[]{
-				getStackNoTemp(new ItemStack(TFCItems.clayMoldSheet, 1, 3))});
-		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.bismuthBronzeSheet),new Object[]{
-				getStackNoTemp(new ItemStack(TFCItems.clayMoldSheet, 1, 4))});
-		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.blackBronzeSheet),new Object[]{
-				getStackNoTemp(new ItemStack(TFCItems.clayMoldSheet, 1, 5))});
-		GameRegistry.addShapelessRecipe(new ItemStack(Blocks.glass_pane),new Object[]{
-				getStackNoTemp(new ItemStack(TFCItems.clayMoldSheet, 1, 6))});
+		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.copperSheet),
+				new Object[] { getStackNoTemp(new ItemStack(TFCItems.clayMoldSheet, 1, 2)) });
+		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.bronzeSheet),
+				new Object[] { getStackNoTemp(new ItemStack(TFCItems.clayMoldSheet, 1, 3)) });
+		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.bismuthBronzeSheet),
+				new Object[] { getStackNoTemp(new ItemStack(TFCItems.clayMoldSheet, 1, 4)) });
+		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.blackBronzeSheet),
+				new Object[] { getStackNoTemp(new ItemStack(TFCItems.clayMoldSheet, 1, 5)) });
+		GameRegistry.addShapelessRecipe(new ItemStack(Blocks.glass_pane),
+				new Object[] { getStackNoTemp(new ItemStack(TFCItems.clayMoldSheet, 1, 6)) });
 
 		GameRegistry.addShapelessRecipe(new ItemStack(TFCItems.copperAxeHead),
 				getStackNoTemp(new ItemStack(TFCItems.clayMoldAxe, 1, 2)));
@@ -1720,7 +1849,7 @@ public class Recipes
 		is.setTagCompound(nbt);
 		return is;
 	}
-	
+
 	public static ItemStack getWool(ItemStack is)
 	{
 		NBTTagCompound woolen = new NBTTagCompound();
@@ -1756,535 +1885,619 @@ public class Recipes
 	public static void registerClothingRecipes()
 	{
 		ClothingManager manager = ClothingManager.getInstance();
-		//Wool Coat
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.woolCoat, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the left side of the coat and underarm
-									new int[][] { new int[] { 24, 86 }, new int[] { 27, 33 }, new int[] {24,33},new int[]{18,71}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] { 8,71 }, new int[] { 11, 33 },
-											new int[] { 16, 19 }, new int[]{22, 13}, new int[]{37, 12} },
-									//the arm attached to the sleeve
-									new int[][] { new int[] { 25, 33 }, new int[] { 21, 15 } }, 
-											// the right side of the coat and underarm
-											new int[][] { new int[] { 97 -24, 86 }, new int[] { 97 -27, 33 }, new int[] {97 -24,33},new int[]{97 -18,71}},
-											//the outer right arm and shoulder
-											new int[][] { new int[] { 97 -8,71 }, new int[] {97 - 11, 33 },
-													new int[] { 97 -16, 19 }, new int[]{97 -22,13}, new int[]{97 -37,12} },
-											//the right arm attached to the sleeve
-											new int[][] { new int[] { 97 -25, 33 }, new int[] { 97 -21, 15 } } 
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.coatBodyFront, 1,0),
-										new ItemStack(TFCItems.shirtSleeves, 1,0),
-										new ItemStack(TFCItems.shirtSleeves, 1,0),
-										new ItemStack(TFCItems.coatBodyBack, 1,0)}));
-				//Silk Coat
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.silkCoat, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the left side of the coat and underarm
-									new int[][] { new int[] { 24, 86 }, new int[] { 27, 33 }, new int[] {24,33},new int[]{18,71}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] { 8,71 }, new int[] { 11, 33 },
-											new int[] { 16, 19 }, new int[]{22, 13}, new int[]{37, 12} },
-									//the arm attached to the sleeve
-									new int[][] { new int[] { 25, 33 }, new int[] { 21, 15 } }, 
-											// the right side of the coat and underarm
-											new int[][] { new int[] { 97 -24, 86 }, new int[] { 97 -27, 33 }, new int[] {97 -24,33},new int[]{97 -18,71}},
-											//the outer right arm and shoulder
-											new int[][] { new int[] { 97 -8,71 }, new int[] {97 - 11, 33 },
-													new int[] { 97 -16, 19 }, new int[]{97 -22,13}, new int[]{97 -37,12} },
-											//the right arm attached to the sleeve
-											new int[][] { new int[] { 97 -25, 33 }, new int[] { 97 -21, 15 } } 
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.coatBodyFront, 1,1),
-										new ItemStack(TFCItems.shirtSleeves, 1,1),
-										new ItemStack(TFCItems.shirtSleeves, 1,1),
-										new ItemStack(TFCItems.coatBodyBack, 1,1)}));
-				//Linen Coat
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.linenCoat, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the left side of the coat and underarm
-									new int[][] { new int[] { 24, 86 }, new int[] { 27, 33 }, new int[] {24,33},new int[]{18,71}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] { 8,71 }, new int[] { 11, 33 },
-											new int[] { 16, 19 }, new int[]{22, 13}, new int[]{37, 12} },
-									//the arm attached to the sleeve
-									new int[][] { new int[] { 25, 33 }, new int[] { 21, 15 } }, 
-											// the right side of the coat and underarm
-											new int[][] { new int[] { 97 -24, 86 }, new int[] { 97 -27, 33 }, new int[] {97 -24,33},new int[]{97 -18,71}},
-											//the outer right arm and shoulder
-											new int[][] { new int[] { 97 -8,71 }, new int[] {97 - 11, 33 },
-													new int[] { 97 -16, 19 }, new int[]{97 -22,13}, new int[]{97 -37,12} },
-											//the right arm attached to the sleeve
-											new int[][] { new int[] { 97 -25, 33 }, new int[] { 97 -21, 15 } } 
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.coatBodyFront, 1,2),
-										new ItemStack(TFCItems.shirtSleeves, 1,3),
-										new ItemStack(TFCItems.shirtSleeves, 1,3),
-										new ItemStack(TFCItems.coatBodyBack, 1,2)}));
-				//Wolf Coat
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.wolfFurCoat, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the left side of the coat and underarm
-									new int[][] { new int[] { 24, 86 }, new int[] { 27, 33 }, new int[] {24,33},new int[]{18,71}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] { 8,71 }, new int[] { 11, 33 },
-											new int[] { 16, 19 }, new int[]{22, 13}, new int[]{37, 12} },
-									//the arm attached to the sleeve
-									new int[][] { new int[] { 25, 33 }, new int[] { 21, 15 } }, 
-											// the right side of the coat and underarm
-											new int[][] { new int[] { 97 -24, 86 }, new int[] { 97 -27, 33 }, new int[] {97 -24,33},new int[]{97 -18,71}},
-											//the outer right arm and shoulder
-											new int[][] { new int[] { 97 -8,71 }, new int[] {97 - 11, 33 },
-													new int[] { 97 -16, 19 }, new int[]{97 -22,13}, new int[]{97 -37,12} },
-											//the right arm attached to the sleeve
-											new int[][] { new int[] { 97 -25, 33 }, new int[] { 97 -21, 15 } } 
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.coatBodyFront, 1,3),
-										new ItemStack(TFCItems.shirtSleeves, 1,4),
-										new ItemStack(TFCItems.shirtSleeves, 1,4),
-										new ItemStack(TFCItems.coatBodyBack, 1,3)}));
-				//Bear Coat
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.bearFurCoat, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the left side of the coat and underarm
-									new int[][] { new int[] { 24, 86 }, new int[] { 27, 33 }, new int[] {24,33},new int[]{18,71}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] { 8,71 }, new int[] { 11, 33 },
-											new int[] { 16, 19 }, new int[]{22, 13}, new int[]{37, 12} },
-									//the arm attached to the sleeve
-									new int[][] { new int[] { 25, 33 }, new int[] { 21, 15 } }, 
-											// the right side of the coat and underarm
-											new int[][] { new int[] { 97 -24, 86 }, new int[] { 97 -27, 33 }, new int[] {97 -24,33},new int[]{97 -18,71}},
-											//the outer right arm and shoulder
-											new int[][] { new int[] { 97 -8,71 }, new int[] {97 - 11, 33 },
-													new int[] { 97 -16, 19 }, new int[]{97 -22,13}, new int[]{97 -37,12} },
-											//the right arm attached to the sleeve
-											new int[][] { new int[] { 97 -25, 33 }, new int[] { 97 -21, 15 } } 
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.coatBodyFront, 1,4),
-										new ItemStack(TFCItems.shirtSleeves, 1,5),
-										new ItemStack(TFCItems.shirtSleeves, 1,5),
-										new ItemStack(TFCItems.coatBodyBack, 1,4)}));
-				//Leather Boots
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.leatherBoots, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the front of the boot
-									new int[][] { new int[] { 38, 39 }, new int[] { 37, 35 }, new int[] {31,33},new int[]{23,30},new int[]{22,13}},
-									//the heel of the boot
-									new int[][] { new int[] { 9,13}, new int[] { 9, 40}},
-									//the arm attached to the sleeve
-									new int[][] {new int[]{17, 80}, new int[]{16,56}, new int[]{19, 52}, new int[]{25, 52}, new int[]{27,54},
-										new int[]{28,62}, new int[]{26,71}, new int[]{27, 79}, new int[]{25,82}, new int[]{17,80}},
-									// the front of the boot
-									new int[][] { new int[] {97- 38, 39 }, new int[] {97- 37, 35 }, new int[] {97-31,33},new int[]{97-23,30},new int[]{97-22,13}},
-									//the heel of the boot
-									new int[][] { new int[] {97- 9,13}, new int[] {97- 9, 40}},
-									//the arm attached to the sleeve
-									new int[][] {new int[]{97-17, 80}, new int[]{97-16,56}, new int[]{97-19, 52}, new int[]{97-25, 52}, new int[]{97-27,54},
-										new int[]{97-28,62}, new int[]{97-26,71}, new int[]{97-27, 79}, new int[]{97-25,82}, new int[]{97-17,80}} 
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.bootTop, 1,0),
-										new ItemStack(TFCItems.bootTop, 1,0),
-										new ItemStack(TFCItems.bootSole, 1,0)}));
-				//Wolf Boots
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.wolfFurBoots, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the front of the boot
-									new int[][] { new int[] { 38, 39 }, new int[] { 37, 35 }, new int[] {31,33},new int[]{23,30},new int[]{22,13}},
-									//the heel of the boot
-									new int[][] { new int[] { 9,13}, new int[] { 9, 40}},
-									//the arm attached to the sleeve
-									new int[][] {new int[]{17, 80}, new int[]{16,56}, new int[]{19, 52}, new int[]{25, 52}, new int[]{27,54},
-										new int[]{28,62}, new int[]{26,71}, new int[]{27, 79}, new int[]{25,82}, new int[]{17,80}},
-									// the front of the boot
-									new int[][] { new int[] {97- 38, 39 }, new int[] {97- 37, 35 }, new int[] {97-31,33},new int[]{97-23,30},new int[]{97-22,13}},
-									//the heel of the boot
-									new int[][] { new int[] {97- 9,13}, new int[] {97- 9, 40}},
-									//the arm attached to the sleeve
-									new int[][] {new int[]{97-17, 80}, new int[]{97-16,56}, new int[]{97-19, 52}, new int[]{97-25, 52}, new int[]{97-27,54},
-										new int[]{97-28,62}, new int[]{97-26,71}, new int[]{97-27, 79}, new int[]{97-25,82}, new int[]{97-17,80}} 
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.bootTop, 1,1),
-										new ItemStack(TFCItems.bootTop, 1,1),
-										new ItemStack(TFCItems.bootSole, 1,1)}));
-				//Bear Boots
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.bearFurBoots, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the front of the boot
-									new int[][] { new int[] { 38, 39 }, new int[] { 37, 35 }, new int[] {31,33},new int[]{23,30},new int[]{22,13}},
-									//the heel of the boot
-									new int[][] { new int[] { 9,13}, new int[] { 9, 40}},
-									//the arm attached to the sleeve
-									new int[][] {new int[]{17, 80}, new int[]{16,56}, new int[]{19, 52}, new int[]{25, 52}, new int[]{27,54},
-										new int[]{28,62}, new int[]{26,71}, new int[]{27, 79}, new int[]{25,82}, new int[]{17,80}},
-									// the front of the boot
-									new int[][] { new int[] {97- 38, 39 }, new int[] {97- 37, 35 }, new int[] {97-31,33},new int[]{97-23,30},new int[]{97-22,13}},
-									//the heel of the boot
-									new int[][] { new int[] {97- 9,13}, new int[] {97- 9, 40}},
-									//the arm attached to the sleeve
-									new int[][] {new int[]{97-17, 80}, new int[]{97-16,56}, new int[]{97-19, 52}, new int[]{97-25, 52}, new int[]{97-27,54},
-										new int[]{97-28,62}, new int[]{97-26,71}, new int[]{97-27, 79}, new int[]{97-25,82}, new int[]{97-17,80}} 
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.bootTop, 1,2),
-										new ItemStack(TFCItems.bootTop, 1,2),
-										new ItemStack(TFCItems.bootSole, 1,2)}));
-				//Wool Shirt
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.woolShirt, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the left side of the coat and underarm
-									new int[][] { new int[] { 30, 73 }, new int[] { 25, 30 }, new int[] {19,73}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] { 8,71 }, new int[] { 11, 33 },
-											new int[] { 16, 19 }, new int[]{22, 13}, new int[]{37, 12} },
-									new int[][] { new int[] {97- 30, 73 }, new int[] {97- 25, 30 }, new int[] {97-19,73}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] {97- 8,71 }, new int[] {97- 11, 33 },
-											new int[] {97- 16, 19 }, new int[]{97-22, 13}, new int[]{97-37, 12} }
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.shirtBody, 1,0),
-										new ItemStack(TFCItems.shirtSleeves, 1,0),
-										new ItemStack(TFCItems.shirtSleeves, 1,0),
-										new ItemStack(TFCItems.shirtBody, 1,0)}));
-				//Silk Shirt
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.silkShirt, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the left side of the coat and underarm
-									new int[][] { new int[] { 30, 73 }, new int[] { 25, 30 }, new int[] {19,73}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] { 8,71 }, new int[] { 11, 33 },
-											new int[] { 16, 19 }, new int[]{22, 13}, new int[]{37, 12} },
-									new int[][] { new int[] {97- 30, 73 }, new int[] {97- 25, 30 }, new int[] {97-19,73}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] {97- 8,71 }, new int[] {97- 11, 33 },
-											new int[] {97- 16, 19 }, new int[]{97-22, 13}, new int[]{97-37, 12} }
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.shirtBody, 1,1),
-										new ItemStack(TFCItems.shirtSleeves, 1,1),
-										new ItemStack(TFCItems.shirtSleeves, 1,1),
-										new ItemStack(TFCItems.shirtBody, 1,1)}));
-				//Leather Chestpiece
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.leatherChestplate, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the left side of the coat and underarm
-									new int[][] { new int[] { 30, 73 }, new int[] { 25, 30 }, new int[] {19,73}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] { 8,71 }, new int[] { 11, 33 },
-											new int[] { 16, 19 }, new int[]{22, 13}, new int[]{37, 12} },
-									new int[][] { new int[] {97- 30, 73 }, new int[] {97- 25, 30 }, new int[] {97-19,73}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] {97- 8,71 }, new int[] {97- 11, 33 },
-											new int[] {97- 16, 19 }, new int[]{97-22, 13}, new int[]{97-37, 12} }
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.shirtBody, 1,2),
-										new ItemStack(TFCItems.shirtSleeves, 1,2),
-										new ItemStack(TFCItems.shirtSleeves, 1,2),
-										new ItemStack(TFCItems.shirtBody, 1,2)}));
-				//Linen Shirt
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.linenShirt, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// the left side of the coat and underarm
-									new int[][] { new int[] { 30, 73 }, new int[] { 25, 30 }, new int[] {19,73}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] { 8,71 }, new int[] { 11, 33 },
-											new int[] { 16, 19 }, new int[]{22, 13}, new int[]{37, 12} },
-									new int[][] { new int[] {97- 30, 73 }, new int[] {97- 25, 30 }, new int[] {97-19,73}},
-									//the outer left arm and shoulder
-									new int[][] { new int[] {97- 8,71 }, new int[] {97- 11, 33 },
-											new int[] {97- 16, 19 }, new int[]{97-22, 13}, new int[]{97-37, 12} }
-														}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.shirtBody, 1,3),
-										new ItemStack(TFCItems.shirtSleeves, 1,3),
-										new ItemStack(TFCItems.shirtSleeves, 1,3),
-										new ItemStack(TFCItems.shirtBody, 1,3)}));
-				//Wool Hat
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.woolHat, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// hat
-									new int[][] { new int[] { 25, 55 }, new int[] { 29, 33 }, new int[] {35,26}, new int[] {49,24},
-									new int[] {97-35,26},new int[] {97- 29, 33 },new int[] {97- 25, 55 }
-									}}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1,0),
-										new ItemStack(TFCItems.hatPiece, 1,0)}));
-				//Silk Hat
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.silkHat, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// hat
-									new int[][] { new int[] { 25, 55 }, new int[] { 29, 33 }, new int[] {35,26}, new int[] {49,24},
-									new int[] {97-35,26},new int[] {97- 29, 33 },new int[] {97- 25, 55 }
-									}}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1,1),
-										new ItemStack(TFCItems.hatPiece, 1,1)}));
-				//Leather Hat
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.leatherHelmet, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// hat
-									new int[][] { new int[] { 25, 55 }, new int[] { 29, 33 }, new int[] {35,26}, new int[] {49,24},
-									new int[] {97-35,26},new int[] {97- 29, 33 },new int[] {97- 25, 55 }
-									}}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1,2),
-										new ItemStack(TFCItems.hatPiece, 1,2)}));
-				//Linen Hat
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.linenHat, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// hat
-									new int[][] { new int[] { 25, 55 }, new int[] { 29, 33 }, new int[] {35,26}, new int[] {49,24},
-									new int[] {97-35,26},new int[] {97- 29, 33 },new int[] {97- 25, 55 }
-									}}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1,3),
-										new ItemStack(TFCItems.hatPiece, 1,3)}));
-				
-				//Wolf Hat
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.wolfFurHat, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// hat
-									new int[][] { new int[] { 23, 65 }, new int[] { 21, 34 }, new int[] {24,24}, new int[] {41,17}, new int[]{52,16}
-									}}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1,4),
-										new ItemStack(TFCItems.hatPiece, 1,4)}));
-				
-				//Bear Hat
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.bearFurHat, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// hat
-									new int[][] { new int[] { 23, 65 }, new int[] { 21, 34 }, new int[] {24,24}, new int[] {41,17}, new int[]{52,16}
-									}}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1,5),
-										new ItemStack(TFCItems.hatPiece, 1,5)}));
-				
-				//Leather Sandals
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.leatherSandals, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// hat
-									new int[][] { new int[] { 15, 57 }, new int[] { 15, 62 }},
-									new int[][] { new int[] { 16, 75 }, new int[] { 16, 80 }},
-									new int[][] { new int[] { 29, 57 }, new int[] { 29, 62 }},
-									new int[][] { new int[] { 28, 74 }, new int[] { 28, 79 }},
-									new int[][] { new int[] {97- 15, 57 }, new int[] {97- 15, 62 }},
-									new int[][] { new int[] {97- 16, 75 }, new int[] {97- 16, 80 }},
-									new int[][] { new int[] {97- 29, 57 }, new int[] {97- 29, 62 }},
-									new int[][] { new int[] {97- 28, 74 }, new int[] {97- 28, 79 }}
-									}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.bootSole, 1,0),
-										new ItemStack(TFCItems.leatherStrap, 1),
-										new ItemStack(TFCItems.leatherStrap, 1)}));
-				
-				//Leather Saddle
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.saddleTFC, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// hat
-									new int[][] { new int[] { 40, 35 }, new int[] { 40, 41 }},
-									new int[][] { new int[] { 44, 59 }, new int[] { 44, 65 }},
-									new int[][] { new int[] {97- 40, 35 }, new int[] {97- 40, 41 }},
-									new int[][] { new int[] {97- 44, 59 }, new int[] {97- 44, 65 }},
-									}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.saddlePiece, 1,0),
-										new ItemStack(TFCItems.leatherStrap, 1),
-										new ItemStack(TFCItems.leatherStrap, 1),
-										new ItemStack(TFCItems.leatherStrap, 1),
-										new ItemStack(TFCItems.leatherStrap, 1)}));
-				
-				//Leather Quiver
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.quiver, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// hat
-									new int[][] { new int[] { 47, 16 }, new int[] { 47, 54 }, new int[] { 53, 57 }, new int[] { 60, 53 },
-										new int[] { 60, 16 }}
-									}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.quiverPiece, 1,0),
-										new ItemStack(TFCItems.quiverPiece, 1,0),
-										new ItemStack(TFCItems.leatherStrap, 1)}));
-				//Wool Socks
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.woolSocks, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// sock L
-									new int[][] { new int[] { 6, 46 }, new int[] { 6, 70 }, new int[] {11,76}, new int[] {20,81}, new int[]{32,82}, new int[] {34,75}, new int[] {19,65}, new int[]{18,46}},
-									new int[][] { new int[] {97- 6, 46 }, new int[] {97- 6, 70 }, new int[] {97-11,76}, new int[] {97-20,81}, new int[]{97-32,82}, new int[] {97-34,75}, new int[] {97-19,65}, new int[]{97-18,46}}	
-								}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.sockCloth, 1,0),
-										new ItemStack(TFCItems.sockCloth, 1,0)}));
-				//Silk Socks
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.silkSocks, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// sock L
-									new int[][] { new int[] { 6, 46 }, new int[] { 6, 70 }, new int[] {11,76}, new int[] {20,81}, new int[]{32,82}, new int[] {34,75}, new int[] {19,65}, new int[]{18,46}},
-									new int[][] { new int[] {97- 6, 46 }, new int[] {97- 6, 70 }, new int[] {97-11,76}, new int[] {97-20,81}, new int[]{97-32,82}, new int[] {97-34,75}, new int[] {97-19,65}, new int[]{97-18,46}}	
-								}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.sockCloth, 1,1),
-										new ItemStack(TFCItems.sockCloth, 1,1)}));
-				//Linen Socks
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.linenSocks, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-									// sock L
-									new int[][] { new int[] { 6, 46 }, new int[] { 6, 70 }, new int[] {11,76}, new int[] {20,81}, new int[]{32,82}, new int[] {34,75}, new int[] {19,65}, new int[]{18,46}},
-									new int[][] { new int[] {97- 6, 46 }, new int[] {97- 6, 70 }, new int[] {97-11,76}, new int[] {97-20,81}, new int[]{97-32,82}, new int[] {97-34,75}, new int[] {97-19,65}, new int[]{97-18,46}}	
-								}
-								,true),
-								new ItemStack[] { new ItemStack(TFCItems.sockCloth, 1,2),
-										new ItemStack(TFCItems.sockCloth, 1,2)}));
-		//Wool Pants
-				manager.addRecipe(
-						new SewingRecipe(
-								new SewingPattern(new ItemStack(TFCItems.woolPants, 1),
-										// Here we go with the pattern. The default
-										// canvas size is 164 x 98
-										// The set of patterns
-										new int[][][] {
-												// The outside of the left leg
-												new int[][] { new int[] { 50, 78 }, new int[] { 60, 8 } },
-												// The inseam
-												new int[][] { new int[] { 72, 78 }, new int[] { 82, 25 },
-														new int[] { 92, 78 } },
-												// The outside of the right leg
-												new int[][] { new int[] { 114, 78 }, new int[] { 104, 8 } } }),
-								new ItemStack[] { new ItemStack(TFCItems.pantsPiece, 1,0),
-										new ItemStack(TFCItems.pantsPiece, 1,0)}));
-				
-				
-		//Silk Pants
+
+		// Wool Robe
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.woolRobe, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// the left side of the coat and underarm
+								new int[][] { new int[] { 24, 86 + 3 }, new int[] { 27, 33 - 9 },
+										new int[] { 24, 33 - 9 }, new int[] { 18, 71 - 9 } },
+								// the outer left arm and shoulder
+								new int[][] { new int[] { 8, 71 - 9 }, new int[] { 11, 33 - 9 },
+										new int[] { 16, 19 - 9 }, new int[] { 22, 13 - 9 }, new int[] { 37, 12 - 9 } },
+								// the arm attached to the sleeve
+								new int[][] { new int[] { 25, 33 - 9 }, new int[] { 21, 15 - 9 } },
+								// the right side of the coat and underarm
+								new int[][] { new int[] { 97 - 24, 86 + 3 }, new int[] { 97 - 27, 33 - 9 },
+										new int[] { 97 - 24, 33 - 9 }, new int[] { 97 - 18, 71 - 9 } },
+								// the outer right arm and shoulder
+								new int[][] { new int[] { 97 - 8, 71 - 9 }, new int[] { 97 - 11, 33 - 9 },
+										new int[] { 97 - 16, 19 - 9 }, new int[] { 97 - 22, 13 - 9 },
+										new int[] { 97 - 37, 12 - 9 } },
+								// the right arm attached to the sleeve
+								new int[][] { new int[] { 97 - 25, 33 - 9 }, new int[] { 97 - 21, 15 - 9 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.coatBodyBack, 1, 0),
+						new ItemStack(TFCItems.shirtSleeves, 1, 0), new ItemStack(TFCItems.shirtSleeves, 1, 0),
+						new ItemStack(TFCItems.coatBodyBack, 1, 0) }));
+		// Silk Robe
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.silkRobe, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// the left side of the coat and underarm
+								new int[][] { new int[] { 24, 86 + 3 }, new int[] { 27, 33 - 9 },
+										new int[] { 24, 33 - 9 }, new int[] { 18, 71 - 9 } },
+								// the outer left arm and shoulder
+								new int[][] { new int[] { 8, 71 - 9 }, new int[] { 11, 33 - 9 },
+										new int[] { 16, 19 - 9 }, new int[] { 22, 13 - 9 }, new int[] { 37, 12 - 9 } },
+								// the arm attached to the sleeve
+								new int[][] { new int[] { 25, 33 - 9 }, new int[] { 21, 15 - 9 } },
+								// the right side of the coat and underarm
+								new int[][] { new int[] { 97 - 24, 86 + 3 }, new int[] { 97 - 27, 33 - 9 },
+										new int[] { 97 - 24, 33 - 9 }, new int[] { 97 - 18, 71 - 9 } },
+								// the outer right arm and shoulder
+								new int[][] { new int[] { 97 - 8, 71 - 9 }, new int[] { 97 - 11, 33 - 9 },
+										new int[] { 97 - 16, 19 - 9 }, new int[] { 97 - 22, 13 - 9 },
+										new int[] { 97 - 37, 12 - 9 } },
+								// the right arm attached to the sleeve
+								new int[][] { new int[] { 97 - 25, 33 - 9 }, new int[] { 97 - 21, 15 - 9 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.coatBodyBack, 1, 1),
+						new ItemStack(TFCItems.shirtSleeves, 1, 1), new ItemStack(TFCItems.shirtSleeves, 1, 1),
+						new ItemStack(TFCItems.coatBodyBack, 1, 1) }));
+		// Linen Robe
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.linenRobe, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// the left side of the coat and underarm
+								new int[][] { new int[] { 24, 86 + 3 }, new int[] { 27, 33 - 9 },
+										new int[] { 24, 33 - 9 }, new int[] { 18, 71 - 9 } },
+								// the outer left arm and shoulder
+								new int[][] { new int[] { 8, 71 - 9 }, new int[] { 11, 33 - 9 },
+										new int[] { 16, 19 - 9 }, new int[] { 22, 13 - 9 }, new int[] { 37, 12 - 9 } },
+								// the arm attached to the sleeve
+								new int[][] { new int[] { 25, 33 - 9 }, new int[] { 21, 15 - 9 } },
+								// the right side of the coat and underarm
+								new int[][] { new int[] { 97 - 24, 86 + 3 }, new int[] { 97 - 27, 33 - 9 },
+										new int[] { 97 - 24, 33 - 9 }, new int[] { 97 - 18, 71 - 9 } },
+								// the outer right arm and shoulder
+								new int[][] { new int[] { 97 - 8, 71 - 9 }, new int[] { 97 - 11, 33 - 9 },
+										new int[] { 97 - 16, 19 - 9 }, new int[] { 97 - 22, 13 - 9 },
+										new int[] { 97 - 37, 12 - 9 } },
+								// the right arm attached to the sleeve
+								new int[][] { new int[] { 97 - 25, 33 - 9 }, new int[] { 97 - 21, 15 - 9 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.coatBodyBack, 1, 2),
+						new ItemStack(TFCItems.shirtSleeves, 1, 3), new ItemStack(TFCItems.shirtSleeves, 1, 3),
+						new ItemStack(TFCItems.coatBodyBack, 1, 2) }));
+
+		// Wool Coat
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.woolCoat, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// the left side of the coat and underarm
+								new int[][] { new int[] { 24, 86 }, new int[] { 27, 33 }, new int[] { 24, 33 },
+										new int[] { 18, 71 } },
+								// the outer left arm and shoulder
+								new int[][] { new int[] { 8, 71 }, new int[] { 11, 33 }, new int[] { 16, 19 },
+										new int[] { 22, 13 }, new int[] { 37, 12 } },
+								// the arm attached to the sleeve
+								new int[][] { new int[] { 25, 33 }, new int[] { 21, 15 } },
+								// the right side of the coat and underarm
+								new int[][] { new int[] { 97 - 24, 86 }, new int[] { 97 - 27, 33 },
+										new int[] { 97 - 24, 33 }, new int[] { 97 - 18, 71 } },
+								// the outer right arm and shoulder
+								new int[][] { new int[] { 97 - 8, 71 }, new int[] { 97 - 11, 33 },
+										new int[] { 97 - 16, 19 }, new int[] { 97 - 22, 13 },
+										new int[] { 97 - 37, 12 } },
+								// the right arm attached to the sleeve
+								new int[][] { new int[] { 97 - 25, 33 }, new int[] { 97 - 21, 15 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.coatBodyFront, 1, 0),
+						new ItemStack(TFCItems.shirtSleeves, 1, 0), new ItemStack(TFCItems.shirtSleeves, 1, 0),
+						new ItemStack(TFCItems.coatBodyBack, 1, 0) }));
+		// Silk Coat
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.silkCoat, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// the left side of the coat and underarm
+								new int[][] { new int[] { 24, 86 }, new int[] { 27, 33 }, new int[] { 24, 33 },
+										new int[] { 18, 71 } },
+								// the outer left arm and shoulder
+								new int[][] { new int[] { 8, 71 }, new int[] { 11, 33 }, new int[] { 16, 19 },
+										new int[] { 22, 13 }, new int[] { 37, 12 } },
+								// the arm attached to the sleeve
+								new int[][] { new int[] { 25, 33 }, new int[] { 21, 15 } },
+								// the right side of the coat and underarm
+								new int[][] { new int[] { 97 - 24, 86 }, new int[] { 97 - 27, 33 },
+										new int[] { 97 - 24, 33 }, new int[] { 97 - 18, 71 } },
+								// the outer right arm and shoulder
+								new int[][] { new int[] { 97 - 8, 71 }, new int[] { 97 - 11, 33 },
+										new int[] { 97 - 16, 19 }, new int[] { 97 - 22, 13 },
+										new int[] { 97 - 37, 12 } },
+								// the right arm attached to the sleeve
+								new int[][] { new int[] { 97 - 25, 33 }, new int[] { 97 - 21, 15 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.coatBodyFront, 1, 1),
+						new ItemStack(TFCItems.shirtSleeves, 1, 1), new ItemStack(TFCItems.shirtSleeves, 1, 1),
+						new ItemStack(TFCItems.coatBodyBack, 1, 1) }));
+		// Linen Coat
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.linenCoat, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// the left side of the coat and underarm
+								new int[][] { new int[] { 24, 86 }, new int[] { 27, 33 }, new int[] { 24, 33 },
+										new int[] { 18, 71 } },
+								// the outer left arm and shoulder
+								new int[][] { new int[] { 8, 71 }, new int[] { 11, 33 }, new int[] { 16, 19 },
+										new int[] { 22, 13 }, new int[] { 37, 12 } },
+								// the arm attached to the sleeve
+								new int[][] { new int[] { 25, 33 }, new int[] { 21, 15 } },
+								// the right side of the coat and underarm
+								new int[][] { new int[] { 97 - 24, 86 }, new int[] { 97 - 27, 33 },
+										new int[] { 97 - 24, 33 }, new int[] { 97 - 18, 71 } },
+								// the outer right arm and shoulder
+								new int[][] { new int[] { 97 - 8, 71 }, new int[] { 97 - 11, 33 },
+										new int[] { 97 - 16, 19 }, new int[] { 97 - 22, 13 },
+										new int[] { 97 - 37, 12 } },
+								// the right arm attached to the sleeve
+								new int[][] { new int[] { 97 - 25, 33 }, new int[] { 97 - 21, 15 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.coatBodyFront, 1, 2),
+						new ItemStack(TFCItems.shirtSleeves, 1, 3), new ItemStack(TFCItems.shirtSleeves, 1, 3),
+						new ItemStack(TFCItems.coatBodyBack, 1, 2) }));
+		// Wolf Coat
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.wolfFurCoat, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// the left side of the coat and underarm
+								new int[][] { new int[] { 24, 86 }, new int[] { 27, 33 }, new int[] { 24, 33 },
+										new int[] { 18, 71 } },
+								// the outer left arm and shoulder
+								new int[][] { new int[] { 8, 71 }, new int[] { 11, 33 }, new int[] { 16, 19 },
+										new int[] { 22, 13 }, new int[] { 37, 12 } },
+								// the arm attached to the sleeve
+								new int[][] { new int[] { 25, 33 }, new int[] { 21, 15 } },
+								// the right side of the coat and underarm
+								new int[][] { new int[] { 97 - 24, 86 }, new int[] { 97 - 27, 33 },
+										new int[] { 97 - 24, 33 }, new int[] { 97 - 18, 71 } },
+								// the outer right arm and shoulder
+								new int[][] { new int[] { 97 - 8, 71 }, new int[] { 97 - 11, 33 },
+										new int[] { 97 - 16, 19 }, new int[] { 97 - 22, 13 },
+										new int[] { 97 - 37, 12 } },
+								// the right arm attached to the sleeve
+								new int[][] { new int[] { 97 - 25, 33 }, new int[] { 97 - 21, 15 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.coatBodyFront, 1, 3),
+						new ItemStack(TFCItems.shirtSleeves, 1, 4), new ItemStack(TFCItems.shirtSleeves, 1, 4),
+						new ItemStack(TFCItems.coatBodyBack, 1, 3) }));
+		// Bear Coat
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.bearFurCoat, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// the left side of the coat and underarm
+								new int[][] { new int[] { 24, 86 }, new int[] { 27, 33 }, new int[] { 24, 33 },
+										new int[] { 18, 71 } },
+								// the outer left arm and shoulder
+								new int[][] { new int[] { 8, 71 }, new int[] { 11, 33 }, new int[] { 16, 19 },
+										new int[] { 22, 13 }, new int[] { 37, 12 } },
+								// the arm attached to the sleeve
+								new int[][] { new int[] { 25, 33 }, new int[] { 21, 15 } },
+								// the right side of the coat and underarm
+								new int[][] { new int[] { 97 - 24, 86 }, new int[] { 97 - 27, 33 },
+										new int[] { 97 - 24, 33 }, new int[] { 97 - 18, 71 } },
+								// the outer right arm and shoulder
+								new int[][] { new int[] { 97 - 8, 71 }, new int[] { 97 - 11, 33 },
+										new int[] { 97 - 16, 19 }, new int[] { 97 - 22, 13 },
+										new int[] { 97 - 37, 12 } },
+								// the right arm attached to the sleeve
+								new int[][] { new int[] { 97 - 25, 33 }, new int[] { 97 - 21, 15 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.coatBodyFront, 1, 4),
+						new ItemStack(TFCItems.shirtSleeves, 1, 5), new ItemStack(TFCItems.shirtSleeves, 1, 5),
+						new ItemStack(TFCItems.coatBodyBack, 1, 4) }));
+		// Leather Boots
+		manager.addRecipe(new SewingRecipe(new SewingPattern(new ItemStack(TFCItems.leatherBoots, 1),
+				// Here we go with the pattern. The default
+				// canvas size is 164 x 98
+				// The set of patterns
+				new int[][][] {
+						// the front of the boot
+						new int[][] { new int[] { 38, 39 }, new int[] { 37, 35 }, new int[] { 31, 33 },
+								new int[] { 23, 30 }, new int[] { 22, 13 } },
+						// the heel of the boot
+						new int[][] { new int[] { 9, 13 }, new int[] { 9, 40 } },
+						// the arm attached to the sleeve
+						new int[][] { new int[] { 17, 80 }, new int[] { 16, 56 }, new int[] { 19, 52 },
+								new int[] { 25, 52 }, new int[] { 27, 54 }, new int[] { 28, 62 }, new int[] { 26, 71 },
+								new int[] { 27, 79 }, new int[] { 25, 82 }, new int[] { 17, 80 } },
+						// the front of the boot
+						new int[][] { new int[] { 97 - 38, 39 }, new int[] { 97 - 37, 35 }, new int[] { 97 - 31, 33 },
+								new int[] { 97 - 23, 30 }, new int[] { 97 - 22, 13 } },
+						// the heel of the boot
+						new int[][] { new int[] { 97 - 9, 13 }, new int[] { 97 - 9, 40 } },
+						// the arm attached to the sleeve
+						new int[][] { new int[] { 97 - 17, 80 }, new int[] { 97 - 16, 56 }, new int[] { 97 - 19, 52 },
+								new int[] { 97 - 25, 52 }, new int[] { 97 - 27, 54 }, new int[] { 97 - 28, 62 },
+								new int[] { 97 - 26, 71 }, new int[] { 97 - 27, 79 }, new int[] { 97 - 25, 82 },
+								new int[] { 97 - 17, 80 } } },
+				true),
+				new ItemStack[] { new ItemStack(TFCItems.bootTop, 1, 0), new ItemStack(TFCItems.bootTop, 1, 0),
+						new ItemStack(TFCItems.bootSole, 1, 0) }));
+		// Wolf Boots
+		manager.addRecipe(new SewingRecipe(new SewingPattern(new ItemStack(TFCItems.wolfFurBoots, 1),
+				// Here we go with the pattern. The default
+				// canvas size is 164 x 98
+				// The set of patterns
+				new int[][][] {
+						// the front of the boot
+						new int[][] { new int[] { 38, 39 }, new int[] { 37, 35 }, new int[] { 31, 33 },
+								new int[] { 23, 30 }, new int[] { 22, 13 } },
+						// the heel of the boot
+						new int[][] { new int[] { 9, 13 }, new int[] { 9, 40 } },
+						// the arm attached to the sleeve
+						new int[][] { new int[] { 17, 80 }, new int[] { 16, 56 }, new int[] { 19, 52 },
+								new int[] { 25, 52 }, new int[] { 27, 54 }, new int[] { 28, 62 }, new int[] { 26, 71 },
+								new int[] { 27, 79 }, new int[] { 25, 82 }, new int[] { 17, 80 } },
+						// the front of the boot
+						new int[][] { new int[] { 97 - 38, 39 }, new int[] { 97 - 37, 35 }, new int[] { 97 - 31, 33 },
+								new int[] { 97 - 23, 30 }, new int[] { 97 - 22, 13 } },
+						// the heel of the boot
+						new int[][] { new int[] { 97 - 9, 13 }, new int[] { 97 - 9, 40 } },
+						// the arm attached to the sleeve
+						new int[][] { new int[] { 97 - 17, 80 }, new int[] { 97 - 16, 56 }, new int[] { 97 - 19, 52 },
+								new int[] { 97 - 25, 52 }, new int[] { 97 - 27, 54 }, new int[] { 97 - 28, 62 },
+								new int[] { 97 - 26, 71 }, new int[] { 97 - 27, 79 }, new int[] { 97 - 25, 82 },
+								new int[] { 97 - 17, 80 } } },
+				true),
+				new ItemStack[] { new ItemStack(TFCItems.bootTop, 1, 1), new ItemStack(TFCItems.bootTop, 1, 1),
+						new ItemStack(TFCItems.bootSole, 1, 1) }));
+		// Bear Boots
+		manager.addRecipe(new SewingRecipe(new SewingPattern(new ItemStack(TFCItems.bearFurBoots, 1),
+				// Here we go with the pattern. The default
+				// canvas size is 164 x 98
+				// The set of patterns
+				new int[][][] {
+						// the front of the boot
+						new int[][] { new int[] { 38, 39 }, new int[] { 37, 35 }, new int[] { 31, 33 },
+								new int[] { 23, 30 }, new int[] { 22, 13 } },
+						// the heel of the boot
+						new int[][] { new int[] { 9, 13 }, new int[] { 9, 40 } },
+						// the arm attached to the sleeve
+						new int[][] { new int[] { 17, 80 }, new int[] { 16, 56 }, new int[] { 19, 52 },
+								new int[] { 25, 52 }, new int[] { 27, 54 }, new int[] { 28, 62 }, new int[] { 26, 71 },
+								new int[] { 27, 79 }, new int[] { 25, 82 }, new int[] { 17, 80 } },
+						// the front of the boot
+						new int[][] { new int[] { 97 - 38, 39 }, new int[] { 97 - 37, 35 }, new int[] { 97 - 31, 33 },
+								new int[] { 97 - 23, 30 }, new int[] { 97 - 22, 13 } },
+						// the heel of the boot
+						new int[][] { new int[] { 97 - 9, 13 }, new int[] { 97 - 9, 40 } },
+						// the arm attached to the sleeve
+						new int[][] { new int[] { 97 - 17, 80 }, new int[] { 97 - 16, 56 }, new int[] { 97 - 19, 52 },
+								new int[] { 97 - 25, 52 }, new int[] { 97 - 27, 54 }, new int[] { 97 - 28, 62 },
+								new int[] { 97 - 26, 71 }, new int[] { 97 - 27, 79 }, new int[] { 97 - 25, 82 },
+								new int[] { 97 - 17, 80 } } },
+				true),
+				new ItemStack[] { new ItemStack(TFCItems.bootTop, 1, 2), new ItemStack(TFCItems.bootTop, 1, 2),
+						new ItemStack(TFCItems.bootSole, 1, 2) }));
+		// Wool Shirt
+		manager.addRecipe(
+				new SewingRecipe(
+						new SewingPattern(new ItemStack(TFCItems.woolShirt, 1),
+								// Here we go with the pattern. The default
+								// canvas size is 164 x 98
+								// The set of patterns
+								new int[][][] {
+										// the left side of the coat and
+										// underarm
+										new int[][] { new int[] { 30, 73 }, new int[] { 25, 30 },
+												new int[] { 19, 73 } },
+										// the outer left arm and shoulder
+										new int[][] { new int[] { 8, 71 }, new int[] { 11, 33 }, new int[] { 16, 19 },
+												new int[] { 22, 13 }, new int[] { 37, 12 } },
+										new int[][] {
+												new int[] { 97 - 30, 73 }, new int[] { 97 - 25, 30 },
+												new int[] { 97 - 19, 73 } },
+										// the outer left arm and shoulder
+										new int[][] { new int[] { 97 - 8, 71 }, new int[] { 97 - 11, 33 },
+												new int[] { 97 - 16, 19 }, new int[] { 97 - 22, 13 },
+												new int[] { 97 - 37, 12 } } },
+								true),
+						new ItemStack[] { new ItemStack(TFCItems.shirtBody, 1, 0),
+								new ItemStack(TFCItems.shirtSleeves, 1, 0), new ItemStack(TFCItems.shirtSleeves, 1, 0),
+								new ItemStack(TFCItems.shirtBody, 1, 0) }));
+		// Silk Shirt
+		manager.addRecipe(
+				new SewingRecipe(
+						new SewingPattern(new ItemStack(TFCItems.silkShirt, 1),
+								// Here we go with the pattern. The default
+								// canvas size is 164 x 98
+								// The set of patterns
+								new int[][][] {
+										// the left side of the coat and
+										// underarm
+										new int[][] { new int[] { 30, 73 }, new int[] { 25, 30 },
+												new int[] { 19, 73 } },
+										// the outer left arm and shoulder
+										new int[][] { new int[] { 8, 71 }, new int[] { 11, 33 }, new int[] { 16, 19 },
+												new int[] { 22, 13 }, new int[] { 37, 12 } },
+										new int[][] {
+												new int[] { 97 - 30, 73 }, new int[] { 97 - 25, 30 },
+												new int[] { 97 - 19, 73 } },
+										// the outer left arm and shoulder
+										new int[][] { new int[] { 97 - 8, 71 }, new int[] { 97 - 11, 33 },
+												new int[] { 97 - 16, 19 }, new int[] { 97 - 22, 13 },
+												new int[] { 97 - 37, 12 } } },
+								true),
+						new ItemStack[] { new ItemStack(TFCItems.shirtBody, 1, 1),
+								new ItemStack(TFCItems.shirtSleeves, 1, 1), new ItemStack(TFCItems.shirtSleeves, 1, 1),
+								new ItemStack(TFCItems.shirtBody, 1, 1) }));
+		// Leather Chestpiece
+		manager.addRecipe(
+				new SewingRecipe(
+						new SewingPattern(new ItemStack(TFCItems.leatherChestplate, 1),
+								// Here we go with the pattern. The default
+								// canvas size is 164 x 98
+								// The set of patterns
+								new int[][][] {
+										// the left side of the coat and
+										// underarm
+										new int[][] { new int[] { 30, 73 }, new int[] { 25, 30 },
+												new int[] { 19, 73 } },
+										// the outer left arm and shoulder
+										new int[][] { new int[] { 8, 71 }, new int[] { 11, 33 }, new int[] { 16, 19 },
+												new int[] { 22, 13 }, new int[] { 37, 12 } },
+										new int[][] {
+												new int[] { 97 - 30, 73 }, new int[] { 97 - 25, 30 },
+												new int[] { 97 - 19, 73 } },
+										// the outer left arm and shoulder
+										new int[][] { new int[] { 97 - 8, 71 }, new int[] { 97 - 11, 33 },
+												new int[] { 97 - 16, 19 }, new int[] { 97 - 22, 13 },
+												new int[] { 97 - 37, 12 } } },
+								true),
+						new ItemStack[] { new ItemStack(TFCItems.shirtBody, 1, 2),
+								new ItemStack(TFCItems.shirtSleeves, 1, 2), new ItemStack(TFCItems.shirtSleeves, 1, 2),
+								new ItemStack(TFCItems.shirtBody, 1, 2) }));
+		// Linen Shirt
+		manager.addRecipe(
+				new SewingRecipe(
+						new SewingPattern(new ItemStack(TFCItems.linenShirt, 1),
+								// Here we go with the pattern. The default
+								// canvas size is 164 x 98
+								// The set of patterns
+								new int[][][] {
+										// the left side of the coat and
+										// underarm
+										new int[][] { new int[] { 30, 73 }, new int[] { 25, 30 },
+												new int[] { 19, 73 } },
+										// the outer left arm and shoulder
+										new int[][] { new int[] { 8, 71 }, new int[] { 11, 33 }, new int[] { 16, 19 },
+												new int[] { 22, 13 }, new int[] { 37, 12 } },
+										new int[][] {
+												new int[] { 97 - 30, 73 }, new int[] { 97 - 25, 30 },
+												new int[] { 97 - 19, 73 } },
+										// the outer left arm and shoulder
+										new int[][] { new int[] { 97 - 8, 71 }, new int[] { 97 - 11, 33 },
+												new int[] { 97 - 16, 19 }, new int[] { 97 - 22, 13 },
+												new int[] { 97 - 37, 12 } } },
+								true),
+						new ItemStack[] { new ItemStack(TFCItems.shirtBody, 1, 3),
+								new ItemStack(TFCItems.shirtSleeves, 1, 3), new ItemStack(TFCItems.shirtSleeves, 1, 3),
+								new ItemStack(TFCItems.shirtBody, 1, 3) }));
+		// Wool Hat
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.woolHat, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// hat
+								new int[][] { new int[] { 25, 55 }, new int[] { 29, 33 }, new int[] { 35, 26 },
+										new int[] { 49, 24 }, new int[] { 97 - 35, 26 }, new int[] { 97 - 29, 33 },
+										new int[] { 97 - 25, 55 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1, 0), new ItemStack(TFCItems.hatPiece, 1, 0) }));
+		// Silk Hat
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.silkHat, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// hat
+								new int[][] { new int[] { 25, 55 }, new int[] { 29, 33 }, new int[] { 35, 26 },
+										new int[] { 49, 24 }, new int[] { 97 - 35, 26 }, new int[] { 97 - 29, 33 },
+										new int[] { 97 - 25, 55 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1, 1), new ItemStack(TFCItems.hatPiece, 1, 1) }));
+		// Leather Hat
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.leatherHelmet, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// hat
+								new int[][] { new int[] { 25, 55 }, new int[] { 29, 33 }, new int[] { 35, 26 },
+										new int[] { 49, 24 }, new int[] { 97 - 35, 26 }, new int[] { 97 - 29, 33 },
+										new int[] { 97 - 25, 55 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1, 2), new ItemStack(TFCItems.hatPiece, 1, 2) }));
+		// Linen Hat
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.linenHat, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// hat
+								new int[][] { new int[] { 25, 55 }, new int[] { 29, 33 }, new int[] { 35, 26 },
+										new int[] { 49, 24 }, new int[] { 97 - 35, 26 }, new int[] { 97 - 29, 33 },
+										new int[] { 97 - 25, 55 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1, 3), new ItemStack(TFCItems.hatPiece, 1, 3) }));
+
+		// Wolf Hat
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.wolfFurHat, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// hat
+								new int[][] { new int[] { 23, 65 }, new int[] { 21, 34 }, new int[] { 24, 24 },
+										new int[] { 41, 17 }, new int[] { 52, 16 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1, 4), new ItemStack(TFCItems.hatPiece, 1, 4) }));
+
+		// Bear Hat
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.bearFurHat, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// hat
+								new int[][] { new int[] { 23, 65 }, new int[] { 21, 34 }, new int[] { 24, 24 },
+										new int[] { 41, 17 }, new int[] { 52, 16 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.hatPiece, 1, 5), new ItemStack(TFCItems.hatPiece, 1, 5) }));
+
+		// Leather Sandals
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.leatherSandals, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// hat
+								new int[][] { new int[] { 15, 57 }, new int[] { 15, 62 } },
+								new int[][] { new int[] { 16, 75 }, new int[] { 16, 80 } },
+								new int[][] { new int[] { 29, 57 }, new int[] { 29, 62 } },
+								new int[][] { new int[] { 28, 74 }, new int[] { 28, 79 } },
+								new int[][] { new int[] { 97 - 15, 57 }, new int[] { 97 - 15, 62 } },
+								new int[][] { new int[] { 97 - 16, 75 }, new int[] { 97 - 16, 80 } },
+								new int[][] { new int[] { 97 - 29, 57 }, new int[] { 97 - 29, 62 } },
+								new int[][] { new int[] { 97 - 28, 74 }, new int[] { 97 - 28, 79 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.bootSole, 1, 0), new ItemStack(TFCItems.leatherStrap, 1),
+						new ItemStack(TFCItems.leatherStrap, 1) }));
+
+		// Leather Saddle
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.saddleTFC, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// hat
+								new int[][] { new int[] { 40, 35 }, new int[] { 40, 41 } },
+								new int[][] { new int[] { 44, 59 }, new int[] { 44, 65 } },
+								new int[][] { new int[] { 97 - 40, 35 }, new int[] { 97 - 40, 41 } },
+								new int[][] { new int[] { 97 - 44, 59 }, new int[] { 97 - 44, 65 } }, },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.saddlePiece, 1, 0), new ItemStack(TFCItems.leatherStrap, 1),
+						new ItemStack(TFCItems.leatherStrap, 1), new ItemStack(TFCItems.leatherStrap, 1),
+						new ItemStack(TFCItems.leatherStrap, 1) }));
+
+		// Leather Quiver
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.quiver, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// hat
+								new int[][] { new int[] { 47, 16 }, new int[] { 47, 54 }, new int[] { 53, 57 },
+										new int[] { 60, 53 }, new int[] { 60, 16 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.quiverPiece, 1, 0), new ItemStack(TFCItems.quiverPiece, 1, 0),
+						new ItemStack(TFCItems.leatherStrap, 1) }));
+		// Wool Socks
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.woolSocks, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// sock L
+								new int[][] { new int[] { 6, 46 }, new int[] { 6, 70 }, new int[] { 11, 76 },
+										new int[] { 20, 81 }, new int[] { 32, 82 }, new int[] { 34, 75 },
+										new int[] { 19, 65 }, new int[] { 18, 46 } },
+								new int[][] { new int[] { 97 - 6, 46 }, new int[] { 97 - 6, 70 },
+										new int[] { 97 - 11, 76 }, new int[] { 97 - 20, 81 }, new int[] { 97 - 32, 82 },
+										new int[] { 97 - 34, 75 }, new int[] { 97 - 19, 65 },
+										new int[] { 97 - 18, 46 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.sockCloth, 1, 0), new ItemStack(TFCItems.sockCloth, 1, 0) }));
+		// Silk Socks
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.silkSocks, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// sock L
+								new int[][] { new int[] { 6, 46 }, new int[] { 6, 70 }, new int[] { 11, 76 },
+										new int[] { 20, 81 }, new int[] { 32, 82 }, new int[] { 34, 75 },
+										new int[] { 19, 65 }, new int[] { 18, 46 } },
+								new int[][] { new int[] { 97 - 6, 46 }, new int[] { 97 - 6, 70 },
+										new int[] { 97 - 11, 76 }, new int[] { 97 - 20, 81 }, new int[] { 97 - 32, 82 },
+										new int[] { 97 - 34, 75 }, new int[] { 97 - 19, 65 },
+										new int[] { 97 - 18, 46 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.sockCloth, 1, 1), new ItemStack(TFCItems.sockCloth, 1, 1) }));
+		// Linen Socks
+		manager.addRecipe(new SewingRecipe(
+				new SewingPattern(new ItemStack(TFCItems.linenSocks, 1),
+						// Here we go with the pattern. The default
+						// canvas size is 164 x 98
+						// The set of patterns
+						new int[][][] {
+								// sock L
+								new int[][] { new int[] { 6, 46 }, new int[] { 6, 70 }, new int[] { 11, 76 },
+										new int[] { 20, 81 }, new int[] { 32, 82 }, new int[] { 34, 75 },
+										new int[] { 19, 65 }, new int[] { 18, 46 } },
+								new int[][] { new int[] { 97 - 6, 46 }, new int[] { 97 - 6, 70 },
+										new int[] { 97 - 11, 76 }, new int[] { 97 - 20, 81 }, new int[] { 97 - 32, 82 },
+										new int[] { 97 - 34, 75 }, new int[] { 97 - 19, 65 },
+										new int[] { 97 - 18, 46 } } },
+						true),
+				new ItemStack[] { new ItemStack(TFCItems.sockCloth, 1, 2), new ItemStack(TFCItems.sockCloth, 1, 2) }));
+		// Wool Pants
+		manager.addRecipe(
+				new SewingRecipe(
+						new SewingPattern(new ItemStack(TFCItems.woolPants, 1),
+								// Here we go with the pattern. The default
+								// canvas size is 164 x 98
+								// The set of patterns
+								new int[][][] {
+										// The outside of the left leg
+										new int[][] { new int[] { 50, 78 }, new int[] { 60, 8 } },
+										// The inseam
+										new int[][] { new int[] { 72, 78 }, new int[] { 82, 25 },
+												new int[] { 92, 78 } },
+										// The outside of the right leg
+										new int[][] { new int[] { 114, 78 }, new int[] { 104, 8 } } }),
+						new ItemStack[] { new ItemStack(TFCItems.pantsPiece, 1, 0),
+								new ItemStack(TFCItems.pantsPiece, 1, 0) }));
+
+		// Silk Pants
 		manager.addRecipe(
 				new SewingRecipe(
 						new SewingPattern(new ItemStack(TFCItems.silkPants, 1),
@@ -2299,9 +2512,9 @@ public class Recipes
 												new int[] { 92, 78 } },
 										// The outside of the right leg
 										new int[][] { new int[] { 114, 78 }, new int[] { 104, 8 } } }),
-						new ItemStack[] { new ItemStack(TFCItems.pantsPiece, 1,1),
-								new ItemStack(TFCItems.pantsPiece, 1,1)}));
-		//Leather Leggings
+						new ItemStack[] { new ItemStack(TFCItems.pantsPiece, 1, 1),
+								new ItemStack(TFCItems.pantsPiece, 1, 1) }));
+		// Leather Leggings
 		manager.addRecipe(
 				new SewingRecipe(
 						new SewingPattern(new ItemStack(TFCItems.leatherLeggings, 1),
@@ -2316,9 +2529,9 @@ public class Recipes
 												new int[] { 92, 78 } },
 										// The outside of the right leg
 										new int[][] { new int[] { 114, 78 }, new int[] { 104, 8 } } }),
-						new ItemStack[] { new ItemStack(TFCItems.pantsPiece, 1,2),
-								new ItemStack(TFCItems.pantsPiece, 1,2)}));
-		//Linen Pants
+						new ItemStack[] { new ItemStack(TFCItems.pantsPiece, 1, 2),
+								new ItemStack(TFCItems.pantsPiece, 1, 2) }));
+		// Linen Pants
 		manager.addRecipe(
 				new SewingRecipe(
 						new SewingPattern(new ItemStack(TFCItems.linenPants, 1),
@@ -2333,8 +2546,8 @@ public class Recipes
 												new int[] { 92, 78 } },
 										// The outside of the right leg
 										new int[][] { new int[] { 114, 78 }, new int[] { 104, 8 } } }),
-						new ItemStack[] { new ItemStack(TFCItems.pantsPiece, 1,3),
-								new ItemStack(TFCItems.pantsPiece, 1,3)}));
+						new ItemStack[] { new ItemStack(TFCItems.pantsPiece, 1, 3),
+								new ItemStack(TFCItems.pantsPiece, 1, 3) }));
 	}
 
 	public static void registerAnvilRecipes(Random r, World world)
@@ -2395,6 +2608,10 @@ public class Recipes
 				new PlanRecipe(new RuleEnum[] { RuleEnum.PUNCHLAST, RuleEnum.ANY, RuleEnum.ANY }));
 		manager.addPlan("tuyere",
 				new PlanRecipe(new RuleEnum[] { RuleEnum.BENDLAST, RuleEnum.BENDSECONDFROMLAST, RuleEnum.ANY }));
+		manager.addPlan("tube",
+				new PlanRecipe(new RuleEnum[] { RuleEnum.BENDLAST, RuleEnum.BENDSECONDFROMLAST, RuleEnum.DRAWANY }));
+		manager.addPlan("horn",
+				new PlanRecipe(new RuleEnum[] { RuleEnum.BENDLAST, RuleEnum.BENDSECONDFROMLAST, RuleEnum.DRAWANY }));
 		manager.addPlan("trapdoor",
 				new PlanRecipe(new RuleEnum[] { RuleEnum.HITLAST, RuleEnum.SHRINKNOTLAST, RuleEnum.UPSETNOTLAST }));
 		manager.addPlan("grill", new PlanRecipe(
@@ -2579,8 +2796,9 @@ public class Recipes
 				new ItemStack(TFCItems.steelHammerHead, 1)).addRecipeSkill(Global.SKILL_TOOLSMITH));
 
 		// Needle
-		manager.addRecipe(new AnvilRecipe(new ItemStack(TFCItems.wroughtIronIngot),null,"needle",AnvilReq.WROUGHTIRON,new ItemStack(TFCItems.ironNeedle)).addRecipeSkill(Global.SKILL_TOOLSMITH));
-		
+		manager.addRecipe(new AnvilRecipe(new ItemStack(TFCItems.wroughtIronIngot), null, "needle",
+				AnvilReq.WROUGHTIRON, new ItemStack(TFCItems.ironNeedle)).addRecipeSkill(Global.SKILL_TOOLSMITH));
+
 		// Chisels
 		manager.addRecipe(
 				new AnvilRecipe(new ItemStack(TFCItems.bismuthBronzeIngot), null, "chisel", AnvilReq.BISMUTHBRONZE,
@@ -3014,6 +3232,12 @@ public class Recipes
 		manager.addRecipe(new AnvilRecipe(new ItemStack(TFCItems.bloom, 1, WILD), null, "splitbloom", AnvilReq.BRONZE,
 				new ItemStack(TFCItems.bloom, 1)).clearRecipeSkills());
 
+		manager.addRecipe(new AnvilRecipe(new ItemStack(TFCItems.brassSheet), null, "tube", AnvilReq.BRONZE,
+				new ItemStack(TFCItems.brassTube, 1)));
+
+		manager.addRecipe(new AnvilRecipe(new ItemStack(TFCItems.brassTube), null, "horn", AnvilReq.BRONZE,
+				new ItemStack(TFCItems.brassHorn, 1)));
+
 		// Tuyeres
 		manager.addRecipe(new AnvilRecipe(new ItemStack(TFCItems.copperSheet2x), null, "tuyere", AnvilReq.COPPER,
 				new ItemStack(TFCItems.tuyereCopper, 1)));
@@ -3369,6 +3593,7 @@ public class Recipes
 		addFoodRefineRecipe(TFCBlocks.fungi, 0, TFCItems.mushroomFoodB, 0);
 		addFoodRefineRecipe(TFCBlocks.fungi, 1, TFCItems.mushroomFoodR, 0);
 		addFoodRefineRecipe(TFCBlocks.pumpkin, TFCItems.pumpkinGuts);
+		addFoodRefineRecipe(TFCBlocks.melon, TFCItems.melonSlice);
 
 		addFoodDoughRecipe(TFCItems.wheatGround, TFCItems.wheatDough, TFCItems.woodenBucketWater);
 		addFoodDoughRecipe(TFCItems.barleyGround, TFCItems.barleyDough, TFCItems.woodenBucketWater);
@@ -3376,6 +3601,12 @@ public class Recipes
 		addFoodDoughRecipe(TFCItems.oatGround, TFCItems.oatDough, TFCItems.woodenBucketWater);
 		addFoodDoughRecipe(TFCItems.riceGround, TFCItems.riceDough, TFCItems.woodenBucketWater);
 		addFoodDoughRecipe(TFCItems.cornmealGround, TFCItems.cornmealDough, TFCItems.woodenBucketWater);
+		addFoodDoughRecipe(TFCItems.wheatGround, TFCItems.wheatDough, TFCItems.clayBucketWater);
+		addFoodDoughRecipe(TFCItems.barleyGround, TFCItems.barleyDough, TFCItems.clayBucketWater);
+		addFoodDoughRecipe(TFCItems.ryeGround, TFCItems.ryeDough, TFCItems.clayBucketWater);
+		addFoodDoughRecipe(TFCItems.oatGround, TFCItems.oatDough, TFCItems.clayBucketWater);
+		addFoodDoughRecipe(TFCItems.riceGround, TFCItems.riceDough, TFCItems.clayBucketWater);
+		addFoodDoughRecipe(TFCItems.cornmealGround, TFCItems.cornmealDough, TFCItems.clayBucketWater);
 		addFoodDoughRecipe(TFCItems.wheatGround, TFCItems.wheatDough, TFCItems.redSteelBucketWater);
 		addFoodDoughRecipe(TFCItems.barleyGround, TFCItems.barleyDough, TFCItems.redSteelBucketWater);
 		addFoodDoughRecipe(TFCItems.ryeGround, TFCItems.ryeDough, TFCItems.redSteelBucketWater);
@@ -3479,6 +3710,12 @@ public class Recipes
 
 		manager.addRecipe(
 				new KilnRecipe(new ItemStack(TFCItems.potteryJug, 1, 0), 0, new ItemStack(TFCItems.potteryJug, 1, 1)));
+
+		manager.addRecipe(
+				new KilnRecipe(new ItemStack(TFCItems.clayTile, 1, 0), 0, new ItemStack(TFCItems.clayTile, 1, 1)));
+
+		manager.addRecipe(new KilnRecipe(new ItemStack(TFCItems.clayBucketUnfired, 1, 0), 0,
+				new ItemStack(TFCItems.clayBucketEmpty, 1, 1)));
 
 		manager.addRecipe(new KilnRecipe(new ItemStack(TFCItems.potterySmallVessel, 1, 0), 0,
 				new ItemStack(TFCItems.potterySmallVessel, 1, 1)));

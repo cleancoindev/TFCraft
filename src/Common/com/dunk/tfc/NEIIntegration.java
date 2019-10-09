@@ -51,7 +51,6 @@ public class NEIIntegration
 				return currenttip;
 			}
 		});
-
 		if (TFCOptions.enableNEIHiding)
 		{
 			API.hideItem(new ItemStack(TFCBlocks.bloom));
@@ -85,7 +84,7 @@ public class NEIIntegration
 			API.hideItem(new ItemStack(TFCBlocks.woodConstruct)); // Lumber Block
 			API.hideItem(new ItemStack(TFCBlocks.metalSheet));
 			API.hideItem(new ItemStack(TFCBlocks.molten));
-			API.hideItem(new ItemStack(TFCBlocks.moss));
+			//API.hideItem(new ItemStack(TFCBlocks.moss));
 			//codechicken.nei.api.API.hideItem(new ItemStack(TFCItems.MudBrick, 1, OreDictionary.WILDCARD_VALUE));
 			API.hideItem(new ItemStack(TFCBlocks.ore));
 			API.hideItem(new ItemStack(TFCBlocks.ore2));
@@ -98,6 +97,8 @@ public class NEIIntegration
 			API.hideItem(new ItemStack(TFCBlocks.sluice));
 			API.hideItem(new ItemStack(TFCBlocks.smoke));
 			API.hideItem(new ItemStack(TFCBlocks.smokeRack));
+			API.hideItem(new ItemStack(TFCBlocks.skinnyLogNatural));
+			API.hideItem(new ItemStack(TFCBlocks.skinnyLogNatural2));
 			//codechicken.nei.api.API.hideItem(new ItemStack(TFCItems.Soup, 1, OreDictionary.WILDCARD_VALUE));
 			API.hideItem(new ItemStack(TFCBlocks.stoneSlabs));
 			API.hideItem(new ItemStack(TFCBlocks.stoneStairs));

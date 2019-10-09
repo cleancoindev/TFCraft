@@ -294,6 +294,7 @@ public class ItemProPick extends ItemTerra
 	public void addInformation(ItemStack is, EntityPlayer player, List arraylist, boolean flag)
 	{
 		ItemTerra.addSizeInformation(is, arraylist);
+		arraylist.add(TFC_Core.translate("gui."+this.getReach(is).getName()));
 		ItemTerraTool.addSmithingBonusInformation(is, arraylist);
 	}
 }

@@ -1,14 +1,14 @@
 {
   "modListVersion": 2,
   "modList": [{
-    "modid": "terrafirmacraft",
-    "name": "TerraFirmaCraft",
+    "modid": "terrafirmacraftplus",
+    "name": "TerraFirmaCraft+",
     "description": "Survival Mode as it should have been.",
     "version": "${mod_version}",
     "mcversion": "${minecraft_version}",
     "url" : "http://terrafirmacraft.com/change_log.html",
     "updateUrl": "http://terrafirmacraft.com/download.html",
-    "authorList": [ "Bioxx", "Dunkleosteus", "Kittychanley" ],
+    "authorList": [ "Dunkleosteus", "Bioxx", "Kittychanley" ],
     "credits": "http://terrafirmacraft.com/credits.html",
     "logoFile": "/assets/textures/gui/TFCLogo.png",
     "screenshots": [  ],

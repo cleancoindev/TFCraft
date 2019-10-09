@@ -5,6 +5,7 @@ import java.util.Random;
 import com.dunk.tfc.Reference;
 import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Core.TFC_Time;
+import com.dunk.tfc.Core.Player.BodyTempStats;
 import com.dunk.tfc.Core.Player.FoodStatsTFC;
 import com.dunk.tfc.api.TFCItems;
 
@@ -23,6 +24,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 public class ItemDrink extends ItemTerra
 {
 	int waterRestore = 0;
+	private long heatProtectionDuration = 1800;
 
 	public ItemDrink()
 	{
@@ -110,6 +112,16 @@ public class ItemDrink extends ItemTerra
 			if (canDrink)
 			{
 				TFC_Core.getPlayerFoodStats(player).restoreWater(player, waterRestore);
+				BodyTempStats bodyTemp = TFC_Core.getBodyTempStats(player);
+				if(bodyTemp.temporaryHeatProtection < 1)
+				{
+					bodyTemp.temporaryHeatProtection++;
+				}
+				if(bodyTemp.tempHeatTimeRemaining < heatProtectionDuration)
+				{
+					bodyTemp.tempHeatTimeRemaining = heatProtectionDuration;
+				}
+				TFC_Core.setBodyTempStats(player, bodyTemp);
 			}
 		}
 		return is;

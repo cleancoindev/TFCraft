@@ -470,7 +470,8 @@ public class ExtraItemsPacket extends AbstractPacket
 					stack.stackTagCompound = tags[i];
 				}
 				PlayerManagerTFC.getInstance().getPlayerInfoFromName(username).myExtraItems[i] = stack;
-				if (TFC_Time.getTotalTicks() % TFC_Core.getClothingUpdateFrequency() == 0)
+				/*
+				if (TFC_Time.getTotalTicks() % TFC_Core.getClothingUpdateFrequency() == 0 && false)
 				{
 					if (stack != null && stack.stackSize > 0)
 					{
@@ -480,7 +481,7 @@ public class ExtraItemsPacket extends AbstractPacket
 					{
 						((InventoryPlayerTFC) (packetPlayer.inventory)).extraEquipInventory[i] = null;
 					}
-				}
+				}*/
 			}
 			// if(username.equals("Kapellini"))
 			// {

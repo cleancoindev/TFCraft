@@ -12,6 +12,11 @@ public class ItemFoodMeat extends ItemFoodTFC {
 			int um, boolean edible, boolean usable) {
 		super(fg, sw, so, sa, bi, um, edible, usable);
 	}
+	
+	public ItemFoodMeat(EnumFoodGroup fg, int sw, int so, int sa, int bi,
+			int um, boolean edible, boolean usable, boolean poison) {
+		super(fg, sw, so, sa, bi, um, edible, usable, poison);
+	}
 
 	@Override
 	protected String getCookedLevelString(ItemStack is)

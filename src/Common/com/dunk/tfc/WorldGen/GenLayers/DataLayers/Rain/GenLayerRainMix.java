@@ -45,7 +45,7 @@ public class GenLayerRainMix extends GenLayerTFC
 					if(thisID+1 < DataLayer.RAIN_8000.layerID)
 						thisID++;
 				if (id0 <= thisID-2 || id1 <= thisID-2 || id2 <= thisID-2 || id3 <= thisID-2)
-					if(thisID-1 > DataLayer.RAIN_62_5.layerID)
+					if(thisID-1 > DataLayer.RAIN_350.layerID)
 						thisID--;
 
 				outCache[index] = thisID;

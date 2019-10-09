@@ -159,7 +159,7 @@ public class TerraFirmaCraft
 		GameRegistry.registerWorldGenerator(new WorldGenForests(), 4);
 		GameRegistry.registerWorldGenerator(new WorldGenLooseRocks(), 5);
 		GameRegistry.registerWorldGenerator(new WorldGenSoilPits(), 6);
-		GameRegistry.registerWorldGenerator(new WorldGenLargeRock(), 7);
+		GameRegistry.registerWorldGenerator(new WorldGenLargeRock(), 3);
 		GameRegistry.registerWorldGenerator(new WorldGenPlants(), 8);
 
 		WorldType.DEFAULT = new TFCWorldType(0, "TFCDefault");

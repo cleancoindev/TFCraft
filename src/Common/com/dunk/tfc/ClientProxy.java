@@ -76,12 +76,16 @@ import com.dunk.tfc.Render.Blocks.RenderBellows;
 import com.dunk.tfc.Render.Blocks.RenderBloomery;
 import com.dunk.tfc.Render.Blocks.RenderBranch;
 import com.dunk.tfc.Render.Blocks.RenderChest;
+import com.dunk.tfc.Render.Blocks.RenderChimney;
 import com.dunk.tfc.Render.Blocks.RenderCrucible;
+import com.dunk.tfc.Render.Blocks.RenderDrum;
+import com.dunk.tfc.Render.Blocks.RenderDryingBricks;
 import com.dunk.tfc.Render.Blocks.RenderFence;
 import com.dunk.tfc.Render.Blocks.RenderFenceGate;
 import com.dunk.tfc.Render.Blocks.RenderFlowerPot;
 import com.dunk.tfc.Render.Blocks.RenderGrill;
 import com.dunk.tfc.Render.Blocks.RenderHopper;
+import com.dunk.tfc.Render.Blocks.RenderLeafLitter;
 import com.dunk.tfc.Render.Blocks.RenderLeatherRack;
 import com.dunk.tfc.Render.Blocks.RenderLoom;
 import com.dunk.tfc.Render.Blocks.RenderMetalSheet;
@@ -94,9 +98,11 @@ import com.dunk.tfc.Render.Blocks.RenderSmoke;
 import com.dunk.tfc.Render.Blocks.RenderSmokeRack;
 import com.dunk.tfc.Render.Blocks.RenderStand;
 import com.dunk.tfc.Render.Blocks.RenderSupportBeam;
+import com.dunk.tfc.Render.Blocks.RenderTileRoof;
 import com.dunk.tfc.Render.Blocks.RenderToolRack;
 import com.dunk.tfc.Render.Blocks.RenderTorch;
 import com.dunk.tfc.Render.Blocks.RenderTuyere;
+import com.dunk.tfc.Render.Blocks.RenderUndergrowth;
 import com.dunk.tfc.Render.Blocks.RenderVessel;
 import com.dunk.tfc.Render.Blocks.RenderWall;
 import com.dunk.tfc.Render.Blocks.RenderWoodConstruct;
@@ -248,8 +254,10 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerBlockHandler(TFCBlocks.sluiceRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.woodFruitRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.leavesFruitRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
+		RenderingRegistry.registerBlockHandler(TFCBlocks.leavesNewFruitRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.stairRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.slabRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
+		RenderingRegistry.registerBlockHandler(TFCBlocks.tileRoofRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderTileRoof());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.cropRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.cookingPitRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.leavesRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
@@ -267,10 +275,13 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerBlockHandler(TFCBlocks.standRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderStand());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.nestBoxRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderNestBox());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.potteryRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderPottery());
+		RenderingRegistry.registerBlockHandler(TFCBlocks.chimneyRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderChimney());
+		RenderingRegistry.registerBlockHandler(TFCBlocks.dryingBricksRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderDryingBricks());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.tuyereRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderTuyere());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.crucibleRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderCrucible());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.waterPlantRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.snowRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
+		RenderingRegistry.registerBlockHandler(TFCBlocks.mossRenderId = RenderingRegistry.getNextAvailableRenderId(), new BlockRenderHandler());
 		//RenderingRegistry.registerBlockHandler(TFCBlocks.berryRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderBerryBush());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.bloomeryRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderBloomery());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.metalsheetRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderMetalSheet());
@@ -279,12 +290,16 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerBlockHandler(TFCBlocks.metalTrapDoorRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderMetalTrapDoor());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.vesselRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderVessel());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.basketRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderBasket());
+		RenderingRegistry.registerBlockHandler(TFCBlocks.drumRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderDrum());
+		RenderingRegistry.registerBlockHandler(TFCBlocks.drumRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderDrum());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.torchRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderTorch());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.smokeRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderSmoke());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.smokeRackRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderSmokeRack());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.oilLampRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderOilLamp());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.hopperRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderHopper());
 		RenderingRegistry.registerBlockHandler(TFCBlocks.flowerPotRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderFlowerPot());
+		RenderingRegistry.registerBlockHandler(TFCBlocks.leafLitterRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderLeafLitter());
+		RenderingRegistry.registerBlockHandler(TFCBlocks.undergrowthRenderId = RenderingRegistry.getNextAvailableRenderId(), new RenderUndergrowth());
 		
 		//Register our overlay changes
 		MinecraftForge.EVENT_BUS.register(new RenderOverlayHandler());
@@ -390,7 +405,7 @@ public class ClientProxy extends CommonProxy
 		//int var6 = 0;
 		//int var7 = 0;
 		int[] rgb = { 0, 0, 0 };
-		float temperature = TFC_Climate.getHeightAdjustedTempSpecificDay(getCurrentWorld(),TFC_Time.getDayOfYear(),i,j,k);
+		float temperature = TFC_Climate.getHeightAdjustedBioTemp(getCurrentWorld(),TFC_Time.getDayOfYear(),i,j,k);
 		//float rainfall = TFC_Climate.getRainfall(getCurrentWorld(),i,j,k);
 
 		int meta = par1IBlockAccess.getBlockMetadata(i, j, k);
@@ -529,7 +544,8 @@ public class ClientProxy extends CommonProxy
 			{
 				for (int var9 = -1; var9 <= 1; ++var9)
 				{
-					int var10 = ColorizerFoliageTFC.getFoliageDead();
+					//int var10 = ColorizerFoliageTFC.getFoliageDead();
+					int var10 = ColorizerFoliageTFC.getFoliageOrange();
 					rgb = applyColor(var10, rgb);
 				}
 			}

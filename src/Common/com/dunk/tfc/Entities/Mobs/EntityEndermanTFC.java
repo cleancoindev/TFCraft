@@ -5,6 +5,7 @@ import com.dunk.tfc.api.Enums.EnumDamageType;
 import com.dunk.tfc.api.Interfaces.ICausesDamage;
 import com.dunk.tfc.api.Interfaces.IInnateArmor;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.world.World;
@@ -27,7 +28,7 @@ public class EntityEndermanTFC extends EntityEnderman implements ICausesDamage, 
 	}
 
 	@Override
-	public EnumDamageType getDamageType() {
+	public EnumDamageType getDamageType(EntityLivingBase is) {
 		// TODO Auto-generated method stub
 		return EnumDamageType.GENERIC;
 	}

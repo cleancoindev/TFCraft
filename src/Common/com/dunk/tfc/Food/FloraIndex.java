@@ -2,6 +2,7 @@ package com.dunk.tfc.Food;
 
 import java.util.Random;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 
@@ -22,6 +23,7 @@ public class FloraIndex
 	public float minEVT;
 	public float maxEVT = 16;
 	public ItemStack output;
+	public ItemStack sapling;
 
 	/**
 	 * n = ID String
@@ -39,6 +41,25 @@ public class FloraIndex
 		harvestStart = h1;
 		harvestFinish = h2;
 		output = o;
+	}
+	
+	/**
+	 * n = ID String
+	 * b1 = Bloom Start Month
+	 * b2 = Bloom End Month
+	 * h1 = Harvest Start Month
+	 * h2 = Harvest End Month
+	 */
+	public FloraIndex(String n, int b1, int b2, int h1, int h2, ItemStack s, ItemStack o)
+	{
+		minEVT = 0.25f;
+		type = n;
+		bloomStart = b1;
+		bloomFinish = b2;
+		harvestStart = h1;
+		harvestFinish = h2;
+		output = o;
+		sapling = s;
 	}
 
 	public FloraIndex(String n, int h1, int h2, ItemStack o)

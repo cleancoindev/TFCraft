@@ -20,7 +20,7 @@ public class TFCFluids
 	public static final Fluid VODKA = new FluidBaseTFC("vodka").setBaseColor(0xdcdcdc);
 	public static final Fluid CIDER = new FluidBaseTFC("cider").setBaseColor(0xb0ae32);
 	public static final Fluid TANNIN = new FluidBaseTFC("tannin").setBaseColor(0x63594e);
-	public static final Fluid VINEGAR = new FluidBaseTFC("vinegar").setBaseColor(0xc7c2aa);
+	public static final Fluid VINEGAR = new FluidBaseTFC("woodenBucketVinegar").setBaseColor(0xc7c2aa);
 	public static final Fluid BRINE = new FluidBaseTFC("brine").setBaseColor(0xdcd3c9);
 	public static final Fluid LIMEWATER = new FluidBaseTFC("limewater").setBaseColor(0xb4b4b4);
 	public static final Fluid MILK = new FluidBaseTFC("milk").setBaseColor(0xffffff);
@@ -35,6 +35,8 @@ public class TFCFluids
 	public static final Fluid WHITEDYE = new FluidBaseTFC("whitedye").setBaseColor(0xeeeeee);
 	public static final Fluid BLACKDYE = new FluidBaseTFC("blackdye").setBaseColor(0x101010);
 	public static final Fluid BERRYWINE = new FluidBaseTFC("berrywine").setBaseColor(0x8F2F65);
+	//Steph helped me with the colour. thanks steph
+	public static final Fluid WINE = new FluidBaseTFC("wine").setBaseColor(0x49192C);
 	public static final Fluid OLIVEOIL = new FluidBaseTFC("oliveoil").setBaseColor(0x6a7537);
 
 }

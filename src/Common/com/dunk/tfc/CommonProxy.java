@@ -46,9 +46,11 @@ import com.dunk.tfc.TileEntities.TEBlastFurnace;
 import com.dunk.tfc.TileEntities.TEBloom;
 import com.dunk.tfc.TileEntities.TEBloomery;
 import com.dunk.tfc.TileEntities.TEChest;
+import com.dunk.tfc.TileEntities.TEChimney;
 import com.dunk.tfc.TileEntities.TECrop;
 import com.dunk.tfc.TileEntities.TECrucible;
 import com.dunk.tfc.TileEntities.TEDetailed;
+import com.dunk.tfc.TileEntities.TEDryingBricks;
 import com.dunk.tfc.TileEntities.TEFarmland;
 import com.dunk.tfc.TileEntities.TEFenceGate;
 import com.dunk.tfc.TileEntities.TEFirepit;
@@ -91,6 +93,7 @@ import com.dunk.tfc.api.TFCFluids;
 import com.dunk.tfc.api.TFCItems;
 import com.dunk.tfc.api.Tools.ChiselManager;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -177,7 +180,8 @@ public class CommonProxy
 		GameRegistry.registerTileEntity(TELightEmitter.class, "LightEmitter");
 		GameRegistry.registerTileEntity(TESmokeRack.class, "Smoke Rack");
 		GameRegistry.registerTileEntity(TEOilLamp.class, "Oil Lamp");
-
+		GameRegistry.registerTileEntity(TEDryingBricks.class, "Drying Bricks");
+		GameRegistry.registerTileEntity(TEChimney.class, "Chimney");
 		
 		
 
@@ -185,6 +189,7 @@ public class CommonProxy
 		{
 			GameRegistry.registerTileEntity(TEFirepit.class, "TerraFirepit");
 			GameRegistry.registerTileEntity(TEIngotPile.class, "ingotPile");
+
 			GameRegistry.registerTileEntity(TEPottery.class, "Pottery");
 			GameRegistry.registerTileEntity(TEChest.class, "chest");
 			GameRegistry.registerTileEntity(TEFoodPrep.class, "FoodPrep");
@@ -307,6 +312,7 @@ public class CommonProxy
 		FluidRegistry.registerFluid(TFCFluids.WHITEDYE);
 		FluidRegistry.registerFluid(TFCFluids.BLACKDYE);
 		FluidRegistry.registerFluid(TFCFluids.BERRYWINE);
+		FluidRegistry.registerFluid(TFCFluids.WINE);
 		FluidRegistry.registerFluid(TFCFluids.MILKCURDLED);
 		FluidRegistry.registerFluid(TFCFluids.MILKVINEGAR);
 		FluidRegistry.registerFluid(TFCFluids.OLIVEOIL);
@@ -319,6 +325,8 @@ public class CommonProxy
 		FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluid(TFCFluids.SALTWATER.getName()), new ItemStack(TFCItems.redSteelBucketSaltWater), new ItemStack(TFCItems.redSteelBucketEmpty));
 		FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluid(TFCFluids.FRESHWATER.getName()), new ItemStack(TFCItems.woodenBucketWater), new ItemStack(TFCItems.woodenBucketEmpty));
 		FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluid(TFCFluids.SALTWATER.getName()), new ItemStack(TFCItems.woodenBucketSaltWater), new ItemStack(TFCItems.woodenBucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluid(TFCFluids.FRESHWATER.getName()), new ItemStack(TFCItems.clayBucketWater), new ItemStack(TFCItems.clayBucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluid(TFCFluids.SALTWATER.getName()), new ItemStack(TFCItems.clayBucketSaltWater), new ItemStack(TFCItems.clayBucketEmpty));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.FRESHWATER, 1000), new ItemStack(TFCItems.potteryJug, 1, 2), new ItemStack(TFCItems.potteryJug,1, 1));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.FRESHWATER, 500), new ItemStack(TFCItems.waterBottle), new ItemStack(TFCItems.glassBottle));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.RUM, 250), new ItemStack(TFCItems.rum), new ItemStack(TFCItems.glassBottle));
@@ -330,8 +338,11 @@ public class CommonProxy
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.CIDER, 250), new ItemStack(TFCItems.cider), new ItemStack(TFCItems.glassBottle));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.VODKA, 250), new ItemStack(TFCItems.vodka), new ItemStack(TFCItems.glassBottle));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.BERRYWINE, 250), new ItemStack(TFCItems.berryWine), new ItemStack(TFCItems.glassBottle));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.WINE, 250), new ItemStack(TFCItems.wine), new ItemStack(TFCItems.glassBottle));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.MILK, 1000), new ItemStack(TFCItems.woodenBucketMilk), new ItemStack(TFCItems.woodenBucketEmpty));
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.VINEGAR, 1000), new ItemStack(TFCItems.vinegar), new ItemStack(TFCItems.woodenBucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.VINEGAR, 1000), new ItemStack(TFCItems.woodenBucketVinegar), new ItemStack(TFCItems.woodenBucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.MILK, 1000), new ItemStack(TFCItems.clayBucketMilk), new ItemStack(TFCItems.clayBucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.VINEGAR, 1000), new ItemStack(TFCItems.clayBucketVinegar), new ItemStack(TFCItems.clayBucketEmpty));
 		//FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.OLIVEOIL, 250), ItemOilLamp.GetFullLamp(0), new ItemStack(TFCBlocks.OilLamp, 1, 0));//Gold
 		//FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.OLIVEOIL, 250), ItemOilLamp.GetFullLamp(1), new ItemStack(TFCBlocks.OilLamp, 1, 1));//Platinum
 		//FluidContainerRegistry.registerFluidContainer(new FluidStack(TFCFluids.OLIVEOIL, 250), ItemOilLamp.GetFullLamp(2), new ItemStack(TFCBlocks.OilLamp, 1, 2));//RoseGold

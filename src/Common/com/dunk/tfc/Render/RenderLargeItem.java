@@ -3,7 +3,9 @@ package com.dunk.tfc.Render;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.dunk.tfc.Blocks.Devices.BlockAnvil;
 import com.dunk.tfc.Core.TFC_Core;
+import com.dunk.tfc.api.TFCBlocks;
 import com.dunk.tfc.api.Interfaces.IEquipable;
 
 import net.minecraft.block.Block;
@@ -273,8 +275,10 @@ public class RenderLargeItem
 		{
 			rotateSign= -1f;
 		}
+
 		GL11.glRotatef(rotateSign * yRot, 0, 1, 0);
-		GL11.glTranslatef(0, -1, -1);
+		
+		
 		if (!entity.isSneaking())
 		{
 			GL11.glTranslatef(0F, 0.2F + entityTranslateY + 0.0F/* 0.65F */, 0.5F);
@@ -282,11 +286,21 @@ public class RenderLargeItem
 		else
 		{
 			GL11.glTranslatef(0F, 0.2F + entityTranslateY + (-rotateSign * (entity == Minecraft.getMinecraft().thePlayer?0.1f:0.3F))/* 0.55F */, 0.6F);
-			GL11.glTranslatef(0, 0.2f, -0.2f);
+			GL11.glTranslatef(0, -0.3f, -0f);
 			GL11.glRotatef(-rotateSign * 20F, 1F, 0F, 0F);
 		}
+		//GL11.glRotatef(180, 0, 0, 1);
+		GL11.glTranslatef(0, -0.5f, -0.75f);
+		if(TFCBlocks.barrel == Block.getBlockFromItem(item.getItem()))
+		{
+			GL11.glTranslatef(0, 0f, -0.25f);
+		}
+		else if(Block.getBlockFromItem(item.getItem()) instanceof BlockAnvil)
+		{
+			GL11.glTranslatef(0, 0f, -0.3f);
+		}
 		GL11.glScalef(0.8F, 0.8F, 0.8F);
-		GL11.glRotatef(180, 0F, 0F, 1F);
+		//GL11.glRotatef(180, 0F, 0F, 1F);
 		Block block;
 		if (item != null)
 		{

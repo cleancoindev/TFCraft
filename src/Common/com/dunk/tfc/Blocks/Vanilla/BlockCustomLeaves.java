@@ -5,10 +5,20 @@ import java.util.Random;
 
 import com.dunk.tfc.Reference;
 import com.dunk.tfc.TerraFirmaCraft;
+import com.dunk.tfc.Blocks.Flora.BlockBranch;
+import com.dunk.tfc.Blocks.Flora.BlockBranch2;
+import com.dunk.tfc.Core.TFC_Climate;
+import com.dunk.tfc.Core.TFC_Core;
+import com.dunk.tfc.Core.TFC_Time;
+import com.dunk.tfc.Food.FloraIndex;
+import com.dunk.tfc.Food.FloraManager;
+import com.dunk.tfc.Food.ItemFoodTFC;
+import com.dunk.tfc.TileEntities.TEFruitLeaves;
 import com.dunk.tfc.api.TFCBlocks;
 import com.dunk.tfc.api.TFCItems;
 import com.dunk.tfc.api.TFCOptions;
 import com.dunk.tfc.api.Constant.Global;
+import com.dunk.tfc.api.Util.Helper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,11 +32,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockCustomLeaves extends BlockLeaves implements IShearable
@@ -35,16 +47,42 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 	protected String[] woodNames;
 	protected IIcon[] icons;
 	protected IIcon[] iconsOpaque;
+	protected IIcon[] willowBottom;
 
 	public BlockCustomLeaves()
 	{
 		super();
-		this.setTickRandomly(false);
+		this.canBlockGrass = true;
 		this.woodNames = new String[16];
+		this.willowBottom = new IIcon[2];
 		System.arraycopy(Global.WOOD_ALL, 0, this.woodNames, 0, 16);
 		this.icons = new IIcon[16];
 		this.iconsOpaque = new IIcon[16];
-		this.setTickRandomly(false);
+		// this.setTickRandomly(true);
+
+	}
+
+	@Override
+	public int tickRate(World world)
+	{
+		return 200;
+	}
+
+	@Override
+	public boolean canBlockStay(World world, int x, int y, int z)
+	{
+		return !BlockBranch.shouldDefinitelyLoseLeaf(world, x, y, z,
+				this instanceof BlockCustomLeaves2) && super.canBlockStay(world, x, y, z);
+	}
+
+	@Override
+	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side)
+	{
+		if (side == ForgeDirection.DOWN)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -83,8 +121,10 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side)
 	{
 		Block block = world.getBlock(x, y, z);
-		/*if(!Minecraft.isFancyGraphicsEnabled() && block == this) 
-			return false;*/
+		/*
+		 * if(!Minecraft.isFancyGraphicsEnabled() && block == this) return
+		 * false;
+		 */
 		if (side == 0 && this.minY > 0.0D)
 			return true;
 		else if (side == 1 && this.maxY < 1.0D)
@@ -104,18 +144,22 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand)
 	{
-		onNeighborBlockChange(world, x, y, z, null);
+		if (rand.nextInt(10) == 0 && !world.isRemote)
+		{
+			onNeighborBlockChange(world, x, y, z, null);
+		}
 	}
 
 	@Override
 	public void beginLeavesDecay(World world, int x, int y, int z)
 	{
-		//We don't do vanilla leaves decay
+		// We don't do vanilla leaves decay
 	}
 
 	@Override
 	public void onNeighborBlockChange(World world, int xOrig, int yOrig, int zOrig, Block b)
 	{
+
 		if (!world.isRemote)
 		{
 			int var6 = world.getBlockMetadata(xOrig, yOrig, zOrig);
@@ -128,7 +172,8 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 			if (this.adjacentTreeBlocks == null)
 				this.adjacentTreeBlocks = new int[searchDistance][searchDistance][searchDistance];
 
-			if (world.checkChunksExist(xOrig - maxDist, yOrig - maxDist, zOrig - maxDist, xOrig + maxDist, yOrig + maxDist, zOrig + maxDist))
+			if (world.checkChunksExist(xOrig - maxDist, yOrig - maxDist, zOrig - maxDist, xOrig + maxDist,
+					yOrig + maxDist, zOrig + maxDist))
 			{
 				for (int xd = -searchRadius; xd <= searchRadius; ++xd)
 				{
@@ -140,9 +185,12 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 						{
 							Block block = world.getBlock(xOrig + xd, yOrig + yd, zOrig + zd);
 
-							if (block == TFCBlocks.logNatural || block == TFCBlocks.logNatural2)
+							if (((block == TFCBlocks.logNatural && !(this instanceof BlockCustomLeaves2)) || (block == TFCBlocks.logNatural2 && this instanceof BlockCustomLeaves2) || (block instanceof BlockBranch &&
+									((block instanceof BlockBranch2) == (this instanceof BlockCustomLeaves2)))) && var6 == world.getBlockMetadata(xOrig + xd, yOrig + yd,
+											zOrig + zd))
 								this.adjacentTreeBlocks[xd + center][yd + center][zd + center] = 0;
-							else if (block == this && var6 == world.getBlockMetadata(xOrig + xd, yOrig + yd, zOrig + zd))
+							else if (block == this && var6 == world.getBlockMetadata(xOrig + xd, yOrig + yd,
+									zOrig + zd))
 								this.adjacentTreeBlocks[xd + center][yd + center][zd + center] = -2;
 							else
 								this.adjacentTreeBlocks[xd + center][yd + center][zd + center] = -1;
@@ -190,7 +238,7 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 
 			if (res < 0)
 			{
-				if(world.getChunkFromBlockCoords(xOrig, zOrig) != null)
+				if (world.getChunkFromBlockCoords(xOrig, zOrig) != null)
 					this.destroyLeaves(world, xOrig, yOrig, zOrig);
 			}
 		}
@@ -204,7 +252,7 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 	private void removeLeaves(World world, int x, int y, int z)
 	{
 		dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-		if(world.rand.nextInt(100) < 30)
+		if (world.rand.nextInt(100) < 30)
 			dropBlockAsItem(world, x, y, z, new ItemStack(TFCItems.stick, 1));
 		world.setBlockToAir(x, y, z);
 	}
@@ -245,8 +293,9 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 						{
 							for (int y = -1; y < 2; y++)
 							{
-								if (world.getBlock(i + x, j + y, k + z).getMaterial() == Material.leaves &&
-									entityplayer.inventory.getStackInSlot(entityplayer.inventory.currentItem) != null)
+								if (world.getBlock(i + x, j + y, k + z)
+										.getMaterial() == Material.leaves && entityplayer.inventory
+												.getStackInSlot(entityplayer.inventory.currentItem) != null)
 								{
 									entityplayer.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
 									entityplayer.addExhaustion(0.045F);
@@ -259,7 +308,8 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 
 									itemstack.damageItem(1, entityplayer);
 									if (itemstack.stackSize == 0)
-										entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, null);
+										entityplayer.inventory
+												.setInventorySlotContents(entityplayer.inventory.currentItem, null);
 								}
 							}
 						}
@@ -302,7 +352,17 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 	@Override
 	public IIcon getIcon(int side, int meta)
 	{
-		if(meta > woodNames.length - 1)
+		if (!(this instanceof BlockCustomLeaves2))
+		{
+			if (meta == 14 && side == 0)
+			{
+				if (TerraFirmaCraft.proxy.getGraphicsLevel())
+					return this.willowBottom[1];
+				else
+					return this.willowBottom[0];
+			}
+		}
+		if (meta > woodNames.length - 1)
 			meta = 0;
 		if (TerraFirmaCraft.proxy.getGraphicsLevel())
 			return this.icons[meta];
@@ -313,11 +373,17 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegisterer)
 	{
-		for(int i = 0; i < this.woodNames.length; i++)
+		for (int i = 0; i < this.woodNames.length; i++)
 		{
-			this.icons[i] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "wood/trees/" + this.woodNames[i] + " Leaves Fancy");
-			this.iconsOpaque[i] = iconRegisterer.registerIcon(Reference.MOD_ID + ":" + "wood/trees/" + this.woodNames[i] + " Leaves");
+			this.icons[i] = iconRegisterer
+					.registerIcon(Reference.MOD_ID + ":" + "wood/trees/" + this.woodNames[i] + " Leaves Fancy");
+			this.iconsOpaque[i] = iconRegisterer
+					.registerIcon(Reference.MOD_ID + ":" + "wood/trees/" + this.woodNames[i] + " Leaves");
 		}
+		this.willowBottom[0] = iconRegisterer
+				.registerIcon(Reference.MOD_ID + ":" + "wood/trees/" + Global.WOOD_ALL[14] + " Leaves Bottom");
+		this.willowBottom[1] = iconRegisterer
+				.registerIcon(Reference.MOD_ID + ":" + "wood/trees/" + Global.WOOD_ALL[14] + " Leaves Bottom Fancy");
 	}
 
 	@Override

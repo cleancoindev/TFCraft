@@ -21,6 +21,7 @@ import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -74,8 +75,9 @@ public class ItemWeapon extends ItemSword implements ISize, ICausesDamage
 		ItemTerra.addHeatInformation(is, arraylist);
 
 		if(is.getItem() instanceof ICausesDamage)
-			arraylist.add(EnumChatFormatting.AQUA + TFC_Core.translate(((ICausesDamage) this).getDamageType().toString()));
+			arraylist.add(EnumChatFormatting.AQUA + TFC_Core.translate(((ICausesDamage) this).getDamageType(player).toString()));
 		ItemTerraTool.addSmithingBonusInformation(is, arraylist);
+		arraylist.add(TFC_Core.translate("gui."+this.getReach(is).getName()));
 		addExtraInformation(is, player, arraylist);
 	}
 
@@ -132,7 +134,7 @@ public class ItemWeapon extends ItemSword implements ISize, ICausesDamage
 	}
 
 	@Override
-	public EnumDamageType getDamageType() 
+	public EnumDamageType getDamageType(EntityLivingBase entity) 
 	{
 		return damageType;
 	}

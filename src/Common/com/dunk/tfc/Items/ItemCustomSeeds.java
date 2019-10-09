@@ -16,6 +16,8 @@ import com.dunk.tfc.api.Enums.EnumWeight;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
@@ -58,6 +60,12 @@ public class ItemCustomSeeds extends ItemTerra
 					TFC_Core.sendInfoMessage(player, new ChatComponentTranslation("gui.seeds.failedSun"));
 					return false;
 				}
+				
+				if(crop.requiresLadder &&  !player.inventory.hasItem(Item.getItemFromBlock(Blocks.ladder)))
+				{
+					TFC_Core.sendInfoMessage(player, new ChatComponentTranslation("gui.seeds.failedLadder"));
+					return false;
+				}
 
 				if (TFC_Climate.getHeightAdjustedTemp(world, x, y, z) <= crop.minAliveTemp && !crop.dormantInFrost)
 				{
@@ -72,6 +80,13 @@ public class ItemCustomSeeds extends ItemTerra
 				world.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 				world.markBlockForUpdate(x, y, z);
 				--stack.stackSize;
+				
+				if(crop.requiresLadder)
+				{
+					player.inventory.consumeInventoryItem(Item.getItemFromBlock(Blocks.ladder));
+					//player.inventory.markDirty();
+					player.inventoryContainer.detectAndSendChanges();
+				}
 				return true;
 			}
 			else

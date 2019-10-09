@@ -3,6 +3,7 @@ package com.dunk.tfc.Containers;
 import com.dunk.tfc.Containers.Slots.SlotForShowOnly;
 import com.dunk.tfc.Containers.Slots.SlotLiquidVessel;
 import com.dunk.tfc.Core.TFC_Achievements;
+import com.dunk.tfc.Core.TFC_Time;
 import com.dunk.tfc.Core.Metal.MetalRegistry;
 import com.dunk.tfc.Items.ItemMeltedMetal;
 import com.dunk.tfc.Items.Pottery.ItemPotteryBlowpipe;
@@ -17,6 +18,7 @@ import com.dunk.tfc.api.Interfaces.ISmeltable;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
@@ -95,7 +97,16 @@ public class ContainerLiquidVessel extends ContainerTFC
 		ItemStack stack = player.inventory.getStackInSlot(bagsSlotNum);
 
 		NBTTagCompound nbt = stack != null && stack.hasTagCompound() ? stack.getTagCompound() : null;
-
+		if(!world.isRemote && TFC_Time.getTotalHours() - nbt.getLong("TempTimer") >= 11 && nbt.getString("MetalType").equals("Glass")&&nbt.getInteger("MetalAmount")>=1000)
+		{
+			ItemStack glass = new ItemStack(Blocks.glass,Math.min(64, nbt.getInteger("MetalAmount")/1000),0);
+			nbt.removeTag("MetalType");
+			nbt.removeTag("MetalAmount");
+			nbt.removeTag("TempTimer");
+			containerInv.setInventorySlotContents(0, glass);
+			stack.stackTagCompound = nbt;
+			stack.setItemDamage(1);
+		}
 		if (nbt != null)
 		{
 			ItemStack input = containerInv.getStackInSlot(0);

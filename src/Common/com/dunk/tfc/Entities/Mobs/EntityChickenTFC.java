@@ -203,6 +203,10 @@ public class EntityChickenTFC extends EntityChicken implements IAnimal
 			float foodWeight = ageMod * (this.sizeMod * 40);
 			TFC_Core.animalDropMeat(this, TFCItems.chickenRaw, foodWeight);
 			this.dropItem(TFCItems.bone, rand.nextInt(2)+1);
+			if(rand.nextInt(20)==0)
+			{
+				this.dropItem(TFCItems.hollowBone, 1);
+			}
 		}
 	}
 

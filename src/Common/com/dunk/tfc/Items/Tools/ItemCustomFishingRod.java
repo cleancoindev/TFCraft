@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.dunk.tfc.Reference;
 import com.dunk.tfc.Core.TFCTabs;
+import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Core.TFC_Time;
 import com.dunk.tfc.Entities.EntityFishHookTFC;
 import com.dunk.tfc.Items.ItemTerra;
+import com.dunk.tfc.Render.Item.PoleItemRenderer;
 import com.dunk.tfc.api.Enums.EnumItemReach;
 import com.dunk.tfc.api.Enums.EnumSize;
 import com.dunk.tfc.api.Enums.EnumWeight;
@@ -23,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ItemCustomFishingRod extends ItemFishingRod implements ISize
 {
@@ -137,7 +140,7 @@ public class ItemCustomFishingRod extends ItemFishingRod implements ISize
 				
 			}
 			is.stackTagCompound.setBoolean("swing", true);
-			player.swingItem();
+			//player.swingItem();
 			is.stackTagCompound.setBoolean("fishing", true);
 			is.stackTagCompound.setInteger("usedUses",0);
 		}
@@ -160,6 +163,7 @@ public class ItemCustomFishingRod extends ItemFishingRod implements ISize
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister)
 	{
+		MinecraftForgeClient.registerItemRenderer(this, new PoleItemRenderer());
 		uncastIconArray = new IIcon[3];
 		castIconArray = new IIcon[8];
 		for (int i = 0; i < castIconArray.length; ++i)
@@ -223,6 +227,7 @@ public class ItemCustomFishingRod extends ItemFishingRod implements ISize
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer player, List arraylist, boolean flag)
 	{
+		arraylist.add(TFC_Core.translate("gui."+this.getReach(is).getName()));
 		ItemTerra.addSizeInformation(is, arraylist);
 	}
 

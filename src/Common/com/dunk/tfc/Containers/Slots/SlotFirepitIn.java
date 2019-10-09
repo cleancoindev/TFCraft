@@ -2,6 +2,7 @@ package com.dunk.tfc.Containers.Slots;
 
 import com.dunk.tfc.Items.ItemClothing;
 import com.dunk.tfc.Items.ItemOre;
+import com.dunk.tfc.Items.Tools.ItemFirestarter;
 import com.dunk.tfc.api.HeatRegistry;
 import com.dunk.tfc.api.TFCItems;
 
@@ -27,7 +28,7 @@ public class SlotFirepitIn extends Slot
 	public boolean isItemValid(ItemStack is)
 	{
 		HeatRegistry manager = HeatRegistry.getInstance();
-		return is.getItem() == TFCItems.fireStarter ||
+		return is.getItem() instanceof ItemFirestarter ||
 				is.getItem() == TFCItems.flintSteel ||
 				!(manager.findMatchingIndex(is) == null ||
 					is.getItem() instanceof ItemOre) || 

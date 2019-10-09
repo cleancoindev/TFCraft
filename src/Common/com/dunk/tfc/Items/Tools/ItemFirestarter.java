@@ -30,6 +30,7 @@ public class ItemFirestarter extends ItemTerra
 	private boolean canBeUsed;
 	private boolean isCoal;
 	private boolean isPottery;
+	private int chanceMultiplier = 1;
 
 	public ItemFirestarter()
 	{
@@ -38,7 +39,21 @@ public class ItemFirestarter extends ItemTerra
 		this.hasSubtypes = false;
 		setCreativeTab(TFCTabs.TFC_TOOLS);
 	}
+	
+	public ItemFirestarter(int d)
+	{
+		super();
+		this.setMaxDamage(d);
+		this.hasSubtypes = false;
+		setCreativeTab(TFCTabs.TFC_TOOLS);
+	}
 
+	public ItemFirestarter setChance(int m)
+	{
+		this.chanceMultiplier = m;
+		return this;
+	}
+	
 	@Override
 	public EnumSize getSize(ItemStack is)
 	{
@@ -83,7 +98,7 @@ public class ItemFirestarter extends ItemTerra
 			double hitY = mop.hitVec.yCoord;
 			double hitZ = mop.hitVec.zCoord;
 			int chance = world.rand.nextInt(100);
-
+			chance *= chanceMultiplier;
 			if(world.getBlock(x, y + 1, z) == TFCBlocks.firepit)
 				player.stopUsingItem();
 

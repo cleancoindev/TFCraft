@@ -44,7 +44,10 @@ public class ItemPotteryBase extends ItemTerra implements ISize
 	public void registerIcons(IIconRegister registerer)
 	{
 		this.clayIcon = registerer.registerIcon(Reference.MOD_ID + ":" + textureFolder + metaNames[0]);
-		this.ceramicIcon = registerer.registerIcon(Reference.MOD_ID + ":" + textureFolder + metaNames[1]);
+		if (metaNames.length > 1)
+		{
+			this.ceramicIcon = registerer.registerIcon(Reference.MOD_ID + ":" + textureFolder + metaNames[1]);
+		}
 	}
 
 	@Override
@@ -59,7 +62,7 @@ public class ItemPotteryBase extends ItemTerra implements ISize
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage(int damage)
 	{
-		if (damage == 0)
+		if (damage == 0 || ceramicIcon==null)
 			return this.clayIcon;
 		else
 			return this.ceramicIcon;
@@ -97,8 +100,8 @@ public class ItemPotteryBase extends ItemTerra implements ISize
 					offset = 1;
 				}
 
-				if (world.getTileEntity(x, y + offset, z) != null
-						&& world.getTileEntity(x, y + offset, z) instanceof TEPottery)
+				if (world.getTileEntity(x, y + offset, z) != null && world.getTileEntity(x, y + offset,
+						z) instanceof TEPottery)
 				{
 					te = (TEPottery) world.getTileEntity(x, y + offset, z);
 					if (hitX < 0.5 && hitZ < 0.5)

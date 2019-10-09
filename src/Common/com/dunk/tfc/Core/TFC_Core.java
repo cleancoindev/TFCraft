@@ -10,6 +10,11 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.dunk.tfc.TerraFirmaCraft;
+import com.dunk.tfc.Blocks.BlockTileRoof;
+import com.dunk.tfc.Blocks.Flora.BlockBranch;
+import com.dunk.tfc.Blocks.Flora.BlockBranch2;
+import com.dunk.tfc.Blocks.Flora.BlockLogNatural;
+import com.dunk.tfc.Blocks.Flora.BlockLogNatural2;
 import com.dunk.tfc.Chunkdata.ChunkData;
 import com.dunk.tfc.Chunkdata.ChunkDataManager;
 import com.dunk.tfc.Core.Player.BodyTempStats;
@@ -77,6 +82,7 @@ public class TFC_Core
 {
 	private static Map<Integer, ChunkDataManager> cdmMap = new HashMap<Integer, ChunkDataManager>();
 	public static boolean preventEntityDataUpdate;
+	public static Block[][][][] branchMap = new Block[3][3][3][4];
 
 	public static int getClothingUpdateFrequency()
 	{
@@ -108,7 +114,7 @@ public class TFC_Core
 		Block b = world.getBlock(x, y, z);
 		if (b != null)
 		{
-			return b.getMaterial() == Material.water;
+			return b.getMaterial() == Material.water && (player.ridingEntity != null?headInAnyWater(player,world):true);
 		}
 		return false;
 	}
@@ -126,6 +132,59 @@ public class TFC_Core
 			return b.getMaterial() == Material.water;
 		}
 		return false;
+	}
+	
+	public static boolean shouldUpdateLocalWarmthFromHeatSource(EntityPlayer player, World world)
+	{
+		int x = (int) player.posX;
+		int y = (int) player.posY;
+		// For some stupid reason, THIS is how you accurately get the block
+		// underneath the player.
+		int z = (int) player.posZ - 1;
+		boolean done = false;
+		int radius = 7;
+		for (int i = -radius; i < radius && !done; i++)
+		{
+			for (int j = -radius; j < radius && !done; j++)
+			{
+				for (int k = -radius; k < radius && !done; k++)
+				{
+					float distance = (float) i * i + j * j + k * k;
+					Block b = world.getBlock((int) x + i, (int) y + j, (int) z + k);
+					if (b instanceof IHeatSource && distance <= ((IHeatSource) b).getHeatSourceRadius() * ((IHeatSource) b).getHeatSourceRadius()
+							&& ((IHeatSource) b).getTileEntityType() != null)
+					{
+						IHeatSourceTE te = (IHeatSourceTE) world.getTileEntity((int) x + i, (int) y + j, (int) z + k);
+						if (te.getHeatSourceTemp() > 0)
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static float getCoolthTemperatureAdjustmentPercentage(EntityPlayer player, World world)
+	{
+		int x = (int) player.posX;
+		int y = (int) player.posY;
+		// For some stupid reason, THIS is how you accurately get the block
+		// underneath the player.
+		int z = (int) player.posZ - 1;
+		float percent = 0;
+		boolean roofed = false;
+		for(int i = 0; i < 12 && !roofed; i++)
+		{
+			if(world.getBlock(x, y+i, z) == TFCBlocks.tileRoof)
+			{
+				percent = Math.min(percent+0.375f,1f);
+				roofed = true;
+			}
+		}
+		return percent;
+		
 	}
 
 	public static float getWarmthTemperatureAdjustmentPercentage(EntityPlayer player, World world)
@@ -151,6 +210,7 @@ public class TFC_Core
 		{
 			percent++;
 		}
+		
 		// 5 blocks from a firepit
 		// 7 blocks from a forge or fire?
 		for (int i = -radius; i < radius && percent < 2; i++)
@@ -193,8 +253,28 @@ public class TFC_Core
 				}
 			}
 		}
-
+		boolean roofed = false;
+		for(int i = 0; i < 12 && !roofed; i++)
+		{
+			if(world.getBlock(x, y+i, z) == TFCBlocks.tileRoof || world.getBlock(x, y+i, z) == TFCBlocks.thatchRoof)
+			{
+				percent = Math.min(percent+0.25f,1f);
+				roofed = true;
+			}
+		}
 		return percent;
+	}
+	
+	public static boolean hasRoof(World world, int x, int y, int z)
+	{
+		for(int i = 0; i < 12; i++)
+		{
+			if(world.getBlock(x, y+i, z) instanceof BlockTileRoof)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	// positive is actually negative
@@ -252,8 +332,7 @@ public class TFC_Core
 		int numWool = 0;
 		boolean feetInWater = feetInAnyWater(player, player.worldObj);
 		boolean headInWater = headInAnyWater(player, player.worldObj);
-		boolean damp = player.worldObj.isRaining() && player.worldObj.canBlockSeeTheSky((int) player.posX,
-				(int) player.posY, (int) player.posZ - 1);
+		boolean damp = TFC_Core.isClothingDamp(null, player);
 		for (ItemStack i : armor)
 		{
 			if (i != null && i.getItem() instanceof ItemClothing)
@@ -977,40 +1056,62 @@ public class TFC_Core
 			return EnumFuelMaterial.COAL;
 		else if (is.getItem() == TFCItems.coal && is.getItemDamage() == 1)
 			return EnumFuelMaterial.CHARCOAL;
-		if (is.getItemDamage() == 0)
+		int dam = is.getItemDamage()/2;
+		if (dam == 0)
 			return EnumFuelMaterial.ASH;
-		else if (is.getItemDamage() == 1)
+		else if (dam == 1)
 			return EnumFuelMaterial.ASPEN;
-		else if (is.getItemDamage() == 2)
+		else if (dam == 2)
 			return EnumFuelMaterial.BIRCH;
-		else if (is.getItemDamage() == 3)
+		else if (dam == 3)
 			return EnumFuelMaterial.CHESTNUT;
-		else if (is.getItemDamage() == 4)
+		else if (dam == 4)
 			return EnumFuelMaterial.DOUGLASFIR;
-		else if (is.getItemDamage() == 5)
+		else if (dam == 5)
 			return EnumFuelMaterial.HICKORY;
-		else if (is.getItemDamage() == 6)
+		else if (dam == 6)
 			return EnumFuelMaterial.MAPLE;
-		else if (is.getItemDamage() == 7)
+		else if (dam == 7)
 			return EnumFuelMaterial.OAK;
-		else if (is.getItemDamage() == 8)
+		else if (dam == 8)
 			return EnumFuelMaterial.PINE;
-		else if (is.getItemDamage() == 9)
+		else if (dam == 9)
 			return EnumFuelMaterial.REDWOOD;
-		else if (is.getItemDamage() == 10)
+		else if (dam == 10)
 			return EnumFuelMaterial.SPRUCE;
-		else if (is.getItemDamage() == 11)
+		else if (dam == 11)
 			return EnumFuelMaterial.SYCAMORE;
-		else if (is.getItemDamage() == 12)
+		else if (dam == 12)
 			return EnumFuelMaterial.WHITECEDAR;
-		else if (is.getItemDamage() == 13)
+		else if (dam == 13)
 			return EnumFuelMaterial.WHITEELM;
-		else if (is.getItemDamage() == 14)
+		else if (dam == 14)
 			return EnumFuelMaterial.WILLOW;
-		else if (is.getItemDamage() == 15)
+		else if (dam == 15)
 			return EnumFuelMaterial.KAPOK;
-		else if (is.getItemDamage() == 16)
+		else if (dam == 16)
 			return EnumFuelMaterial.ACACIA;
+		else if (dam == 17)
+			return EnumFuelMaterial.PALM;
+		else if (dam == 18)
+			return EnumFuelMaterial.EBONY;
+		else if (dam == 19)
+			return EnumFuelMaterial.FEVER;
+		else if (dam == 20)
+			return EnumFuelMaterial.BAOBAB;
+		else if (dam == 21)
+			return EnumFuelMaterial.LIMBA;
+		else if (dam == 22)
+			return EnumFuelMaterial.MAHOGANY;
+		else if (dam == 23)
+			return EnumFuelMaterial.TEAK;
+		else if (dam == 24)
+			return EnumFuelMaterial.BAMBOO;
+		else if (dam == 25)
+			return EnumFuelMaterial.GINGKO;
+		else if (dam == 26)
+			return EnumFuelMaterial.FRUITWOOD;
+		
 		return EnumFuelMaterial.ASPEN;
 	}
 
@@ -1031,6 +1132,57 @@ public class TFC_Core
 		foodstats.readNBT(player.getEntityData());
 		return foodstats;
 	}
+	
+	//returns the branch2 of this branch1
+	public static Block getSecondBranch(Block originalBranch)
+	{
+		if(originalBranch instanceof BlockBranch)
+		{
+			if(((BlockBranch)originalBranch) instanceof BlockBranch2)
+			{
+				return originalBranch;
+			}
+			BlockBranch b = ((BlockBranch)originalBranch);
+			if(b.isEnd())
+			{
+				return TFC_Core.branchMap[b.getSourceX()+1][b.getSourceY()+1][b.getSourceZ()+1][3];
+			}
+			return TFC_Core.branchMap[b.getSourceX()+1][b.getSourceY()+1][b.getSourceZ()+1][1];
+		}
+		return null;
+	}
+	
+	//Given an initial branch, return the branch that would be in that direction
+	public static Block getSourcedBranchForBranch(Block initialBranch, int x, int y, int z)
+	{
+		//If the branch given wasn't even a branch, we just return null.
+		if(!(initialBranch instanceof BlockBranch|| initialBranch instanceof BlockLogNatural) || x <-1||x>1||y<-1||y>1||z<-1||z>1)
+		{
+			return null;
+		}
+		//If the branch given was a branch2, that means we need to return a branch2
+		if(initialBranch instanceof BlockBranch2 || initialBranch instanceof BlockLogNatural2)
+		{
+			return branchMap[2-(x+1)][2-(y+1)][2-(z+1)][1];
+		}
+		return branchMap[2-(x+1)][2-(y+1)][2-(z+1)][0];
+	}
+	
+	//Given an initial branch, return the branch that would be in that direction
+	public static Block getSourcedTerminalBranchForBranch(Block initialBranch, int x, int y, int z)
+		{
+			//If the branch given wasn't even a branch, we just return null.
+			if(!(initialBranch instanceof BlockBranch || initialBranch instanceof BlockLogNatural) || x <-1||x>1||y<-1||y>1||z<-1||z>1)
+			{
+				return null;
+			}
+			//If the branch given was a branch2, that means we need to return a branch2
+			if(initialBranch instanceof BlockBranch2 || initialBranch instanceof BlockLogNatural2)
+			{
+				return branchMap[2-(x+1)][2-(y+1)][2-(z+1)][3];
+			}
+			return branchMap[2-(x+1)][2-(y+1)][2-(z+1)][2];
+		}
 
 	public static void setPlayerFoodStats(EntityPlayer player, FoodStatsTFC foodstats)
 	{
@@ -1378,8 +1530,9 @@ public class TFC_Core
 	{
 		// if (i == null)
 		// {
-		return player.worldObj.isRaining() && player.worldObj.canBlockSeeTheSky((int) player.posX,
-				(int) player.posY, (int) player.posZ - 1);
+		return (player.worldObj.isRaining()&& !hasRoof(player.worldObj,(int)player.posX,(int)player.posY,(int)player.posZ) && player.worldObj.canBlockSeeTheSky((int) player.posX,
+				(int) player.posY, (int) player.posZ - 1) && 
+				TFC_Climate.getHeightAdjustedTempSpecificDay(player.worldObj, TFC_Time.getTotalDays(), TFC_Time.getHour(), (int)player.posX, (int)player.posY, (int)player.posZ) > 0);
 		// }
 		// else if (i.stackTagCompound == null)
 		// {
@@ -1617,7 +1770,7 @@ public class TFC_Core
 			}
 			else if (decay == 0)
 			{
-				decay = (Food.getWeight(is) * (world.rand.nextFloat() * 0.005f)) * TFCOptions.decayMultiplier;
+				decay = (Food.getWeight(is) * (0.0025f + (world.rand.nextFloat() * 0.0025f))) * TFCOptions.decayMultiplier;
 			}
 			else
 			{
@@ -1842,10 +1995,15 @@ public class TFC_Core
 		return w.getSeed() + w.getWorldInfo().getNBTTagCompound().getLong("superseed");
 	}
 
-	public static boolean isExposedToRain(World world, int x, int y, int z)
+	
+	public static boolean isExposed(World world, int x, int y, int z)
 	{
 		int highestY = world.getPrecipitationHeight(x, z) - 1;
 		boolean isExposed = true;
+		if(highestY == y)
+		{
+			return true;
+		}
 		if (world.canBlockSeeTheSky(x, y + 1, z)) // Either no blocks, or
 													// transparent blocks above.
 		{
@@ -1854,12 +2012,18 @@ public class TFC_Core
 			if (world.getBlock(x, highestY, z) instanceof BlockGlass
 					|| world.getBlock(x, highestY, z) instanceof BlockStainedGlass
 					|| world.isSideSolid(x, highestY, z, ForgeDirection.UP)
-					|| world.isSideSolid(x, highestY, z, ForgeDirection.DOWN))
+					|| world.isSideSolid(x, highestY, z, ForgeDirection.DOWN)
+					|| world.getBlock(x, highestY,z) instanceof BlockTileRoof)
 				isExposed = false;
 		}
 		else // Can't see the sky
 			isExposed = false;
 
-		return world.isRaining() && isExposed;
+		return isExposed;
+	}
+	
+	public static boolean isExposedToRain(World world, int x, int y, int z)
+	{
+		return world.isRaining() && isExposed(world,x,y,z);
 	}
 }

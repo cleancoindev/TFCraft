@@ -1,11 +1,15 @@
 package com.dunk.tfc.TileEntities;
 
+import java.util.Random;
+
+import com.dunk.tfc.Blocks.Flora.BlockBranch;
 import com.dunk.tfc.Blocks.Flora.BlockFruitLeaves;
 import com.dunk.tfc.Blocks.Flora.BlockFruitWood;
 import com.dunk.tfc.Core.TFC_Climate;
 import com.dunk.tfc.Core.TFC_Time;
 import com.dunk.tfc.Food.FloraIndex;
 import com.dunk.tfc.Food.FloraManager;
+import com.dunk.tfc.WorldGen.TFCBiome;
 import com.dunk.tfc.api.TFCBlocks;
 
 import net.minecraft.block.Block;
@@ -18,15 +22,19 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
-public class TEFruitTreeWood extends TileEntity implements IInventory
+public class TEFruitTreeWood extends NetworkTileEntity implements IInventory
 {
 	public boolean isTrunk;
 	public int height;
 	public long birthTimeWood;
 	public long birthTimeLeaves;
+	public int fruitType;
+	public int dayHarvested = -1000;
+	public int dayFruited = -1000;
+	public boolean hasFruit;
 	private static final long LEAF_GROWTH_RATE = 20;
-	private static final long TRUNK_GROW_TIME = (long) (1.5F * TFC_Time.daysInMonth);
-	private static final long BRANCH_GROW_TIME = TFC_Time.daysInMonth;
+	public static final long TRUNK_GROW_TIME = (long) (1.5F * TFC_Time.daysInMonth);
+	public static final long BRANCH_GROW_TIME = (2 * TFC_Time.daysInMonth);
 
 	public TEFruitTreeWood()
 	{
@@ -56,6 +64,7 @@ public class TEFruitTreeWood extends TileEntity implements IInventory
 	{
 		birthTimeLeaves = t;
 	}
+
 	public void increaseBirthLeaves(long t)
 	{
 		birthTimeLeaves += t;
@@ -80,151 +89,172 @@ public class TEFruitTreeWood extends TileEntity implements IInventory
 		setBirthLeaves(leafBirth);
 	}
 
+	private int getGrowDistance()
+	{
+		if (this.fruitType == 1)
+		{
+			return 4;
+		}
+		return 8;
+	}
+
 	@Override
 	public void updateEntity()
 	{
-		if(!worldObj.isRemote)
+		if (!worldObj.isRemote)
 		{
-			FloraManager manager = FloraManager.getInstance();
-			FloraIndex fi = manager.findMatchingIndex(BlockFruitWood.getType(worldObj.getBlockMetadata(xCoord, yCoord, zCoord)));
-
-			int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-			float temp = TFC_Climate.getHeightAdjustedTemp(worldObj, xCoord, yCoord, zCoord);
-
-			int month = TFC_Time.getSeasonAdjustedMonth(zCoord); // 0 is Early Spring, 3 is Early Summer, 6 is Early Autumn
-			if (month < 9 && fi != null && temp >= fi.minTemp && temp < fi.maxTemp) // Will not grow during winter months or out of temp range
+			Block branch = worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord);
+			if (birthTimeWood + this.BRANCH_GROW_TIME <= TFC_Time.getTotalDays() && branch instanceof BlockBranch && ((BlockBranch) branch).isEnd())
 			{
-				int t = 1;
-				if (month < 3) // Twice as likely to grow in the spring
-					t = 2;
-
-				//First we attempt to grow the trunk of the tree higher
-				if (birthTimeWood + TRUNK_GROW_TIME < TFC_Time.getTotalDays() && height < 3 && isTrunk && worldObj.rand.nextInt(16 / t) == 0 &&
-					(worldObj.isAirBlock(xCoord, yCoord + 1, zCoord) || worldObj.getBlock(xCoord, yCoord + 1, zCoord) == TFCBlocks.fruitTreeLeaves ||
-						worldObj.getBlock(xCoord, yCoord + 1, zCoord) == TFCBlocks.fruitTreeLeaves2))
+				int dist = ((BlockBranch) branch).getDistanceToTrunk(worldObj, this.xCoord, this.yCoord, this.zCoord,
+						0);
+				if (dist >= 0 && dist < getGrowDistance())
 				{
-					worldObj.setBlock(xCoord, yCoord + 1, zCoord, TFCBlocks.fruitTreeWood, meta, 0x2);
-					if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof TEFruitTreeWood)
+					if (fruitType >= 0 && fruitType < TFCBiome.fruitTreesFromSapling.length)
 					{
-						TEFruitTreeWood trunkTE = ((TEFruitTreeWood) worldObj.getTileEntity(xCoord, yCoord + 1, zCoord));
-						trunkTE.setupBirth(true, height + 1, birthTimeWood + TRUNK_GROW_TIME, birthTimeLeaves);
-
-						this.increaseBirthWood(TRUNK_GROW_TIME);
-						worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+						TFCBiome.fruitTreesFromSapling[fruitType].growBranch(this.worldObj, new Random(), this.xCoord,
+								this.yCoord, this.zCoord);
 					}
+
 				}
-				//Otherwise we try to grow the branches outward
-				else if (birthTimeWood + BRANCH_GROW_TIME < TFC_Time.getTotalDays() && height == 2 && isTrunk && worldObj.rand.nextInt(16 / t) == 0 &&
-						worldObj.getBlock(xCoord, yCoord + 1, zCoord) == TFCBlocks.fruitTreeWood) // Only grow branches if the tree is full height
-				{
-					int r = worldObj.rand.nextInt(4);
-					if (r == 0 && worldObj.blockExists(xCoord + 1, yCoord, zCoord) && (worldObj.isAirBlock(xCoord + 1, yCoord, zCoord) ||
-						worldObj.getBlock(xCoord + 1, yCoord, zCoord) == TFCBlocks.fruitTreeLeaves || worldObj.getBlock(xCoord + 1, yCoord, zCoord) == TFCBlocks.fruitTreeLeaves2))
-					{
-						worldObj.setBlock(xCoord + 1, yCoord, zCoord, TFCBlocks.fruitTreeWood, meta, 0x2);
-						if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TEFruitTreeWood)
-						{
-							TEFruitTreeWood branchTE = ((TEFruitTreeWood) worldObj.getTileEntity(xCoord + 1, yCoord, zCoord));
-							branchTE.setupBirth(false, height, birthTimeWood + BRANCH_GROW_TIME, birthTimeLeaves);
-						}
-					}
-					else if (r == 1 && worldObj.blockExists(xCoord, yCoord, zCoord - 1) && (worldObj.isAirBlock(xCoord, yCoord, zCoord - 1) ||
-							worldObj.getBlock(xCoord, yCoord, zCoord - 1) == TFCBlocks.fruitTreeLeaves || worldObj.getBlock(xCoord, yCoord, zCoord - 1) == TFCBlocks.fruitTreeLeaves2))
-					{
-						worldObj.setBlock(xCoord, yCoord, zCoord - 1, TFCBlocks.fruitTreeWood, meta, 0x2);
-						if (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof TEFruitTreeWood)
-						{
-							TEFruitTreeWood branchTE = ((TEFruitTreeWood) worldObj.getTileEntity(xCoord, yCoord, zCoord - 1));
-							branchTE.setupBirth(false, height, birthTimeWood + BRANCH_GROW_TIME, birthTimeLeaves);
-						}
-					}
-					else if (r == 2 && worldObj.blockExists(xCoord - 1, yCoord, zCoord) && (worldObj.isAirBlock(xCoord - 1, yCoord, zCoord) ||
-							worldObj.getBlock(xCoord - 1, yCoord, zCoord) == TFCBlocks.fruitTreeLeaves || worldObj.getBlock(xCoord - 1, yCoord, zCoord) == TFCBlocks.fruitTreeLeaves2))
-					{
-						worldObj.setBlock(xCoord - 1, yCoord, zCoord, TFCBlocks.fruitTreeWood, meta, 0x2);
-						if (worldObj.getTileEntity(xCoord - 1, yCoord, zCoord) instanceof TEFruitTreeWood)
-						{
-							TEFruitTreeWood branchTE = ((TEFruitTreeWood) worldObj.getTileEntity(xCoord - 1, yCoord, zCoord));
-							branchTE.setupBirth(false, height, birthTimeWood + BRANCH_GROW_TIME, birthTimeLeaves);
-						}
-					}
-					else if (r == 3 && worldObj.blockExists(xCoord, yCoord, zCoord + 1) && (worldObj.isAirBlock(xCoord, yCoord, zCoord + 1) ||
-							worldObj.getBlock(xCoord, yCoord, zCoord + 1) == TFCBlocks.fruitTreeLeaves || worldObj.getBlock(xCoord, yCoord, zCoord + 1) == TFCBlocks.fruitTreeLeaves2))
-					{
-						worldObj.setBlock(xCoord, yCoord, zCoord + 1, TFCBlocks.fruitTreeWood, meta, 0x2);
-						if (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof TEFruitTreeWood)
-						{
-							TEFruitTreeWood branchTE = ((TEFruitTreeWood) worldObj.getTileEntity(xCoord, yCoord, zCoord + 1));
-							branchTE.setupBirth(false, height, birthTimeWood + BRANCH_GROW_TIME, birthTimeLeaves);
-						}
-					}
-
-					this.increaseBirthWood(BRANCH_GROW_TIME);
-					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-				}
-
-				if (birthTimeLeaves + 2 < TFC_Time.getTotalDays() && worldObj.rand.nextInt((int) LEAF_GROWTH_RATE) == 0 && worldObj.getBlock(xCoord, yCoord + 2, zCoord) != TFCBlocks.fruitTreeWood)
-				{
-					int m = meta & 7;
-					Block bid = meta < 8 ? TFCBlocks.fruitTreeLeaves : TFCBlocks.fruitTreeLeaves2;
-
-					if (checkLeaves(xCoord, yCoord + 1, zCoord)) //above
-					{
-						worldObj.setBlock(xCoord, yCoord + 1, zCoord, bid, m, 0x2);
-						worldObj.markBlockForUpdate(xCoord, yCoord + 1, zCoord);
-					}
-					else if (checkLeaves(xCoord + 1, yCoord, zCoord)) //+x
-					{
-						worldObj.setBlock(xCoord + 1, yCoord, zCoord, bid, m, 0x2);
-						worldObj.markBlockForUpdate(xCoord + 1, yCoord, zCoord);
-					}
-					else if (checkLeaves(xCoord - 1, yCoord, zCoord)) //-x
-					{
-						worldObj.setBlock(xCoord - 1, yCoord, zCoord, bid, m, 0x2);
-						worldObj.markBlockForUpdate(xCoord - 1, yCoord, zCoord);
-					}
-					else if (checkLeaves(xCoord, yCoord, zCoord + 1)) //+z
-					{
-						worldObj.setBlock(xCoord, yCoord, zCoord + 1, bid, m, 0x2);
-						worldObj.markBlockForUpdate(xCoord, yCoord, zCoord + 1);
-					}
-					else if (checkLeaves(xCoord, yCoord, zCoord - 1)) //-z
-					{
-						worldObj.setBlock(xCoord, yCoord, zCoord - 1, bid, m, 0x2);
-						worldObj.markBlockForUpdate(xCoord, yCoord, zCoord - 1);
-					}
-					else if (checkLeaves(xCoord + 1, yCoord, zCoord - 1)) //+x/-z
-					{
-						worldObj.setBlock(xCoord + 1, yCoord, zCoord - 1, bid, m, 0x2);
-						worldObj.markBlockForUpdate(xCoord + 1, yCoord, zCoord - 1);
-					}
-					else if (checkLeaves(xCoord + 1, yCoord, zCoord + 1)) //+x/+z
-					{
-						worldObj.setBlock(xCoord + 1, yCoord, zCoord + 1, bid, m, 0x2);
-						worldObj.markBlockForUpdate(xCoord + 1, yCoord, zCoord + 1);
-					}
-					else if (checkLeaves(xCoord - 1, yCoord, zCoord - 1)) //-x/-z
-					{
-						worldObj.setBlock(xCoord - 1, yCoord, zCoord - 1, bid, m, 0x2);
-						worldObj.markBlockForUpdate(xCoord - 1, yCoord, zCoord - 1);
-					}
-					else if (checkLeaves(xCoord - 1, yCoord, zCoord + 1)) //-x/+z
-					{
-						worldObj.setBlock(xCoord - 1, yCoord, zCoord + 1, bid, m, 0x2);
-						worldObj.markBlockForUpdate(xCoord - 1, yCoord, zCoord + 1);
-					}
-
-					this.increaseBirthLeaves(2);
-					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-				}
+				birthTimeWood += this.BRANCH_GROW_TIME;
 			}
+
+			/*
+			 * FloraManager manager = FloraManager.getInstance(); FloraIndex fi
+			 * = manager.findMatchingIndex(BlockFruitWood.getType(worldObj.
+			 * getBlockMetadata(xCoord, yCoord, zCoord)));
+			 * 
+			 * int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+			 * float temp = TFC_Climate.getHeightAdjustedTemp(worldObj, xCoord,
+			 * yCoord, zCoord);
+			 * 
+			 * int month = TFC_Time.getSeasonAdjustedMonth(zCoord); // 0 is
+			 * Early Spring, 3 is Early Summer, 6 is Early Autumn if (month < 9
+			 * && fi != null && temp >= fi.minTemp && temp < fi.maxTemp) // Will
+			 * not grow during winter months or out of temp range { int t = 1;
+			 * if (month < 3) // Twice as likely to grow in the spring t = 2;
+			 * 
+			 * //First we attempt to grow the trunk of the tree higher if
+			 * (birthTimeWood + TRUNK_GROW_TIME < TFC_Time.getTotalDays() &&
+			 * height < 3 && isTrunk && worldObj.rand.nextInt(16 / t) == 0 &&
+			 * (worldObj.isAirBlock(xCoord, yCoord + 1, zCoord) ||
+			 * worldObj.getBlock(xCoord, yCoord + 1, zCoord) ==
+			 * TFCBlocks.fruitTreeLeaves || worldObj.getBlock(xCoord, yCoord +
+			 * 1, zCoord) == TFCBlocks.fruitTreeLeaves2)) {
+			 * //worldObj.setBlock(xCoord, yCoord + 1, zCoord,
+			 * TFCBlocks.fruitTreeWood, meta, 0x2); if
+			 * (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof
+			 * TEFruitTreeWood) { TEFruitTreeWood trunkTE = ((TEFruitTreeWood)
+			 * worldObj.getTileEntity(xCoord, yCoord + 1, zCoord));
+			 * trunkTE.setupBirth(true, height + 1, birthTimeWood +
+			 * TRUNK_GROW_TIME, birthTimeLeaves);
+			 * 
+			 * this.increaseBirthWood(TRUNK_GROW_TIME);
+			 * worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); } }
+			 * //Otherwise we try to grow the branches outward else if
+			 * (birthTimeWood + BRANCH_GROW_TIME < TFC_Time.getTotalDays() &&
+			 * height == 2 && isTrunk && worldObj.rand.nextInt(16 / t) == 0 &&
+			 * worldObj.getBlock(xCoord, yCoord + 1, zCoord) ==
+			 * TFCBlocks.fruitTreeWood) // Only grow branches if the tree is
+			 * full height { int r = worldObj.rand.nextInt(4); if (r == 0 &&
+			 * worldObj.blockExists(xCoord + 1, yCoord, zCoord) &&
+			 * (worldObj.isAirBlock(xCoord + 1, yCoord, zCoord) ||
+			 * worldObj.getBlock(xCoord + 1, yCoord, zCoord) ==
+			 * TFCBlocks.fruitTreeLeaves || worldObj.getBlock(xCoord + 1,
+			 * yCoord, zCoord) == TFCBlocks.fruitTreeLeaves2)) {
+			 * worldObj.setBlock(xCoord + 1, yCoord, zCoord,
+			 * TFCBlocks.fruitTreeWood, meta, 0x2); if
+			 * (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof
+			 * TEFruitTreeWood) { TEFruitTreeWood branchTE = ((TEFruitTreeWood)
+			 * worldObj.getTileEntity(xCoord + 1, yCoord, zCoord));
+			 * branchTE.setupBirth(false, height, birthTimeWood +
+			 * BRANCH_GROW_TIME, birthTimeLeaves); } } else if (r == 1 &&
+			 * worldObj.blockExists(xCoord, yCoord, zCoord - 1) &&
+			 * (worldObj.isAirBlock(xCoord, yCoord, zCoord - 1) ||
+			 * worldObj.getBlock(xCoord, yCoord, zCoord - 1) ==
+			 * TFCBlocks.fruitTreeLeaves || worldObj.getBlock(xCoord, yCoord,
+			 * zCoord - 1) == TFCBlocks.fruitTreeLeaves2)) {
+			 * worldObj.setBlock(xCoord, yCoord, zCoord - 1,
+			 * TFCBlocks.fruitTreeWood, meta, 0x2); if
+			 * (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof
+			 * TEFruitTreeWood) { TEFruitTreeWood branchTE = ((TEFruitTreeWood)
+			 * worldObj.getTileEntity(xCoord, yCoord, zCoord - 1));
+			 * branchTE.setupBirth(false, height, birthTimeWood +
+			 * BRANCH_GROW_TIME, birthTimeLeaves); } } else if (r == 2 &&
+			 * worldObj.blockExists(xCoord - 1, yCoord, zCoord) &&
+			 * (worldObj.isAirBlock(xCoord - 1, yCoord, zCoord) ||
+			 * worldObj.getBlock(xCoord - 1, yCoord, zCoord) ==
+			 * TFCBlocks.fruitTreeLeaves || worldObj.getBlock(xCoord - 1,
+			 * yCoord, zCoord) == TFCBlocks.fruitTreeLeaves2)) {
+			 * worldObj.setBlock(xCoord - 1, yCoord, zCoord,
+			 * TFCBlocks.fruitTreeWood, meta, 0x2); if
+			 * (worldObj.getTileEntity(xCoord - 1, yCoord, zCoord) instanceof
+			 * TEFruitTreeWood) { TEFruitTreeWood branchTE = ((TEFruitTreeWood)
+			 * worldObj.getTileEntity(xCoord - 1, yCoord, zCoord));
+			 * branchTE.setupBirth(false, height, birthTimeWood +
+			 * BRANCH_GROW_TIME, birthTimeLeaves); } } else if (r == 3 &&
+			 * worldObj.blockExists(xCoord, yCoord, zCoord + 1) &&
+			 * (worldObj.isAirBlock(xCoord, yCoord, zCoord + 1) ||
+			 * worldObj.getBlock(xCoord, yCoord, zCoord + 1) ==
+			 * TFCBlocks.fruitTreeLeaves || worldObj.getBlock(xCoord, yCoord,
+			 * zCoord + 1) == TFCBlocks.fruitTreeLeaves2)) {
+			 * worldObj.setBlock(xCoord, yCoord, zCoord + 1,
+			 * TFCBlocks.fruitTreeWood, meta, 0x2); if
+			 * (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof
+			 * TEFruitTreeWood) { TEFruitTreeWood branchTE = ((TEFruitTreeWood)
+			 * worldObj.getTileEntity(xCoord, yCoord, zCoord + 1));
+			 * branchTE.setupBirth(false, height, birthTimeWood +
+			 * BRANCH_GROW_TIME, birthTimeLeaves); } }
+			 * 
+			 * this.increaseBirthWood(BRANCH_GROW_TIME);
+			 * worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); }
+			 * 
+			 * if (birthTimeLeaves + 2 < TFC_Time.getTotalDays() &&
+			 * worldObj.rand.nextInt((int) LEAF_GROWTH_RATE) == 0 &&
+			 * worldObj.getBlock(xCoord, yCoord + 2, zCoord) !=
+			 * TFCBlocks.fruitTreeWood) { int m = meta & 7; Block bid = meta < 8
+			 * ? TFCBlocks.fruitTreeLeaves : TFCBlocks.fruitTreeLeaves2;
+			 * 
+			 * if (checkLeaves(xCoord, yCoord + 1, zCoord)) //above {
+			 * worldObj.setBlock(xCoord, yCoord + 1, zCoord, bid, m, 0x2);
+			 * worldObj.markBlockForUpdate(xCoord, yCoord + 1, zCoord); } else
+			 * if (checkLeaves(xCoord + 1, yCoord, zCoord)) //+x {
+			 * worldObj.setBlock(xCoord + 1, yCoord, zCoord, bid, m, 0x2);
+			 * worldObj.markBlockForUpdate(xCoord + 1, yCoord, zCoord); } else
+			 * if (checkLeaves(xCoord - 1, yCoord, zCoord)) //-x {
+			 * worldObj.setBlock(xCoord - 1, yCoord, zCoord, bid, m, 0x2);
+			 * worldObj.markBlockForUpdate(xCoord - 1, yCoord, zCoord); } else
+			 * if (checkLeaves(xCoord, yCoord, zCoord + 1)) //+z {
+			 * worldObj.setBlock(xCoord, yCoord, zCoord + 1, bid, m, 0x2);
+			 * worldObj.markBlockForUpdate(xCoord, yCoord, zCoord + 1); } else
+			 * if (checkLeaves(xCoord, yCoord, zCoord - 1)) //-z {
+			 * worldObj.setBlock(xCoord, yCoord, zCoord - 1, bid, m, 0x2);
+			 * worldObj.markBlockForUpdate(xCoord, yCoord, zCoord - 1); } else
+			 * if (checkLeaves(xCoord + 1, yCoord, zCoord - 1)) //+x/-z {
+			 * worldObj.setBlock(xCoord + 1, yCoord, zCoord - 1, bid, m, 0x2);
+			 * worldObj.markBlockForUpdate(xCoord + 1, yCoord, zCoord - 1); }
+			 * else if (checkLeaves(xCoord + 1, yCoord, zCoord + 1)) //+x/+z {
+			 * worldObj.setBlock(xCoord + 1, yCoord, zCoord + 1, bid, m, 0x2);
+			 * worldObj.markBlockForUpdate(xCoord + 1, yCoord, zCoord + 1); }
+			 * else if (checkLeaves(xCoord - 1, yCoord, zCoord - 1)) //-x/-z {
+			 * worldObj.setBlock(xCoord - 1, yCoord, zCoord - 1, bid, m, 0x2);
+			 * worldObj.markBlockForUpdate(xCoord - 1, yCoord, zCoord - 1); }
+			 * else if (checkLeaves(xCoord - 1, yCoord, zCoord + 1)) //-x/+z {
+			 * worldObj.setBlock(xCoord - 1, yCoord, zCoord + 1, bid, m, 0x2);
+			 * worldObj.markBlockForUpdate(xCoord - 1, yCoord, zCoord + 1); }
+			 * 
+			 * this.increaseBirthLeaves(2); worldObj.markBlockForUpdate(xCoord,
+			 * yCoord, zCoord); } }
+			 */
 		}
+		// worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	private boolean checkLeaves(int xCoord, int yCoord, int zCoord)
 	{
-		return worldObj.blockExists(xCoord, yCoord, zCoord) && worldObj.isAirBlock(xCoord, yCoord, zCoord) &&
-				worldObj.isAirBlock(xCoord, yCoord + 1, zCoord) && BlockFruitLeaves.canStay(worldObj, xCoord, yCoord, zCoord);
+		return worldObj.blockExists(xCoord, yCoord, zCoord) && worldObj.isAirBlock(xCoord, yCoord, zCoord) && worldObj
+				.isAirBlock(xCoord, yCoord + 1, zCoord) && BlockFruitLeaves.canStay(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -242,6 +272,11 @@ public class TEFruitTreeWood extends TileEntity implements IInventory
 	public String getInventoryName()
 	{
 		return "Fruit Tree Wood";
+	}
+
+	public boolean canFruit()
+	{
+		return this.fruitType == 1 || this.fruitType==10;
 	}
 
 	@Override
@@ -265,10 +300,26 @@ public class TEFruitTreeWood extends TileEntity implements IInventory
 	public void readFromNBT(NBTTagCompound nbttagcompound)
 	{
 		super.readFromNBT(nbttagcompound);
+
 		birthTimeWood = nbttagcompound.getLong("birthTime");
 		birthTimeLeaves = nbttagcompound.getLong("birthTimeLeaves");
 		isTrunk = nbttagcompound.getBoolean("isTrunk");
 		height = nbttagcompound.getInteger("height");
+		int ft = nbttagcompound.getInteger("fruitType");
+		if(ft != fruitType && worldObj != null && worldObj.isRemote)
+		{
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		fruitType = nbttagcompound.getInteger("fruitType");
+		dayHarvested = nbttagcompound.getInteger("dayHarvested");
+		dayFruited = nbttagcompound.getInteger("dayFruited");
+		boolean f = nbttagcompound.getBoolean("hasFruit");
+		if (hasFruit != f && worldObj != null&& worldObj.isRemote)
+		{
+			hasFruit = f;
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		hasFruit = f;
 	}
 
 	@Override
@@ -279,6 +330,10 @@ public class TEFruitTreeWood extends TileEntity implements IInventory
 		nbttagcompound.setLong("birthTimeLeaves", birthTimeLeaves);
 		nbttagcompound.setBoolean("isTrunk", isTrunk);
 		nbttagcompound.setInteger("height", height);
+		nbttagcompound.setInteger("fruitType", fruitType);
+		nbttagcompound.setInteger("dayHarvested", dayHarvested);
+		nbttagcompound.setInteger("dayFruited", dayFruited);
+		nbttagcompound.setBoolean("hasFruit", hasFruit);
 	}
 
 	@Override
@@ -293,7 +348,8 @@ public class TEFruitTreeWood extends TileEntity implements IInventory
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
 	{
 		readFromNBT(pkt.func_148857_g());
-		//TEFruitTreeWood pile = this;
+		// worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		// TEFruitTreeWood pile = this;
 	}
 
 	@Override
@@ -323,6 +379,51 @@ public class TEFruitTreeWood extends TileEntity implements IInventory
 	public boolean hasCustomInventoryName()
 	{
 		return false;
+	}
+
+	@Override
+	public void handleInitPacket(NBTTagCompound nbt)
+	{
+		dayHarvested = nbt.getInteger("dayHarvested");
+		boolean f = nbt.getBoolean("hasFruit");
+		if (hasFruit != f && worldObj != null && worldObj.isRemote)
+		{
+			hasFruit = f;
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		hasFruit = f;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		fruitType = nbt.getInteger("fruitType");
+	}
+
+	@Override
+	public void handleDataPacket(NBTTagCompound nbt)
+	{
+		boolean f = nbt.getBoolean("hasFruit");
+		dayHarvested = nbt.getInteger("dayHarvested");
+		if (hasFruit != f && worldObj != null && worldObj.isRemote)
+		{
+			hasFruit = f;
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		hasFruit = f;
+		fruitType = nbt.getInteger("fruitType");
+	}
+
+	@Override
+	public void createDataNBT(NBTTagCompound nbt)
+	{
+		nbt.setBoolean("hasFruit", hasFruit);
+		nbt.setInteger("dayHarvested", dayHarvested);
+		nbt.setInteger("fruitType", fruitType);
+	}
+
+	@Override
+	public void createInitNBT(NBTTagCompound nbt)
+	{
+		nbt.setBoolean("hasFruit", hasFruit);
+		nbt.setInteger("fruitType", fruitType);
+		nbt.setInteger("dayHarvested", dayHarvested);
 	}
 
 	@Override

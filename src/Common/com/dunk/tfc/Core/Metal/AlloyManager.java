@@ -42,6 +42,7 @@ public class AlloyManager
 		while (iter.hasNext())
 		{
 			match = iter.next();
+
 			if(furnaceTier.tier >= match.furnaceTier.tier)
 				match = match.matches(ingred);
 			else

@@ -45,7 +45,7 @@ public class BlockSkinnyLogNatural extends BlockLogNatural {
 				if (isAxe)
 				{
 					damage = -1;
-					processTree(world, x, y, z, meta, equip);
+					processTree(world,entityplayer, x, y, z, meta, equip);
 
 					if (damage + equip.getItemDamage() > equip.getMaxDamage())
 					{

@@ -154,11 +154,11 @@ public class ModelPants extends ModelBase
 
 
 			legL.rotationPointZ = renderer.modelBipedMain.bipedLeftLeg.rotationPointZ;
-			legL.rotationPointY = renderer.modelBipedMain.bipedLeftLeg.rotationPointY;
+			legL.rotationPointY = renderer.modelBipedMain.bipedLeftLeg.rotationPointY+0.5f;
 			legL.rotationPointX = renderer.modelBipedMain.bipedLeftLeg.rotationPointX;
 
 			legR.rotationPointZ = renderer.modelBipedMain.bipedRightLeg.rotationPointZ;
-			legR.rotationPointY = renderer.modelBipedMain.bipedRightLeg.rotationPointY;
+			legR.rotationPointY = renderer.modelBipedMain.bipedRightLeg.rotationPointY+0.5f;
 			legR.rotationPointX = renderer.modelBipedMain.bipedRightLeg.rotationPointX;
 			
 		//	if(((EntityPlayer) theEntity).getCurrentArmor(1)== null && theEntity.ridingEntity == null)

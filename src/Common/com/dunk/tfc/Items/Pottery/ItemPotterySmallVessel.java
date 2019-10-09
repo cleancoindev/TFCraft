@@ -18,6 +18,7 @@ import com.dunk.tfc.api.HeatIndex;
 import com.dunk.tfc.api.HeatRegistry;
 import com.dunk.tfc.api.Metal;
 import com.dunk.tfc.api.TFC_ItemHeat;
+import com.dunk.tfc.api.Constant.Global;
 import com.dunk.tfc.api.Enums.EnumSize;
 import com.dunk.tfc.api.Enums.EnumWeight;
 import com.dunk.tfc.api.Interfaces.IBag;
@@ -29,6 +30,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -123,13 +125,23 @@ public class ItemPotterySmallVessel extends ItemPotteryBase implements IBag
 			Metal[] types = new Metal[4];
 			int[] metalAmounts = new int[4];
 
-			if(bag[0] != null)
+			if(bag[0] != null && bag[0].getItem() instanceof ISmeltable)
 			{
 				types[0] = ((ISmeltable)bag[0].getItem()).getMetalType(bag[0]);
 				metalAmounts[0] = ((ISmeltable)bag[0].getItem()).getMetalReturnAmount(bag[0]) * bag[0].stackSize;
 			}
+			else if(bag[0] != null && bag[0].getItem() == Item.getItemFromBlock(Blocks.glass))
+			{
+				types[0] = Global.GLASS;
+				metalAmounts[0] = 850 * bag[0].stackSize;
+			}
+			else if(bag[0] != null && bag[0].getItem() == Item.getItemFromBlock(Blocks.glass_pane))
+			{
+				types[0] = Global.GLASS;
+				metalAmounts[0] = 175 * bag[0].stackSize;
+			}
 
-			if(bag[1] != null)
+			if(bag[1] != null && bag[1].getItem() instanceof ISmeltable)
 			{
 				types[1] = ((ISmeltable)bag[1].getItem()).getMetalType(bag[1]);
 				metalAmounts[1] = ((ISmeltable)bag[1].getItem()).getMetalReturnAmount(bag[1]) * bag[1].stackSize;
@@ -141,8 +153,30 @@ public class ItemPotterySmallVessel extends ItemPotteryBase implements IBag
 					metalAmounts[1] = 0;
 				}
 			}
+			else if(bag[1] != null && bag[1].getItem() == Item.getItemFromBlock(Blocks.glass))
+			{
+				types[1] = Global.GLASS;
+				metalAmounts[1] = 850 * bag[1].stackSize;
+				if(mergeMetals(types[0], types[1], metalAmounts[0], metalAmounts[1]) != metalAmounts[0])
+				{
+					metalAmounts[0] = mergeMetals(types[0], types[1], metalAmounts[0], metalAmounts[1]);
+					types[1] = null;
+					metalAmounts[1] = 0;
+				}
+			}
+			else if(bag[1] != null && bag[1].getItem() == Item.getItemFromBlock(Blocks.glass_pane))
+			{
+				types[1] = Global.GLASS;
+				metalAmounts[1] = 175 * bag[1].stackSize;
+				if(mergeMetals(types[0], types[1], metalAmounts[0], metalAmounts[1]) != metalAmounts[0])
+				{
+					metalAmounts[0] = mergeMetals(types[0], types[1], metalAmounts[0], metalAmounts[1]);
+					types[1] = null;
+					metalAmounts[1] = 0;
+				}
+			}
 
-			if(bag[2] != null)
+			if(bag[2] != null && bag[2].getItem() instanceof ISmeltable)
 			{
 				types[2] = ((ISmeltable)bag[2].getItem()).getMetalType(bag[2]);
 				metalAmounts[2] = ((ISmeltable)bag[2].getItem()).getMetalReturnAmount(bag[2]) * bag[2].stackSize;
@@ -160,11 +194,92 @@ public class ItemPotterySmallVessel extends ItemPotteryBase implements IBag
 					metalAmounts[2] = 0;
 				}
 			}
-			if(bag[3] != null)
+			else if(bag[2] != null && bag[2].getItem() == Item.getItemFromBlock(Blocks.glass))
+			{
+				types[2] = Global.GLASS;
+				metalAmounts[2] = 850 * bag[2].stackSize;
+				if(mergeMetals(types[0], types[2], metalAmounts[0], metalAmounts[2]) != metalAmounts[0])
+				{
+					metalAmounts[0] = mergeMetals(types[0], types[2], metalAmounts[0], metalAmounts[2]);
+					types[2] = null;
+					metalAmounts[2] = 0;
+				}
+				if(mergeMetals(types[1], types[2], metalAmounts[1], metalAmounts[2]) != metalAmounts[1])
+				{
+					metalAmounts[1] = mergeMetals(types[1], types[2], metalAmounts[1], metalAmounts[2]);
+					types[2] = null;
+					metalAmounts[2] = 0;
+				}
+			}
+			else if(bag[2] != null && bag[2].getItem() == Item.getItemFromBlock(Blocks.glass_pane))
+			{
+				types[2] = Global.GLASS;
+				metalAmounts[2] = 175 * bag[2].stackSize;
+				if(mergeMetals(types[0], types[2], metalAmounts[0], metalAmounts[2]) != metalAmounts[0])
+				{
+					metalAmounts[0] = mergeMetals(types[0], types[2], metalAmounts[0], metalAmounts[2]);
+					types[2] = null;
+					metalAmounts[2] = 0;
+				}
+				if(mergeMetals(types[1], types[2], metalAmounts[1], metalAmounts[2]) != metalAmounts[1])
+				{
+					metalAmounts[1] = mergeMetals(types[1], types[2], metalAmounts[1], metalAmounts[2]);
+					types[2] = null;
+					metalAmounts[2] = 0;
+				}
+			}
+			
+			if(bag[3] != null && bag[3].getItem() instanceof ISmeltable)
 			{
 				types[3] = ((ISmeltable)bag[3].getItem()).getMetalType(bag[3]);
 				metalAmounts[3] = ((ISmeltable)bag[3].getItem()).getMetalReturnAmount(bag[3]) * bag[3].stackSize;
 
+				if(mergeMetals(types[0], types[3], metalAmounts[0], metalAmounts[3]) != metalAmounts[0])
+				{
+					metalAmounts[0] = mergeMetals(types[0], types[3], metalAmounts[0], metalAmounts[3]);
+					types[3] = null;
+					metalAmounts[3] = 0;
+				}
+				if(mergeMetals(types[1], types[3], metalAmounts[1], metalAmounts[3]) != metalAmounts[1])
+				{
+					metalAmounts[1] = mergeMetals(types[1], types[3], metalAmounts[1], metalAmounts[3]);
+					types[3] = null;
+					metalAmounts[3] = 0;
+				}
+				if(mergeMetals(types[2], types[3], metalAmounts[2], metalAmounts[3]) != metalAmounts[2])
+				{
+					metalAmounts[2] = mergeMetals(types[2], types[3], metalAmounts[2], metalAmounts[3]);
+					types[3] = null;
+					metalAmounts[3] = 0;
+				}
+			}
+			else if(bag[3] != null && bag[3].getItem() == Item.getItemFromBlock(Blocks.glass))
+			{
+				types[3] = Global.GLASS;
+				metalAmounts[3] = 850 * bag[3].stackSize;
+				if(mergeMetals(types[0], types[3], metalAmounts[0], metalAmounts[3]) != metalAmounts[0])
+				{
+					metalAmounts[0] = mergeMetals(types[0], types[3], metalAmounts[0], metalAmounts[3]);
+					types[3] = null;
+					metalAmounts[3] = 0;
+				}
+				if(mergeMetals(types[1], types[3], metalAmounts[1], metalAmounts[3]) != metalAmounts[1])
+				{
+					metalAmounts[1] = mergeMetals(types[1], types[3], metalAmounts[1], metalAmounts[3]);
+					types[3] = null;
+					metalAmounts[3] = 0;
+				}
+				if(mergeMetals(types[2], types[3], metalAmounts[2], metalAmounts[3]) != metalAmounts[2])
+				{
+					metalAmounts[2] = mergeMetals(types[2], types[3], metalAmounts[2], metalAmounts[3]);
+					types[3] = null;
+					metalAmounts[3] = 0;
+				}
+			}
+			else if(bag[3] != null && bag[3].getItem() == Item.getItemFromBlock(Blocks.glass_pane))
+			{
+				types[3] = Global.GLASS;
+				metalAmounts[3] = 175 * bag[3].stackSize;
 				if(mergeMetals(types[0], types[3], metalAmounts[0], metalAmounts[3]) != metalAmounts[0])
 				{
 					metalAmounts[0] = mergeMetals(types[0], types[3], metalAmounts[0], metalAmounts[3]);
@@ -451,7 +566,7 @@ public class ItemPotterySmallVessel extends ItemPotteryBase implements IBag
 				else if (nbt.hasKey("TempTimer"))
 				{
 					long temp = nbt.getLong("TempTimer");
-					if(TFC_Time.getTotalHours() - temp < 11)
+					if(TFC_Time.getTotalHours() - temp < 11 || (nbt.hasKey("MetalType")&&nbt.hasKey("MetalAmount")&&nbt.getString("MetalType").equals("Glass")&&nbt.getInteger("MetalAmount")>=1000))
 						entityplayer.openGui(TerraFirmaCraft.instance, 19, entityplayer.worldObj, (int)entityplayer.posX, (int)entityplayer.posY, (int)entityplayer.posZ);
 				}
 			}

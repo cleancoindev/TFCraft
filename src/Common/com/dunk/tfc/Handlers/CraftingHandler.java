@@ -1,8 +1,10 @@
 package com.dunk.tfc.Handlers;
 
 import java.util.List;
+import java.util.Random;
 
 import com.dunk.tfc.TerraFirmaCraft;
+import com.dunk.tfc.TerraFirmaCraftCore;
 import com.dunk.tfc.Core.Recipes;
 import com.dunk.tfc.Core.TFC_Achievements;
 import com.dunk.tfc.Core.TFC_Core;
@@ -12,6 +14,7 @@ import com.dunk.tfc.Core.Player.PlayerInventory;
 import com.dunk.tfc.Handlers.Network.AbstractPacket;
 import com.dunk.tfc.Handlers.Network.PlayerUpdatePacket;
 import com.dunk.tfc.Items.ItemClothingPiece;
+import com.dunk.tfc.Items.ItemDyeCustom;
 import com.dunk.tfc.Items.ItemIngot;
 import com.dunk.tfc.Items.ItemMeltedMetal;
 import com.dunk.tfc.Items.ItemMetalSheet;
@@ -74,6 +77,31 @@ public class CraftingHandler
 				List<ItemStack> saws = OreDictionary.getOres("itemSaw", false);
 				handleItem(player, iinventory, axes);
 				handleItem(player, iinventory, saws);
+			}
+			else if(item instanceof ItemDyeCustom && itemstack.getItemDamage()==15)
+			{
+				//Assume we're doing a hollow bone into a flute?
+				List<ItemStack> knives = OreDictionary.getOres("itemKnife", false);
+				handleItem(player, iinventory, knives);
+				boolean wasHollowBone = false;
+				for (int i = 0; i < iinventory.getSizeInventory(); i++)
+				{
+					wasHollowBone |= wasHollowBone||(iinventory.getStackInSlot(i) != null && iinventory.getStackInSlot(i).getItem() == TFCItems.hollowBone);
+				}
+				Random r = new Random();
+				if(wasHollowBone && r.nextInt(4)==0)
+				{
+					TFC_Core.giveItemToPlayer(new ItemStack(TFCItems.boneFlute, 1, 0), player);
+				}
+				else if(wasHollowBone)
+				{
+					TFC_Core.giveItemToPlayer(new ItemStack(TFCItems.boneFragment, 1, 0), player);
+				}
+			}
+			else if(item == TFCItems.blowingHorn || item == TFCItems.unstrungBow || item==TFCItems.pole || item==TFCItems.woodenSpear)
+			{
+				List<ItemStack> knives = OreDictionary.getOres("itemKnife", false);
+				handleItem(player, iinventory, knives);		
 			}
 			else if (item == TFCItems.wool)
 			{

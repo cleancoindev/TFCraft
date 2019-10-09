@@ -8,6 +8,8 @@ import com.dunk.tfc.Blocks.Flora.BlockBranch;
 import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.TileEntities.TELogPile;
 import com.dunk.tfc.api.TFCBlocks;
+import com.dunk.tfc.api.TFCItems;
+import com.dunk.tfc.api.TFCOptions;
 import com.dunk.tfc.api.Constant.Global;
 import com.dunk.tfc.api.Enums.EnumItemReach;
 import com.dunk.tfc.api.Enums.EnumSize;
@@ -88,7 +90,7 @@ public class ItemNeedle extends ItemTerraTool
 						two = true;
 						meta %=16;
 					}
-			if (distance > 4)
+			if (this == TFCItems.ironNeedle)
 			{
 				if (side == 0)
 				{
@@ -172,9 +174,9 @@ public class ItemNeedle extends ItemTerraTool
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int x, int y, int z, int side,
 			float hitX, float hitY, float hitZ)
 	{
-		return false;
-		/*
-		if (!world.isRemote)
+		//return false;
+		
+		if (!world.isRemote && TFCOptions.enableDebugMode)
 		{
 			if (!entityplayer.isSneaking() )
 			{
@@ -182,7 +184,7 @@ public class ItemNeedle extends ItemTerraTool
 				int dist = 0;
 				if (b2 instanceof BlockBranch)
 				{
-					dist = ((BlockBranch) b2).getDistanceToTrunk(world, x, y, z);
+					dist = ((BlockBranch) b2).getDistanceToTrunk(world, x, y, z,0);
 				}
 				int dir = MathHelper.floor_double(entityplayer.rotationYaw * 4F / 360F + 0.5D) & 3;
 				// side 0 means bottom
@@ -212,7 +214,7 @@ public class ItemNeedle extends ItemTerraTool
 				return true;
 			}
 		}
-		return false;*/
+		return false;
 	}
 
 	@Override

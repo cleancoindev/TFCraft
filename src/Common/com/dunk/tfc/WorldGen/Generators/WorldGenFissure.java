@@ -98,7 +98,7 @@ public class WorldGenFissure implements IWorldGenerator
 			if(!world.getBlock(x, y-d, z).isNormalCube())
 				return;
 		}
-
+		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		Block block = world.getBlock(x,y,z);
 
 		if(block != null && block.getMaterial() == Material.water)
@@ -109,7 +109,7 @@ public class WorldGenFissure implements IWorldGenerator
 		int stability = TFC_Climate.getStability(world, x, z);
 		if(checkStability && stability == 0)
 			return;
-		if(stability == 1 && fillBlock != null && fillBlock.getMaterial() == Material.water)
+		if(stability == 1 && fillBlock != null && fillBlock.getMaterial() == Material.water && (biome==TFCBiome.MOUNTAINS || biome==TFCBiome.MOUNTAINS_EDGE))
 			fillBlock = TFCBlocks.hotWater;
 		if(!TFC_Core.isGround(block))
 			return;

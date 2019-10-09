@@ -3,6 +3,10 @@ package com.dunk.tfc.Items.Tools;
 import java.util.List;
 
 import com.dunk.tfc.Core.TFC_Core;
+import com.dunk.tfc.Core.Player.PlayerInfo;
+import com.dunk.tfc.Core.Player.PlayerManagerTFC;
+import com.dunk.tfc.Render.Item.FoodItemRenderer;
+import com.dunk.tfc.Render.Item.KnifeItemRenderer;
 import com.dunk.tfc.TileEntities.TEFoodPrep;
 import com.dunk.tfc.api.TFCBlocks;
 import com.dunk.tfc.api.TFCItems;
@@ -13,9 +17,14 @@ import com.dunk.tfc.api.Tools.IKnife;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class ItemKnife extends ItemWeapon implements IKnife
@@ -26,7 +35,28 @@ public class ItemKnife extends ItemWeapon implements IKnife
 		this.setMaxDamage(e.getMaxUses());
 		this.damageType = EnumDamageType.PIERCING;
 	}
+	
+	@Override
+	public EnumDamageType getDamageType(EntityLivingBase entity) 
+	{
+		if(entity instanceof EntityPlayer)
+		{
+			PlayerInfo pi = PlayerManagerTFC.getInstance().getPlayerInfoFromPlayer(((EntityPlayer)entity));
+			if(pi != null && pi.knifeMode==0)
+			{
+				return EnumDamageType.SLASHING;
+			}
+		}
+		return damageType;
+	}
 
+	@Override
+	public void registerIcons(IIconRegister registerer)
+	{
+		super.registerIcons(registerer);
+		MinecraftForgeClient.registerItemRenderer(this, new KnifeItemRenderer());
+	}
+	
 	@Override
 	public EnumSize getSize(ItemStack is)
 	{
@@ -70,16 +100,24 @@ public class ItemKnife extends ItemWeapon implements IKnife
 		}
 		return false;
 	}
+	
+	@Override
+	public IIcon getIcon(ItemStack is, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
+	{
+		return super.getIcon(is, renderPass);
+	}
 
 	@Override
 	public void addExtraInformation(ItemStack is, EntityPlayer player, List<String> arraylist)
 	{
+		arraylist.add(TFC_Core.translate("gui."+this.getReach(is).getName()));
 		if (TFC_Core.showShiftInformation()) 
 		{
 			arraylist.add(TFC_Core.translate("gui.Help"));
 			arraylist.add(TFC_Core.translate("gui.Knife.Inst0"));
 			arraylist.add(TFC_Core.translate("gui.Knife.Inst1"));
-			//arraylist.add(TFC_Core.translate("gui.Knife.Inst2"));
+			arraylist.add(TFC_Core.translate("gui.Knife.Inst2"));
+			arraylist.add(TFC_Core.translate("gui.Knife.Inst3"));
 		}
 		else
 		{

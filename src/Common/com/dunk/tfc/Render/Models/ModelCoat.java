@@ -2,6 +2,7 @@ package com.dunk.tfc.Render.Models;
 
 import org.lwjgl.opengl.GL11;
 
+import com.dunk.tfc.Core.TFC_Time;
 import com.dunk.tfc.Items.ItemClothing;
 
 import net.minecraft.client.model.ModelBase;
@@ -24,7 +25,13 @@ public class ModelCoat extends ModelBase
 
 	private ModelRenderer body;
 
+	private float length = 7f;
+
+	private boolean open = false;
+
 	private float scaleFactor;
+	
+	private float flare;
 
 	public ModelCoat()
 	{
@@ -35,19 +42,25 @@ public class ModelCoat extends ModelBase
 
 	public ModelCoat(float f)
 	{
+		this(f, false, false, true,0f);
+	}
+
+	public ModelCoat(float f, boolean longCoat, boolean sleeveType, boolean open, float flare)
+	{
 		super();
 		this.scaleFactor = f;
 		// Quiver
-
+		this.open = open;
+		this.flare= flare;
 		body = new ModelRenderer(this, 16, 0);
-		body.addBox(-4F, 2F, -2F, 8, 10, 4, scaleFactor);
+		body.addBox(-4F, 2F, -2F, 8, 10, 4, scaleFactor + 0.5f);
 		body.setRotationPoint(0, 0, 0f);
 		armR = new ModelRenderer(this, 16, 16);
 		armR.mirror = true;
 		armL = new ModelRenderer(this, 16, 16);
 		// Should be locx,locy,locz,sizex,sizey,sizez
-		armR.addBox(-3f, -2f, -2f, 4, 8, 4, scaleFactor);
-		armL.addBox(-1F, -2f, -2F, 4, 8, 4, scaleFactor);
+		armR.addBox(-3f, -2f, -2f, 4, 8, 4, scaleFactor+ 0.3f);
+		armL.addBox(-1F, -2f, -2F, 4, 8, 4, scaleFactor+ 0.3f);
 		armR.setRotationPoint(1.9f, 14f, 0f);
 		armL.setRotationPoint(-1.9f, 14f, 0f);
 		// body.addChild(armR);
@@ -56,6 +69,11 @@ public class ModelCoat extends ModelBase
 		// quiver.setTextureSize(64, 32);
 		armL.setTextureSize(64, 32);
 		armR.setTextureSize(64, 32);
+
+		if (longCoat)
+		{
+			length = 10f;
+		}
 
 		/*
 		 * for(int i = 0; i < arrows.length; i++) { arrows[i] = new
@@ -134,6 +152,14 @@ public class ModelCoat extends ModelBase
 		// The ARMS WERE BACKWARDS DAMMNIT
 		if (theEntity instanceof EntityPlayer)
 		{
+			float velocity = (float) Math.pow((Math.pow(theEntity.lastTickPosX - theEntity.posX, 2)
+					+ Math.pow(((theEntity.lastTickPosY - theEntity.posY)
+							+ Math.abs((theEntity.lastTickPosY - theEntity.posY))) / 2f, 2)
+					+ Math.pow(theEntity.lastTickPosZ - theEntity.posZ, 2)), 0.5);
+			if (velocity > 0.25)
+			{
+				// System.out.println(velocity);
+			}
 			this.armR.rotateAngleZ = 0.0F;
 			this.armL.rotateAngleZ = 0.0F;
 			this.armR.rotateAngleY = 0.0F;
@@ -200,25 +226,33 @@ public class ModelCoat extends ModelBase
 			// Z, Y, X.
 			// Let's establish that the point we want to render is halfway down
 			// the leg?
-			Vec3 rightLegVector = Vec3.createVectorHelper(0, 4f, 0);
-			Vec3 rightLegVector2 = Vec3.createVectorHelper(0, 4f, 0);
-			Vec3 rightLegButtVector = Vec3.createVectorHelper(0, 0, 2.35);
+			Vec3 rightLegVector = Vec3.createVectorHelper(0, 1f * length, 0);
+			Vec3 rightLegOuterVector;
+			Vec3 rightLegVector2 = Vec3.createVectorHelper(0, 1f * length, 0);
 
-			rightLegButtVector.rotateAroundZ(renderer.modelBipedMain.bipedRightLeg.rotateAngleZ);
-			rightLegButtVector.rotateAroundY(renderer.modelBipedMain.bipedRightLeg.rotateAngleY);
-			rightLegButtVector.rotateAroundX(renderer.modelBipedMain.bipedRightLeg.rotateAngleX);
+			Vec3 leftLegVector = Vec3.createVectorHelper(0, 1f * length, 0);
+			Vec3 leftLegOuterVector;
+			Vec3 leftLegVector2 = Vec3.createVectorHelper(0, 1f * length, 0);
 
-			Vec3 leftLegVector = Vec3.createVectorHelper(0, 4f, 0);
-			Vec3 leftLegVector2 = Vec3.createVectorHelper(0, 4f, 0);
+			float buttZdisplacement, crotchZdisplacement;
 
-			rightLegVector.rotateAroundZ(renderer.modelBipedMain.bipedRightLeg.rotateAngleZ);
+			if (theEntity.isSneaking())
+			{
+				buttZdisplacement = -0.4f;
+				crotchZdisplacement = 0.4f;
+			}
+			else
+			{
+				buttZdisplacement = crotchZdisplacement = 0;
+			}
+			rightLegVector.rotateAroundZ(renderer.modelBipedMain.bipedRightLeg.rotateAngleZ + flare);
 			rightLegVector.rotateAroundY(renderer.modelBipedMain.bipedRightLeg.rotateAngleY);
-			rightLegVector2.rotateAroundZ(renderer.modelBipedMain.bipedRightLeg.rotateAngleZ);
+			rightLegVector2.rotateAroundZ(renderer.modelBipedMain.bipedRightLeg.rotateAngleZ + flare);
 			rightLegVector2.rotateAroundY(renderer.modelBipedMain.bipedRightLeg.rotateAngleY);
 
-			leftLegVector.rotateAroundZ(renderer.modelBipedMain.bipedLeftLeg.rotateAngleZ);
+			leftLegVector.rotateAroundZ(renderer.modelBipedMain.bipedLeftLeg.rotateAngleZ-flare);
 			leftLegVector.rotateAroundY(renderer.modelBipedMain.bipedLeftLeg.rotateAngleY);
-			leftLegVector2.rotateAroundZ(renderer.modelBipedMain.bipedLeftLeg.rotateAngleZ);
+			leftLegVector2.rotateAroundZ(renderer.modelBipedMain.bipedLeftLeg.rotateAngleZ-flare);
 			leftLegVector2.rotateAroundY(renderer.modelBipedMain.bipedLeftLeg.rotateAngleY);
 
 			if (theEntity.isSneaking())
@@ -240,20 +274,46 @@ public class ModelCoat extends ModelBase
 
 			if (renderer.modelBipedMain.bipedRightLeg.rotateAngleX < 0)
 			{
-				rightLegVector.rotateAroundX(renderer.modelBipedMain.bipedRightLeg.rotateAngleX);
+				rightLegVector.rotateAroundX(Math.min(renderer.modelBipedMain.bipedRightLeg.rotateAngleX,-flare));
+				rightLegVector2.rotateAroundX(Math.max(renderer.modelBipedMain.bipedRightLeg.rotateAngleX*0.35f,flare));
+				if (theEntity.isSneaking())
+				{
+					rightLegVector.rotateAroundX(-0.1f);
+					leftLegVector.rotateAroundX(-0.1f);
+				}
+
 			}
 			else if (renderer.modelBipedMain.bipedRightLeg.rotateAngleX > 0)
 			{
-				rightLegVector2.rotateAroundX(renderer.modelBipedMain.bipedRightLeg.rotateAngleX);
+				rightLegVector2.rotateAroundX(Math.max(renderer.modelBipedMain.bipedRightLeg.rotateAngleX,flare));
+				rightLegVector.rotateAroundX(Math.min(renderer.modelBipedMain.bipedRightLeg.rotateAngleX * 0.35f,-flare));
+				if (theEntity.isSneaking())
+				{
+					rightLegVector2.rotateAroundX(-0.3f);
+					leftLegVector2.rotateAroundX(-0.3f);
+				}
 			}
 
 			if (renderer.modelBipedMain.bipedLeftLeg.rotateAngleX > 0)
 			{
-				leftLegVector2.rotateAroundX(renderer.modelBipedMain.bipedLeftLeg.rotateAngleX);
+
+				leftLegVector2.rotateAroundX(Math.max(renderer.modelBipedMain.bipedLeftLeg.rotateAngleX,flare));
+				leftLegVector.rotateAroundX(Math.min(renderer.modelBipedMain.bipedLeftLeg.rotateAngleX * 0.35f,-flare));
+				if (theEntity.isSneaking())
+				{
+					leftLegVector2.rotateAroundX(-0.3f);
+					rightLegVector2.rotateAroundX(-0.3f);
+				}
 			}
 			else if (renderer.modelBipedMain.bipedLeftLeg.rotateAngleX < 0)
 			{
-				leftLegVector.rotateAroundX(renderer.modelBipedMain.bipedLeftLeg.rotateAngleX);
+				leftLegVector.rotateAroundX(Math.min(renderer.modelBipedMain.bipedLeftLeg.rotateAngleX,-flare));
+				leftLegVector2.rotateAroundX(Math.max(renderer.modelBipedMain.bipedLeftLeg.rotateAngleX * 0.35f,flare));
+				if (theEntity.isSneaking())
+				{
+					leftLegVector.rotateAroundX(-0.1f);
+					rightLegVector.rotateAroundX(-0.1f);
+				}
 			}
 
 			/*
@@ -268,87 +328,138 @@ public class ModelCoat extends ModelBase
 
 			float hipDisplacementX, hipDisplacementY, hipDisplacementZ;
 
-			float sneakLegDepth = theEntity.isSneaking() ? -0.4f : 0f;
+			float sneakLegDepth = theEntity.isSneaking() ? -0.8f : 0f;
 			float sneakButtHeight = theEntity.isSneaking() ? -0.2f : 0f;
 
 			hipDisplacementX = renderer.modelBipedMain.bipedRightLeg.rotationPointX + 6 + scaleFactor;
-			hipDisplacementY = renderer.modelBipedMain.bipedRightLeg.rotationPointY + 0;
+			hipDisplacementY = renderer.modelBipedMain.bipedRightLeg.rotationPointY + 0f;
 			hipDisplacementZ = renderer.modelBipedMain.bipedRightLeg.rotationPointZ + 2 + scaleFactor;
 
 			if (theEntity.isSneaking())
 			{
 				// GL11.glTranslatef(0f / 16f, 2f / 16f, -1.5f / 16f);
 				hipDisplacementY += 2f;
-				hipDisplacementZ += -7.5f;
+				hipDisplacementZ += -8f;
 			}
 
+			// rightLegVector.rotateAroundX(Math.min(0.4f,velocity));
+			rightLegVector2.rotateAroundX(Math.min(0.4f, velocity * 0.5f));
+			leftLegVector2.rotateAroundX(Math.min(0.4f, velocity * 0.5f));
+
+			if (!this.open)
+			{
+				rightLegOuterVector = Vec3.createVectorHelper(rightLegVector.xCoord, rightLegVector.yCoord,
+						rightLegVector.zCoord);
+				leftLegOuterVector = Vec3.createVectorHelper(leftLegVector.xCoord, leftLegVector.yCoord,
+						leftLegVector.zCoord);
+			}
+			else
+			{
+				rightLegVector2.rotateAroundZ(Math.min(1f + (float)Math.sin((TFC_Time.getTotalTicks()%20)*Math.PI/20d)*0.1f, velocity * 0.75f));
+				rightLegVector.rotateAroundZ(Math.min(1f+(float)Math.sin(((TFC_Time.getTotalTicks()+5)%20)*Math.PI/20d)*0.1f, velocity * 1.5f));
+				leftLegVector.rotateAroundZ(Math.max(-1f-(float)Math.sin(((TFC_Time.getTotalTicks()+10)%20)*Math.PI/20d)*0.1f, -velocity * 1.5f));
+				leftLegVector2.rotateAroundZ(Math.max(-1f-(float)Math.sin(((TFC_Time.getTotalTicks()+15)%20)*Math.PI/20d)*0.1f, -velocity * 0.75f));
+				rightLegOuterVector = Vec3.createVectorHelper(rightLegVector.xCoord, rightLegVector.yCoord,
+						rightLegVector.zCoord);
+				leftLegOuterVector = Vec3.createVectorHelper(leftLegVector.xCoord, leftLegVector.yCoord,
+						leftLegVector.zCoord);
+				// if (renderer.modelBipedMain.bipedRightLeg.rotateAngleX < 0)
+				// {
+				// rightLegOuterVector
+				// .rotateAroundX(-renderer.modelBipedMain.bipedRightLeg.rotateAngleX*velocity);
+				rightLegVector.rotateAroundX(Math.max(-1,-0.7f * velocity));
+				// }
+				// else if (renderer.modelBipedMain.bipedRightLeg.rotateAngleX >
+				// 0)
+				// {
+				// leftLegOuterVector
+				// .rotateAroundX(-renderer.modelBipedMain.bipedLeftLeg.rotateAngleX*velocity);
+				leftLegVector.rotateAroundX(Math.max(-1,-0.7f * velocity));
+				// }
+			}
+			// leftLegVector.rotateAroundX(Math.min(0.4f,velocity));
+
 			PositionTextureVertex rightFrontOuterLeg = new PositionTextureVertex(
-					0.25f + hipDisplacementX + (float) rightLegVector.xCoord,
-					hipDisplacementY + (float) rightLegVector.yCoord,
-					0.25f + hipDisplacementZ + (float) rightLegVector.zCoord, 0, 4);
+					0.25f + hipDisplacementX + (float) rightLegOuterVector.xCoord,
+					hipDisplacementY + (float) rightLegOuterVector.yCoord,
+					0.25f + hipDisplacementZ + crotchZdisplacement + (float) rightLegOuterVector.zCoord, 0, 4);
 			PositionTextureVertex rightFrontInnerLeg = new PositionTextureVertex(
 					hipDisplacementX - (4f + scaleFactor) + (float) rightLegVector.xCoord,
-					hipDisplacementY + (float) rightLegVector.yCoord, hipDisplacementZ + (float) rightLegVector.zCoord,
-					4, 4);
+					hipDisplacementY + (float) rightLegVector.yCoord,
+					hipDisplacementZ + crotchZdisplacement + (float) rightLegVector.zCoord, 4, 4);
 			PositionTextureVertex rightBackOuterLeg = new PositionTextureVertex(
 					0.25f + hipDisplacementX + (float) rightLegVector2.xCoord,
 					sneakButtHeight + hipDisplacementY + (float) rightLegVector2.yCoord,
-					sneakLegDepth - 0.25f + hipDisplacementZ - (4f + scaleFactor * 2) + (float) rightLegVector2.zCoord,
+					sneakLegDepth - 0.25f + buttZdisplacement + +hipDisplacementZ - (4f + scaleFactor * 2)
+							+ (float) rightLegVector2.zCoord,
 					0, 0);
 			PositionTextureVertex rightBackInnerLeg = new PositionTextureVertex(
 					hipDisplacementX - (4f + scaleFactor) + (float) rightLegVector2.xCoord,
 					sneakButtHeight + hipDisplacementY + (float) rightLegVector2.yCoord,
-					sneakLegDepth - 0.25f + hipDisplacementZ - (4f + scaleFactor * 2) + (float) rightLegVector2.zCoord,
+					sneakLegDepth - 0.25f + buttZdisplacement + hipDisplacementZ - (4f + scaleFactor * 2)
+							+ (float) rightLegVector2.zCoord,
 					0, 0);
 
 			PositionTextureVertex rightFrontOuterHip = new PositionTextureVertex(hipDisplacementX, hipDisplacementY,
-					hipDisplacementZ, 0, 0);
+					hipDisplacementZ + crotchZdisplacement, 0, 0);
 			PositionTextureVertex rightFrontInnerHip = new PositionTextureVertex(hipDisplacementX - (4f + scaleFactor),
-					hipDisplacementY, hipDisplacementZ, 0, 0);
+					hipDisplacementY, hipDisplacementZ + crotchZdisplacement, 0, 0);
 			PositionTextureVertex rightBackOuterHip = new PositionTextureVertex(hipDisplacementX,
 					sneakButtHeight + hipDisplacementY,
-					sneakLegDepth + hipDisplacementZ - (4f + 0.25f + scaleFactor * 2), 0, 0);
+					sneakLegDepth + hipDisplacementZ + buttZdisplacement - (4f + 0.25f + scaleFactor * 2), 0, 0);
 			PositionTextureVertex rightBackInnerHip = new PositionTextureVertex(hipDisplacementX - (4f + scaleFactor),
 					sneakButtHeight + hipDisplacementY,
-					sneakLegDepth + hipDisplacementZ - (4f + 0.25f + scaleFactor * 2), 4, 0);
+					sneakLegDepth + hipDisplacementZ + buttZdisplacement - (4f + 0.25f + scaleFactor * 2), 4, 0);
 
 			hipDisplacementX = renderer.modelBipedMain.bipedLeftLeg.rotationPointX - 7 + scaleFactor;
-			hipDisplacementY = renderer.modelBipedMain.bipedLeftLeg.rotationPointY + 0;
+			hipDisplacementY = renderer.modelBipedMain.bipedLeftLeg.rotationPointY + 0f;
 			hipDisplacementZ = renderer.modelBipedMain.bipedLeftLeg.rotationPointZ + 2 + scaleFactor;
 
 			if (theEntity.isSneaking())
 			{
 				// GL11.glTranslatef(0f / 16f, 2f / 16f, -1.5f / 16f);
 				hipDisplacementY += 2f;
-				hipDisplacementZ += -7.5f;
+				hipDisplacementZ += -8f;
 			}
 
+			float leftBackYd = 0;
+			float rightBackYd = 0;
+			if (renderer.modelBipedMain.bipedLeftLeg.rotateAngleX > 0)
+			{
+				leftBackYd = -0.5f;
+			}
+			else if (renderer.modelBipedMain.bipedLeftLeg.rotateAngleX < 0)
+			{
+				rightBackYd = -0.5f;
+			}
 			PositionTextureVertex leftFrontOuterLeg = new PositionTextureVertex(
-					-0.25f + hipDisplacementX + (float) leftLegVector.xCoord,
-					hipDisplacementY + (float) leftLegVector.yCoord,
-					0.25f + hipDisplacementZ + (float) leftLegVector.zCoord, 0, 8);
+					-0.25f + hipDisplacementX + (float) leftLegOuterVector.xCoord,
+					hipDisplacementY + (float) leftLegOuterVector.yCoord,
+					0.25f + hipDisplacementZ + crotchZdisplacement + (float) leftLegOuterVector.zCoord, 0, 8);
 			PositionTextureVertex leftFrontInnerLeg = new PositionTextureVertex(
 					hipDisplacementX + (4f + scaleFactor) + (float) leftLegVector.xCoord,
-					hipDisplacementY + (float) leftLegVector.yCoord, hipDisplacementZ + (float) leftLegVector.zCoord, 8,
-					8);
+					hipDisplacementY + (float) leftLegVector.yCoord,
+					hipDisplacementZ + crotchZdisplacement + (float) leftLegVector.zCoord, 8, 8);
 			PositionTextureVertex leftBackOuterLeg = new PositionTextureVertex(
 					-0.25f + hipDisplacementX + (float) leftLegVector2.xCoord,
-					sneakButtHeight + hipDisplacementY + (float) leftLegVector2.yCoord, sneakLegDepth - 0.25f
-							+ hipDisplacementZ - (4f + 0.25f + scaleFactor * 2) + (float) leftLegVector2.zCoord,
+					sneakButtHeight + hipDisplacementY + leftBackYd + (float) leftLegVector2.yCoord,
+					sneakLegDepth - 0.25f + hipDisplacementZ + buttZdisplacement - (4f + 0.25f + scaleFactor * 2)
+							+ (float) leftLegVector2.zCoord,
 					0, 0);
 			PositionTextureVertex leftBackInnerLeg = new PositionTextureVertex(
 					hipDisplacementX + (4f + scaleFactor) + (float) leftLegVector2.xCoord,
-					sneakButtHeight + hipDisplacementY + (float) leftLegVector2.yCoord, sneakLegDepth - 0.25f
-							+ hipDisplacementZ - (4f + 0.25f + scaleFactor * 2) + (float) leftLegVector2.zCoord,
+					sneakButtHeight + hipDisplacementY + leftBackYd + (float) leftLegVector2.yCoord,
+					sneakLegDepth - 0.25f + hipDisplacementZ + buttZdisplacement - (4f + 0.25f + scaleFactor * 2)
+							+ (float) leftLegVector2.zCoord,
 					0, 0);
 
 			PositionTextureVertex leftFrontOuterHip = new PositionTextureVertex(hipDisplacementX, hipDisplacementY,
-					hipDisplacementZ, 0, 0);
+					hipDisplacementZ + crotchZdisplacement, 0, 0);
 			PositionTextureVertex leftFrontInnerHip = new PositionTextureVertex(hipDisplacementX + (4f + scaleFactor),
-					hipDisplacementY, hipDisplacementZ, 0, 0);
+					hipDisplacementY, hipDisplacementZ + crotchZdisplacement, 0, 0);
 			PositionTextureVertex leftBackOuterHip = new PositionTextureVertex(hipDisplacementX,
-					sneakButtHeight + hipDisplacementY,
-					sneakLegDepth + hipDisplacementZ - (4f + 0.25f + scaleFactor * 2), 0, 0);
+					sneakButtHeight + hipDisplacementY + leftBackYd,
+					sneakLegDepth + buttZdisplacement + hipDisplacementZ - (4f + 0.25f + scaleFactor * 2), 0, 0);
 			PositionTextureVertex leftBackInnerHip = rightBackInnerHip;// new
 																		// PositionTextureVertex(hipDisplacementX+(4f
 																		// +
@@ -357,24 +468,16 @@ public class ModelCoat extends ModelBase
 																		// 0.25f
 																		// +
 																		// scaleFactor*2),8,0);
+			if (!open)
+			{
+				leftFrontInnerHip = rightFrontInnerHip;
+			}
 
 			int textureOffsetX = 40;
 			int textureOffsetY = 15;
 			int textureWidth = 64;
 			int textureHeight = 32;
 
-			// Right front thigh
-			this.quadList[0] = new TexturedQuad(
-					new PositionTextureVertex[] { rightFrontOuterHip, rightFrontInnerHip, rightFrontInnerLeg,
-							rightFrontOuterLeg },
-					textureOffsetX + 4, textureOffsetY + 0, textureOffsetX + 4 + 4, textureOffsetY + 4, textureWidth,
-					textureHeight); // petit
-
-			this.quadList[1] = new TexturedQuad(
-					new PositionTextureVertex[] { rightFrontInnerHip, rightFrontOuterHip, rightFrontOuterLeg,
-							rightFrontInnerLeg },
-					textureOffsetX + 4, textureOffsetY + 0, textureOffsetX + 4 + 4, textureOffsetY + 4, textureWidth,
-					textureHeight); // petit
 			// Right side thigh
 			this.quadList[2] = new TexturedQuad(
 					new PositionTextureVertex[] { rightBackOuterHip, rightFrontOuterHip, rightFrontOuterLeg,
@@ -388,6 +491,47 @@ public class ModelCoat extends ModelBase
 					textureOffsetX + 0, textureOffsetY + 0, textureOffsetX + 4, textureOffsetY + 4, textureWidth,
 					textureHeight); // petit
 
+			// left side thigh
+			this.quadList[10] = new TexturedQuad(
+					new PositionTextureVertex[] { leftBackOuterHip, leftFrontOuterHip, leftFrontOuterLeg,
+							leftBackOuterLeg },
+					textureOffsetX + 12, textureOffsetY + 0, textureOffsetX + 12 + 4, textureOffsetY + 4, textureWidth,
+					textureHeight); // petit
+
+			this.quadList[11] = new TexturedQuad(
+					new PositionTextureVertex[] { leftFrontOuterHip, leftBackOuterHip, leftBackOuterLeg,
+							leftFrontOuterLeg },
+					textureOffsetX + 12, textureOffsetY + 0, textureOffsetX + 12 + 4, textureOffsetY + 4, textureWidth,
+					textureHeight); // petit
+
+			if (open)
+			{
+				// Right front thigh
+				this.quadList[0] = new TexturedQuad(
+						new PositionTextureVertex[] { rightFrontInnerLeg, rightFrontOuterLeg, rightFrontOuterHip,
+								rightFrontInnerHip },
+						textureOffsetX + 4, textureOffsetY + 0, textureOffsetX + 4 + 4, textureOffsetY + 4,
+						textureWidth, textureHeight); // petit
+
+				this.quadList[1] = new TexturedQuad(
+						new PositionTextureVertex[] { rightFrontInnerHip, rightFrontOuterHip, rightFrontOuterLeg,
+								rightFrontInnerLeg },
+						textureOffsetX + 4, textureOffsetY + 0, textureOffsetX + 4 + 4, textureOffsetY + 4,
+						textureWidth, textureHeight); // petit
+
+				// left front thigh
+				this.quadList[8] = new TexturedQuad(
+						new PositionTextureVertex[] { leftFrontOuterHip, leftFrontInnerHip, leftFrontInnerLeg,
+								leftFrontOuterLeg },
+						textureOffsetX + 8, textureOffsetY + 0, textureOffsetX + 8 + 4, textureOffsetY + 4,
+						textureWidth, textureHeight); // petit
+
+				this.quadList[9] = new TexturedQuad(
+						new PositionTextureVertex[] { leftFrontOuterLeg, leftFrontInnerLeg, leftFrontInnerHip,
+								leftFrontOuterHip },
+						textureOffsetX + 8, textureOffsetY + 0, textureOffsetX + 8 + 4, textureOffsetY + 4,
+						textureWidth, textureHeight); // petit
+			}
 			if (renderer.modelBipedMain.bipedRightLeg.rotateAngleX < 0)
 			{
 				// asscheeks
@@ -404,8 +548,8 @@ public class ModelCoat extends ModelBase
 						textureWidth, textureHeight); // petit
 
 				this.quadList[6] = new TexturedQuad(
-						new PositionTextureVertex[] { leftBackOuterHip, leftBackInnerHip, leftBackInnerLeg,
-								leftBackOuterLeg },
+						new PositionTextureVertex[] { leftBackInnerLeg, leftBackOuterLeg, leftBackOuterHip,
+								leftBackInnerHip },
 						textureOffsetX + 16, textureOffsetY + 0, textureOffsetX + 16 + 4, textureOffsetY + 4,
 						textureWidth, textureHeight); // petit
 
@@ -414,6 +558,32 @@ public class ModelCoat extends ModelBase
 								leftBackInnerLeg },
 						textureOffsetX + 16, textureOffsetY + 0, textureOffsetX + 16 + 4, textureOffsetY + 4,
 						textureWidth, textureHeight); // petit
+				if (!open)
+				{
+					this.quadList[0] = new TexturedQuad(
+							new PositionTextureVertex[] { rightFrontOuterHip, rightFrontInnerHip, rightFrontInnerLeg,
+									rightFrontOuterLeg },
+							textureOffsetX + 20, textureOffsetY + 0, textureOffsetX + 20 + 4, textureOffsetY + 4,
+							textureWidth, textureHeight); // petit
+
+					this.quadList[1] = new TexturedQuad(
+							new PositionTextureVertex[] { rightFrontInnerHip, rightFrontOuterHip, rightFrontOuterLeg,
+									rightFrontInnerLeg },
+							textureOffsetX + 20, textureOffsetY + 0, textureOffsetX + 20 + 4, textureOffsetY + 4,
+							textureWidth, textureHeight); // petit
+
+					this.quadList[8] = new TexturedQuad(
+							new PositionTextureVertex[] { leftFrontOuterLeg, leftFrontOuterHip, leftFrontInnerHip,
+									rightFrontInnerLeg },
+							textureOffsetX + 16, textureOffsetY + 0, textureOffsetX + 16 + 4, textureOffsetY + 4,
+							textureWidth, textureHeight); // petit
+
+					this.quadList[9] = new TexturedQuad(
+							new PositionTextureVertex[] { rightFrontInnerLeg, leftFrontInnerHip, leftFrontOuterHip,
+									leftFrontOuterLeg },
+							textureOffsetX + 16, textureOffsetY + 0, textureOffsetX + 16 + 4, textureOffsetY + 4,
+							textureWidth, textureHeight); // petit
+				}
 
 			}
 			else
@@ -432,41 +602,44 @@ public class ModelCoat extends ModelBase
 						textureWidth, textureHeight); // petit
 
 				this.quadList[6] = new TexturedQuad(
-						new PositionTextureVertex[] { rightBackOuterHip, rightBackInnerHip, leftBackInnerLeg,
-								rightBackOuterLeg },
+						new PositionTextureVertex[] { leftBackOuterLeg, leftBackOuterHip, leftBackInnerHip,
+								rightBackInnerLeg },
 						textureOffsetX + 16, textureOffsetY + 0, textureOffsetX + 16 + 4, textureOffsetY + 4,
 						textureWidth, textureHeight); // petit
 
 				this.quadList[7] = new TexturedQuad(
-						new PositionTextureVertex[] { leftBackInnerHip, leftBackOuterHip, leftBackOuterLeg,
-								rightBackInnerLeg },
+						new PositionTextureVertex[] { rightBackInnerLeg, leftBackInnerHip, leftBackOuterHip,
+								leftBackOuterLeg },
 						textureOffsetX + 16, textureOffsetY + 0, textureOffsetX + 16 + 4, textureOffsetY + 4,
 						textureWidth, textureHeight); // petit
+
+				if (!open)
+				{
+					this.quadList[0] = new TexturedQuad(
+							new PositionTextureVertex[] { rightFrontOuterHip, rightFrontInnerHip, leftFrontInnerLeg,
+									rightFrontOuterLeg },
+							textureOffsetX + 20, textureOffsetY + 0, textureOffsetX + 20 + 4, textureOffsetY + 4,
+							textureWidth, textureHeight); // petit
+
+					this.quadList[1] = new TexturedQuad(
+							new PositionTextureVertex[] { rightFrontInnerHip, rightFrontOuterHip, rightFrontOuterLeg,
+									leftFrontInnerLeg },
+							textureOffsetX + 20, textureOffsetY + 0, textureOffsetX + 20 + 4, textureOffsetY + 4,
+							textureWidth, textureHeight); // petit
+
+					this.quadList[8] = new TexturedQuad(
+							new PositionTextureVertex[] { leftFrontInnerLeg, leftFrontOuterLeg, leftFrontOuterHip,
+									leftFrontInnerHip },
+							textureOffsetX + 16, textureOffsetY + 0, textureOffsetX + 16 + 4, textureOffsetY + 4,
+							textureWidth, textureHeight); // petit
+
+					this.quadList[9] = new TexturedQuad(
+							new PositionTextureVertex[] { leftFrontInnerHip, leftFrontOuterHip, leftFrontOuterLeg,
+									leftFrontInnerLeg },
+							textureOffsetX + 16, textureOffsetY + 0, textureOffsetX + 16 + 4, textureOffsetY + 4,
+							textureWidth, textureHeight); // petit
+				}
 			}
-			// left front thigh
-			this.quadList[8] = new TexturedQuad(
-					new PositionTextureVertex[] { leftFrontOuterHip, leftFrontInnerHip, leftFrontInnerLeg,
-							leftFrontOuterLeg },
-					textureOffsetX + 8, textureOffsetY + 0, textureOffsetX + 8 + 4, textureOffsetY + 4, textureWidth,
-					textureHeight); // petit
-
-			this.quadList[9] = new TexturedQuad(
-					new PositionTextureVertex[] { leftFrontInnerHip, leftFrontOuterHip, leftFrontOuterLeg,
-							leftFrontInnerLeg },
-					textureOffsetX + 8, textureOffsetY + 0, textureOffsetX + 8 + 4, textureOffsetY + 4, textureWidth,
-					textureHeight); // petit
-			// left side thigh
-			this.quadList[10] = new TexturedQuad(
-					new PositionTextureVertex[] { leftBackOuterHip, leftFrontOuterHip, leftFrontOuterLeg,
-							leftBackOuterLeg },
-					textureOffsetX + 12, textureOffsetY + 0, textureOffsetX + 12 + 4, textureOffsetY + 4, textureWidth,
-					textureHeight); // petit
-
-			this.quadList[11] = new TexturedQuad(
-					new PositionTextureVertex[] { leftFrontOuterHip, leftBackOuterHip, leftBackOuterLeg,
-							leftFrontOuterLeg },
-					textureOffsetX + 12, textureOffsetY + 0, textureOffsetX + 12 + 4, textureOffsetY + 4, textureWidth,
-					textureHeight); // petit
 
 			if (!renderer.modelBipedMain.aimedBow)
 			{
@@ -490,29 +663,30 @@ public class ModelCoat extends ModelBase
 				GL11.glTranslatef(0f / 16f, 1f / 16f, 0f / 16f);
 			}
 
-			if(!theEntity.isPlayerSleeping())
+			if (!theEntity.isPlayerSleeping())
 			{
 				GL11.glRotatef(rotateAngle, 0, 1, 0);
 			}
 
 			GL11.glRotatef(180, 0, 1, 0);
-			if(theEntity.isPlayerSleeping())
+			if (theEntity.isPlayerSleeping())
 			{
-				GL11.glRotatef(-90,1,0,0);
+				GL11.glRotatef(-90, 1, 0, 0);
 				GL11.glTranslatef(0, 0.25f, 1.75f);
 				GL11.glRotatef(180, 0, 0, 1);
 				GL11.glRotatef(180, 1, 0, 0);
 			}
 			for (int var3 = 0; var3 < 12; ++var3)
 			{
-				this.quadList[var3].draw(Tessellator.instance, 0.0625F);
+				if (this.quadList[var3] != null)
+					this.quadList[var3].draw(Tessellator.instance, 0.0625F);
 			}
 			GL11.glRotatef(180, 0, 1, 0);
 			if (theEntity.isSneaking())
 			{
-				GL11.glTranslatef(0 / 16F, 1f / 16F, -1.5f / 16F);
+				GL11.glTranslatef(0 / 16F, 1f / 16F, -1f / 16F);
 			}
-			
+
 			this.body.render(0.0625F);
 			if (theEntity.isSneaking())
 			{
@@ -522,9 +696,9 @@ public class ModelCoat extends ModelBase
 			{
 				GL11.glTranslatef(0 / 16F, 2.5f / 16F, /*-0.25*/0f / 16F);
 			}
-			GL11.glTranslatef(-0.5f/16f, -0.5f/16f, 0);
+			GL11.glTranslatef(-0.5f / 16f, -0.5f / 16f, 0);
 			this.armL.render(0.0625F);
-			GL11.glTranslatef(1f/16f, 0, 0);
+			GL11.glTranslatef(1f / 16f, 0, 0);
 			this.armR.render(0.0625F);
 
 			GL11.glPopMatrix();

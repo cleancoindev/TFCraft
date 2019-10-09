@@ -144,7 +144,7 @@ public class EntityZombieTFC extends EntityZombie implements ICausesDamage, IInn
 	}
 
 	@Override
-	public EnumDamageType getDamageType() 
+	public EnumDamageType getDamageType(EntityLivingBase is) 
 	{
 		return EnumDamageType.SLASHING;
 	}

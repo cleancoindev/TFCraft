@@ -106,7 +106,7 @@ public class BlockDirt extends BlockTerra
 	@Override
 	public void updateTick(World world, int i, int j, int k, Random random)
 	{
-		if (!world.isRemote && world.doChunksNearChunkExist(i, j, k, 1) && !BlockCollapsible.isNearSupport(world, i, j, k, 4, 0))
+		if (!world.isRemote && world.doChunksNearChunkExist(i, j, k, 1) && !BlockCollapsible.isNearSupport(world, i, j, k, 4, 0) && world.getChunkFromBlockCoords(i, k).lastSaveTime>0)
 		{
 			int meta = world.getBlockMetadata(i, j, k);
 

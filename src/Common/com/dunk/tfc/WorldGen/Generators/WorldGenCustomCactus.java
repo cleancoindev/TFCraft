@@ -2,8 +2,11 @@ package com.dunk.tfc.WorldGen.Generators;
 
 import java.util.Random;
 
+import com.dunk.tfc.Core.TFC_Climate;
 import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.api.TFCBlocks;
+import com.dunk.tfc.api.Constant.Global;
+import com.dunk.tfc.api.Enums.EnumRegion;
 
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -18,7 +21,12 @@ public class WorldGenCustomCactus extends WorldGenerator
 			int xCoord = i + random.nextInt(8) - random.nextInt(8);
 			int yCoord = j + random.nextInt(4) - random.nextInt(4);
 			int zCoord = k + random.nextInt(8) - random.nextInt(8);
-
+			
+			int region = TFC_Climate.getRegionLayer(world, i, Global.SEALEVEL, k);
+			if(EnumRegion.values()[region] != EnumRegion.AMERICAS)
+			{
+				return false;
+			}
 			if (world.isAirBlock(xCoord, yCoord, zCoord) && !TFC_Core.isBeachBiome(world.getBiomeGenForCoords(xCoord, zCoord).biomeID))
 			{
 				int var10 = 1 + random.nextInt(random.nextInt(3) + 1);

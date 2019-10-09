@@ -129,7 +129,7 @@ public class EntityProjectileTFC extends EntityArrow implements ICausesDamage
 	}
 
 	@Override
-	public EnumDamageType getDamageType()
+	public EnumDamageType getDamageType(EntityLivingBase is)
 	{
 		return EnumDamageType.PIERCING;
 	}

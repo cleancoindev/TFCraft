@@ -11,6 +11,7 @@ import com.dunk.tfc.Reference;
 import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Core.TFC_Textures;
 import com.dunk.tfc.Core.TFC_Time;
+import com.dunk.tfc.Core.Player.BodyTempStats;
 import com.dunk.tfc.Core.Player.PlayerInventory;
 import com.dunk.tfc.Food.ItemMeal;
 import com.dunk.tfc.Food.TFCPotion;
@@ -40,6 +41,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StringUtils;
 
 public class GuiInventoryTFC extends InventoryEffectRenderer
 {
@@ -82,139 +84,89 @@ public class GuiInventoryTFC extends InventoryEffectRenderer
 			x = this.guiLeft + 1;
 		}
 		super.mouseClicked(x, y, b);
-		//this.mc.thePlayer.inventoryContainer.detectAndSendChanges();
+		// this.mc.thePlayer.inventoryContainer.detectAndSendChanges();
 	}
 
 	@Override
 	protected void handleMouseClick(Slot par1Slot, int par2, int par3, int par4)
 	{
 		if (par1Slot != null)
-        {
+		{
 			par2 = par1Slot.slotNumber;
-        }
-		//System.out.println(par2 + ", " + par3 + ", " + par4);
-        this.mc.playerController.windowClick(this.inventorySlots.windowId, par2, par3, par4, this.mc.thePlayer);
-		//super.handleMouseClick(par1Slot, par2, par3, par4);
-		/*
-		boolean flag = par4 == 1;
-		par4 = par2 == -999 && par4 == 0 ? 4 : par4;
-		ItemStack itemstack;
-		InventoryPlayer inventoryplayer;
-
-		if (par1Slot == null && selectedTabIndex != CreativeTabs.tabInventory.getTabIndex() && par4 != 5)
-		{
-			inventoryplayer = this.mc.thePlayer.inventory;
-
-			if (inventoryplayer.getItemStack() != null)
-			{
-				if (par3 == 0)
-				{
-					this.mc.thePlayer.entityDropItem(inventoryplayer.getItemStack(), 1.5F);
-					// this.mc.playerController.windowClick(this.inventorySlots.windowId,
-					// par2, par3, par4, this.mc.thePlayer);
-					inventoryplayer.setItemStack((ItemStack) null);
-				}
-
-				if (par3 == 1)
-				{
-					itemstack = inventoryplayer.getItemStack().splitStack(1);
-					this.mc.thePlayer.entityDropItem(itemstack, 1.5F);
-					// this.mc.playerController.windowClick(this.inventorySlots.windowId,
-					// par2, par3, par4, this.mc.thePlayer);
-
-					if (inventoryplayer.getItemStack().stackSize == 0)
-						inventoryplayer.setItemStack((ItemStack) null);
-				}
-			}
 		}
-		else
-		{
-			int l;
-			ItemStack itemstack1;
-
-			if (selectedTabIndex == CreativeTabs.tabInventory.getTabIndex())
-			{
-				if (par4 == 4 && par1Slot != null && par1Slot.getHasStack())
-				{
-					itemstack1 = par1Slot.decrStackSize(par3 == 0 ? 1 : par1Slot.getStack().getMaxStackSize());
-					//this.mc.thePlayer.entityDropItem(itemstack1, 1.5F);
-				//	this.mc.playerController.sendPacketDropItem(itemstack1);
-				}
-				else if (par4 == 4 && this.mc.thePlayer.inventory.getItemStack() != null)
-				{
-					if (par1Slot != null)
-					{
-						par2 = par1Slot.slotNumber;
-					}
-					if (par1Slot != null)
-					{
-						par2 = par1Slot.slotNumber;
-					}
-					if (par2 >= 50 && par2 < 55)
-					{
-						this.inventorySlots.slotClick(par1Slot == null ? par2 : par1Slot.slotNumber, par3, par4,
-								this.mc.thePlayer);
-						this.mc.playerController.windowClick(this.inventorySlots.windowId, par2, par3, par4,
-								this.mc.thePlayer);
-					}
-					else
-					{
-						this.mc.playerController.windowClick(this.inventorySlots.windowId, par2, par3, par4,
-								this.mc.thePlayer);
-					}
-					// this.mc.thePlayer.entityDropItem(this.mc.thePlayer.inventory.getItemStack(),
-					// 1.5F);
-					// this.mc.playerController
-					// .sendPacketDropItem(this.mc.thePlayer.inventory.getItemStack());
-					// this.mc.thePlayer.inventory.setItemStack((ItemStack)
-					// null);
-				}
-				else
-				{
-					if (par1Slot != null)
-					{
-						par2 = par1Slot.slotNumber;
-					}
-					if (par2 >= 50 && par2 < 55)
-					{
-						boolean b = player.inventory.getItemStack() == null;
-						this.inventorySlots.slotClick(par1Slot == null ? par2 : par1Slot.slotNumber, par3, par4,
-								this.mc.thePlayer);
-						this.mc.playerController.windowClick(this.inventorySlots.windowId, par2, par3, par4,
-								this.mc.thePlayer);
-					}
-					else
-					{
-						this.mc.playerController.windowClick(this.inventorySlots.windowId, par2, par3, par4,
-								this.mc.thePlayer);
-					}
-					// this.mc.thePlayer.inventoryContainer
-					// .slotClick(
-					// par1Slot == null ? par2
-					// : par1Slot.slotNumber,
-					// par3, par4, this.mc.thePlayer);
-					// this.mc.thePlayer.inventoryContainer.detectAndSendChanges();
-				}
-			}
-			else
-			{
-				this.inventorySlots.slotClick(par1Slot == null ? par2 : par1Slot.slotNumber, par3, par4,
-						this.mc.thePlayer);
-
-				if (Container.func_94532_c(par3) == 2)
-				{
-					for (l = 0; l < 9; ++l)
-						this.mc.playerController.sendSlotPacket(this.inventorySlots.getSlot(45 + l).getStack(), 36 + l);
-				}
-				else if (par1Slot != null)
-				{
-					itemstack1 = this.inventorySlots.getSlot(par1Slot.slotNumber).getStack();
-					this.mc.playerController.sendSlotPacket(itemstack1,
-							par1Slot.slotNumber - this.inventorySlots.inventorySlots.size() + 9 + 36);
-				}
-			}
-
-		}*/
+		// System.out.println(par2 + ", " + par3 + ", " + par4);
+		this.mc.playerController.windowClick(this.inventorySlots.windowId, par2, par3, par4, this.mc.thePlayer);
+		// super.handleMouseClick(par1Slot, par2, par3, par4);
+		/*
+		 * boolean flag = par4 == 1; par4 = par2 == -999 && par4 == 0 ? 4 :
+		 * par4; ItemStack itemstack; InventoryPlayer inventoryplayer;
+		 * 
+		 * if (par1Slot == null && selectedTabIndex !=
+		 * CreativeTabs.tabInventory.getTabIndex() && par4 != 5) {
+		 * inventoryplayer = this.mc.thePlayer.inventory;
+		 * 
+		 * if (inventoryplayer.getItemStack() != null) { if (par3 == 0) {
+		 * this.mc.thePlayer.entityDropItem(inventoryplayer.getItemStack(),
+		 * 1.5F); //
+		 * this.mc.playerController.windowClick(this.inventorySlots.windowId, //
+		 * par2, par3, par4, this.mc.thePlayer);
+		 * inventoryplayer.setItemStack((ItemStack) null); }
+		 * 
+		 * if (par3 == 1) { itemstack =
+		 * inventoryplayer.getItemStack().splitStack(1);
+		 * this.mc.thePlayer.entityDropItem(itemstack, 1.5F); //
+		 * this.mc.playerController.windowClick(this.inventorySlots.windowId, //
+		 * par2, par3, par4, this.mc.thePlayer);
+		 * 
+		 * if (inventoryplayer.getItemStack().stackSize == 0)
+		 * inventoryplayer.setItemStack((ItemStack) null); } } } else { int l;
+		 * ItemStack itemstack1;
+		 * 
+		 * if (selectedTabIndex == CreativeTabs.tabInventory.getTabIndex()) { if
+		 * (par4 == 4 && par1Slot != null && par1Slot.getHasStack()) {
+		 * itemstack1 = par1Slot.decrStackSize(par3 == 0 ? 1 :
+		 * par1Slot.getStack().getMaxStackSize());
+		 * //this.mc.thePlayer.entityDropItem(itemstack1, 1.5F); //
+		 * this.mc.playerController.sendPacketDropItem(itemstack1); } else if
+		 * (par4 == 4 && this.mc.thePlayer.inventory.getItemStack() != null) {
+		 * if (par1Slot != null) { par2 = par1Slot.slotNumber; } if (par1Slot !=
+		 * null) { par2 = par1Slot.slotNumber; } if (par2 >= 50 && par2 < 55) {
+		 * this.inventorySlots.slotClick(par1Slot == null ? par2 :
+		 * par1Slot.slotNumber, par3, par4, this.mc.thePlayer);
+		 * this.mc.playerController.windowClick(this.inventorySlots.windowId,
+		 * par2, par3, par4, this.mc.thePlayer); } else {
+		 * this.mc.playerController.windowClick(this.inventorySlots.windowId,
+		 * par2, par3, par4, this.mc.thePlayer); } //
+		 * this.mc.thePlayer.entityDropItem(this.mc.thePlayer.inventory.
+		 * getItemStack(), // 1.5F); // this.mc.playerController //
+		 * .sendPacketDropItem(this.mc.thePlayer.inventory.getItemStack()); //
+		 * this.mc.thePlayer.inventory.setItemStack((ItemStack) // null); } else
+		 * { if (par1Slot != null) { par2 = par1Slot.slotNumber; } if (par2 >=
+		 * 50 && par2 < 55) { boolean b = player.inventory.getItemStack() ==
+		 * null; this.inventorySlots.slotClick(par1Slot == null ? par2 :
+		 * par1Slot.slotNumber, par3, par4, this.mc.thePlayer);
+		 * this.mc.playerController.windowClick(this.inventorySlots.windowId,
+		 * par2, par3, par4, this.mc.thePlayer); } else {
+		 * this.mc.playerController.windowClick(this.inventorySlots.windowId,
+		 * par2, par3, par4, this.mc.thePlayer); } //
+		 * this.mc.thePlayer.inventoryContainer // .slotClick( // par1Slot ==
+		 * null ? par2 // : par1Slot.slotNumber, // par3, par4,
+		 * this.mc.thePlayer); //
+		 * this.mc.thePlayer.inventoryContainer.detectAndSendChanges(); } } else
+		 * { this.inventorySlots.slotClick(par1Slot == null ? par2 :
+		 * par1Slot.slotNumber, par3, par4, this.mc.thePlayer);
+		 * 
+		 * if (Container.func_94532_c(par3) == 2) { for (l = 0; l < 9; ++l)
+		 * this.mc.playerController.sendSlotPacket(this.inventorySlots.getSlot(
+		 * 45 + l).getStack(), 36 + l); } else if (par1Slot != null) {
+		 * itemstack1 =
+		 * this.inventorySlots.getSlot(par1Slot.slotNumber).getStack();
+		 * this.mc.playerController.sendSlotPacket(itemstack1,
+		 * par1Slot.slotNumber - this.inventorySlots.inventorySlots.size() + 9 +
+		 * 36); } }
+		 * 
+		 * }
+		 */
 	}
 
 	@Override
@@ -315,7 +267,11 @@ public class GuiInventoryTFC extends InventoryEffectRenderer
 		else
 			super.initGui();
 
-		if (!this.mc.thePlayer.getActivePotionEffects().isEmpty())
+		BodyTempStats bodyTemp = TFC_Core.getBodyTempStats(player);
+		boolean hasHeatProt = bodyTemp.temporaryHeatProtection > 0;
+		boolean hasColdProt = bodyTemp.temporaryColdProtection > 0;
+		
+		if (!this.mc.thePlayer.getActivePotionEffects().isEmpty() || hasHeatProt || hasColdProt)
 		{
 			// this.guiLeft = 160 + (this.width - this.xSize - 200) / 2;
 			this.guiLeft = (this.width - this.xSize) / 2;
@@ -377,43 +333,87 @@ public class GuiInventoryTFC extends InventoryEffectRenderer
 		int var1 = this.guiLeft - 124;
 		int var2 = this.guiTop;
 		Collection var4 = this.mc.thePlayer.getActivePotionEffects();
-
-		if (!var4.isEmpty())
+		BodyTempStats bodyTemp = TFC_Core.getBodyTempStats(player);
+		boolean hasHeatProt = bodyTemp.temporaryHeatProtection > 0;
+		boolean hasColdProt = bodyTemp.temporaryColdProtection > 0;
+		if (!var4.isEmpty() || hasHeatProt || hasColdProt)
 		{
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glDisable(GL11.GL_LIGHTING);
 			int var6 = 33;
+			
 
-			if (var4.size() > 5)
-				var6 = 132 / (var4.size() - 1);
+			int extras = hasHeatProt ? 1 : 0;
+			extras += hasColdProt ? 1 : 0;
 
-			for (Iterator var7 = this.mc.thePlayer.getActivePotionEffects().iterator(); var7.hasNext(); var2 += var6)
+			if ((var4.size() + extras) > 5)
 			{
-				PotionEffect var8 = (PotionEffect) var7.next();
-				Potion var9 = Potion.potionTypes[var8.getPotionID()] instanceof TFCPotion
-						? ((TFCPotion) Potion.potionTypes[var8.getPotionID()]) : Potion.potionTypes[var8.getPotionID()];
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				TFC_Core.bindTexture(EFFECTS_TEXTURE);
-				this.drawTexturedModalRect(var1, var2, 0, 166, 140, 32);
-
-				if (var9.hasStatusIcon())
+				var6 = 132 / ((var4.size() + extras) - 1);
+			}
+			if (!var4.isEmpty())
+			{
+				for (Iterator var7 = this.mc.thePlayer.getActivePotionEffects().iterator(); var7
+						.hasNext(); var2 += var6)
 				{
-					int var10 = var9.getStatusIconIndex();
-					this.drawTexturedModalRect(var1 + 6, var2 + 7, 0 + var10 % 8 * 18, 198 + var10 / 8 * 18, 18, 18);
+					PotionEffect var8 = (PotionEffect) var7.next();
+					Potion var9 = Potion.potionTypes[var8.getPotionID()] instanceof TFCPotion
+							? ((TFCPotion) Potion.potionTypes[var8.getPotionID()])
+							: Potion.potionTypes[var8.getPotionID()];
+					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+					TFC_Core.bindTexture(EFFECTS_TEXTURE);
+					this.drawTexturedModalRect(var1, var2, 0, 166, 140, 32);
+
+					if (var9.hasStatusIcon())
+					{
+						int var10 = var9.getStatusIconIndex();
+						this.drawTexturedModalRect(var1 + 6, var2 + 7, 0 + var10 % 8 * 18, 198 + var10 / 8 * 18, 18,
+								18);
+					}
+
+					String var12 = TFC_Core.translate(var9.getName());
+
+					if (var8.getAmplifier() == 1)
+						var12 = var12 + " II";
+					else if (var8.getAmplifier() == 2)
+						var12 = var12 + " III";
+					else if (var8.getAmplifier() == 3)
+						var12 = var12 + " IV";
+
+					this.fontRendererObj.drawStringWithShadow(var12, var1 + 10 + 18, var2 + 6, 16777215);
+					String var11 = Potion.getDurationString(var8);
+					this.fontRendererObj.drawStringWithShadow(var11, var1 + 10 + 18, var2 + 6 + 10, 8355711);
 				}
-
-				String var12 = TFC_Core.translate(var9.getName());
-
-				if (var8.getAmplifier() == 1)
-					var12 = var12 + " II";
-				else if (var8.getAmplifier() == 2)
-					var12 = var12 + " III";
-				else if (var8.getAmplifier() == 3)
-					var12 = var12 + " IV";
-
-				this.fontRendererObj.drawStringWithShadow(var12, var1 + 10 + 18, var2 + 6, 16777215);
-				String var11 = Potion.getDurationString(var8);
-				this.fontRendererObj.drawStringWithShadow(var11, var1 + 10 + 18, var2 + 6 + 10, 8355711);
+			}
+			if (extras > 0)
+			{
+				if (hasColdProt)
+				{
+					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+					TFC_Core.bindTexture(EFFECTS_TEXTURE);
+					this.drawTexturedModalRect(var1, var2, 0, 166, 140, 32);
+					
+					this.drawTexturedModalRect(var1 + 6, var2 + 7, 144, 198, 18,
+							18);
+					
+					String effectName = TFC_Core.translate("gui.coldProtection");
+					this.fontRendererObj.drawStringWithShadow(effectName, var1 + 10 + 18, var2 + 6, 16777215);
+					String var11 = StringUtils.ticksToElapsedTime((int) bodyTemp.tempColdTimeRemaining);
+					this.fontRendererObj.drawStringWithShadow(var11, var1 + 10 + 18, var2 + 6 + 10, 8355711);
+					var2 += var6;
+				}
+				if (hasHeatProt)
+				{
+					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+					TFC_Core.bindTexture(EFFECTS_TEXTURE);
+					this.drawTexturedModalRect(var1, var2, 0, 166, 140, 32);
+					this.drawTexturedModalRect(var1 + 6, var2 + 7, 144, 198+18, 18,
+							18);
+					String effectName = TFC_Core.translate("gui.heatProtection");
+					this.fontRendererObj.drawStringWithShadow(effectName, var1 + 10 + 18, var2 + 6, 16777215);
+					String var11 = StringUtils.ticksToElapsedTime((int) bodyTemp.tempHeatTimeRemaining);
+					this.fontRendererObj.drawStringWithShadow(var11, var1 + 10 + 18, var2 + 6 + 10, 8355711);
+					var2 += var6;
+				}
 			}
 		}
 	}

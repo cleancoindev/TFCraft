@@ -19,6 +19,7 @@ import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -68,8 +69,9 @@ public class ItemCustomAxe extends ItemAxe implements ISize, ICausesDamage
 	public void addInformation(ItemStack is, EntityPlayer player, List arraylist, boolean flag) 
 	{
 		ItemTerra.addSizeInformation(is, arraylist);
-		arraylist.add(EnumChatFormatting.AQUA + TFC_Core.translate(getDamageType().toString()));
+		arraylist.add(EnumChatFormatting.AQUA + TFC_Core.translate(getDamageType(player).toString()));
 		ItemTerraTool.addSmithingBonusInformation(is, arraylist);
+		arraylist.add(TFC_Core.translate("gui."+this.getReach(is).getName()));
 	}
 
 	@Override
@@ -97,7 +99,7 @@ public class ItemCustomAxe extends ItemAxe implements ISize, ICausesDamage
 	}
 
 	@Override
-	public EnumDamageType getDamageType()
+	public EnumDamageType getDamageType(EntityLivingBase is)
 	{
 		return EnumDamageType.SLASHING;
 	}

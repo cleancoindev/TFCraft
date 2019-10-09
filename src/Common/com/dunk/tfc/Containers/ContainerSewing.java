@@ -170,7 +170,9 @@ public class ContainerSewing extends ContainerTFC
 				if (itemstack != null)
 					player.dropPlayerItemWithRandomChoice(itemstack, false);
 			}
-
+			ItemStack itemstack = this.outputInv.getStackInSlotOnClosing(0);
+			if (itemstack != null)
+				player.dropPlayerItemWithRandomChoice(itemstack, false);
 			this.containerInv.setInventorySlotContents(0, (ItemStack) null);
 		}
 	}
@@ -315,15 +317,16 @@ public class ContainerSewing extends ContainerTFC
 					int yarnSlot = checkForString();
 					if (yarnSlot > -1)
 					{
-
-						ItemStack itemstack = new ItemStack(p_75144_4_.inventory.getItemStack().getItem(), 1);
+						ItemStack itemstack = null;
+						if(p_75144_4_.inventory.getItemStack() != null)
+						itemstack = new ItemStack(p_75144_4_.inventory.getItemStack().getItem(), 1);
 						// Set the string value
-						if (itemstack.hasTagCompound())
+						if (itemstack != null && itemstack.hasTagCompound())
 						{
 							itemstack.stackTagCompound.setBoolean("stringed", true);
 							itemstack.stackTagCompound.setString("string", "yarn");
 						}
-						else
+						else if(itemstack != null)
 						{
 							NBTTagCompound s = new NBTTagCompound();
 							s.setBoolean("stringed", true);

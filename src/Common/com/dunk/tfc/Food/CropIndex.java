@@ -7,6 +7,7 @@ import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.TileEntities.TECrop;
 import com.dunk.tfc.api.Food;
 import com.dunk.tfc.api.TFCBlocks;
+import com.dunk.tfc.api.Enums.EnumRegion;
 import com.dunk.tfc.api.Util.Helper;
 
 import net.minecraft.block.Block;
@@ -26,6 +27,16 @@ public class CropIndex
 	public int[] nutrientExtraRestore;
 	public boolean dormantInFrost;
 	public int maxLifespan = -1;
+	
+	public int minimumNaturalRain;
+	public int maximumNaturalRain;
+	
+	public int minimumNaturalBioTemp;
+	public int maximumNaturalBioTemp;
+	
+	public EnumRegion[] regions;
+	
+	public boolean requiresLadder;
 
 	public int chanceForOutput1 = 100;
 	public Item output1;
@@ -34,12 +45,16 @@ public class CropIndex
 	public int chanceForOutput2 = 100;
 	public Item output2;
 	public float output2Avg;
+	
+	//Whether you can harvest this block by right-clicking
+	public boolean activateHarvestable;
+	public int regrowMultiplier = 0;
 
 	public boolean needsSunlight = true;
 	public float waterUsageMult = 1;
 	public Item seedItem;
 
-	public CropIndex(int id, String name, int type, int growth, int stages, float minGTemp, float minATemp, Item seed)
+	public CropIndex(int id, String name, int type, int growth, int stages, float minGTemp, float minATemp, Item seed, EnumRegion[] reg,int minR,int maxR,int minT,int maxT)
 	{
 		growthTime = growth;
 		cycleType = type;
@@ -52,17 +67,28 @@ public class CropIndex
 		nutrientUsageMult = 1.0f;
 		dormantInFrost = false;
 		seedItem = seed;
+		regions = reg;
+		this.minimumNaturalRain = minR;
+		this.maximumNaturalRain = maxR;
+		this.minimumNaturalBioTemp = minT;
+		this.maximumNaturalBioTemp = maxT;
 	}
-	public CropIndex(int id, String name, int type, int growth, int stages, float minGTemp, float minATemp, float nutrientUsageMultiplier, Item seed)
+	public CropIndex(int id, String name, int type, int growth, int stages, float minGTemp, float minATemp, float nutrientUsageMultiplier, Item seed, EnumRegion[] reg,int minR,int maxR,int minT,int maxT)
 	{
-		this(id,name,type,growth,stages,minGTemp,minATemp,seed);
+		this(id,name,type,growth,stages,minGTemp,minATemp,seed,reg, minR, maxR, minT, maxT);
 		nutrientUsageMult = nutrientUsageMultiplier;
 	}
-	public CropIndex(int id, String name, int type, int growth, int stages, float minGTemp, float minATemp, float nutrientUsageMultiplier, Item seed, int[] nutriRestore)
+	public CropIndex(int id, String name, int type, int growth, int stages, float minGTemp, float minATemp, float nutrientUsageMultiplier, Item seed, EnumRegion[] reg,int minR,int maxR,int minT,int maxT, int[] nutriRestore)
 	{
-		this(id,name,type,growth,stages,minGTemp,minATemp,seed);
+		this(id,name,type,growth,stages,minGTemp,minATemp,seed,reg, minR, maxR, minT, maxT);
 		nutrientExtraRestore = nutriRestore.clone();
 		nutrientUsageMult = nutrientUsageMultiplier;
+	}
+	
+	public CropIndex setRequiresLadder(boolean t)
+	{
+		this.requiresLadder = t;
+		return this;
 	}
 
 	public CropIndex setOutput1(Item o, float oAvg)
@@ -84,6 +110,27 @@ public class CropIndex
 		chanceForOutput1 = chance;
 		return this;
 	}
+	
+	public CropIndex setHarvestableWithRightClick(boolean b)
+	{
+		this.activateHarvestable = b;
+		if(b)
+		{
+			this.regrowMultiplier = this.numGrowthStages/4;
+		}
+		return this;
+	}
+	
+	public CropIndex setHarvestableWithRightClick(boolean b, int numDaysToRegrow)
+	{
+		this.activateHarvestable = b;
+		if(b)
+		{
+			this.regrowMultiplier = numDaysToRegrow;
+		}
+		return this;
+	}
+	
 	public CropIndex setOutput2Chance(Item o, float oAvg, int chance)
 	{
 		output2 = o;
@@ -148,6 +195,12 @@ public class CropIndex
 			return new Random(soilType1+soilType2+ph+drainage);
 		}
 		return null;
+	}
+	
+	public CropIndex setMaxLifespan(int m)
+	{
+		this.maxLifespan = m;
+		return this;
 	}
 
 	private void addFlavorProfile(TECrop te, ItemStack outFood)

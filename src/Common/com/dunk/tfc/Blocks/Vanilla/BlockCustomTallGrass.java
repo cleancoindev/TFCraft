@@ -170,7 +170,7 @@ public class BlockCustomTallGrass extends BlockTallGrass implements IShearable
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z)
 	{
-		return (world.getFullBlockLightValue(x, y, z) >= 8 || 
+		return (world.getFullBlockLightValue(x, y, z) >= 12 || 
 				world.canBlockSeeTheSky(x, y, z)) && 
 				this.canThisPlantGrowOnThisBlock(world.getBlock(x, y - 1, z));
 	}
@@ -252,11 +252,11 @@ public class BlockCustomTallGrass extends BlockTallGrass implements IShearable
 			if(w.rand.nextInt(Math.max(((int)((160)/(temp-4))),1)) < 2) //chirp intensity grows with higher temperature
 			{
 				float vol = 0.1f + (w.rand.nextFloat() * 0.20F); // keep the volume between 0 and 0.3
-				float pitch = (temp / 100) * 2 + 0.5F + vol; // the chirp frequency will change depending on the climate temperature
+				float pitch = (temp / 100) * 2 + 0.5F; // the chirp frequency will change depending on the climate temperature
 				w.playSoundEffect(x, y, z, TFC_Sounds.CRICKET, vol, pitch);
 			}
 
-			if(rand.nextInt(8)==0){
+			if(rand.nextInt(16)==0){
 				w.scheduleBlockUpdate(x, y, z, this, 5);
 			}
 		}

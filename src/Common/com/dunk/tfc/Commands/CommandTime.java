@@ -38,68 +38,71 @@ public class CommandTime extends CommandBase
 	@Override
 	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
 	{
-		if(!TFCOptions.enableDebugMode){
-			if (par2ArrayOfStr.length > 1)
+		//This means you can set the time to day or night while in debug mode without stupidness.
+		//It will only go backwards in time if you specifically set the time to a value.
+		boolean debug = false;
+
+		if (par2ArrayOfStr.length > 1)
+		{
+			int i;
+			long currentTime = TFC_Time.getTotalTicks();
+
+			if (par2ArrayOfStr[0].equals("set"))
 			{
-				int i;
-				long currentTime = TFC_Time.getTotalTicks();
-
-				if (par2ArrayOfStr[0].equals("set"))
+				if (par2ArrayOfStr[1].equals("day"))
 				{
-					if (par2ArrayOfStr[1].equals("day"))
-					{
-						i = (int)(currentTime + (24000 - (currentTime%24000)));
-					}
-					else if (par2ArrayOfStr[1].equals("night"))
-					{
-						i = 12500 + (int)(currentTime + (24000 - (currentTime%24000)));
-					}
-					else
-					{
-						i = parseIntWithMin(par1ICommandSender, par2ArrayOfStr[1], 0);
-					}
-					if(i < currentTime)
-					{
-						par1ICommandSender.addChatMessage(new ChatComponentText("Cannot set time to before current time."));
-					}
-					else
-					{
-						this.setTime(par1ICommandSender, i);
-						func_152373_a(par1ICommandSender, this, "commands.time.set", new Object[] {Integer.valueOf(i)});//notifyAdmins
-					}
-					return;
+					i = (int) (currentTime + (24000 - (currentTime % 24000)));
 				}
-
-				if (par2ArrayOfStr[0].equals("add"))
+				else if (par2ArrayOfStr[1].equals("night"))
+				{
+					i = 12500 + (int) (currentTime + (24000 - (currentTime % 24000)));
+				}
+				else
 				{
 					i = parseIntWithMin(par1ICommandSender, par2ArrayOfStr[1], 0);
-					if(i+ currentTime < currentTime)
-					{
-						par1ICommandSender.addChatMessage(new ChatComponentText("Cannot set time to before current time."));
-					}
-					else
-					{
-						this.addTime(par1ICommandSender, i);
-						func_152373_a(par1ICommandSender, this, "commands.time.added", new Object[] {Integer.valueOf(i)});
-					}
-					return;
+					debug = TFCOptions.enableDebugMode;
 				}
+				if (i < currentTime && !debug)
+				{
+					par1ICommandSender.addChatMessage(new ChatComponentText("Cannot set time to before current time."));
+				}
+				else
+				{
+					this.setTime(par1ICommandSender, i);
+					func_152373_a(par1ICommandSender, this, "commands.time.set", new Object[] { Integer.valueOf(i) });// notifyAdmins
+				}
+				return;
 			}
-		}
-		else{
-			(new net.minecraft.command.CommandTime()).processCommand(par1ICommandSender,par2ArrayOfStr);
-			return;
+
+			if (par2ArrayOfStr[0].equals("add"))
+			{
+				i = parseIntWithMin(par1ICommandSender, par2ArrayOfStr[1], 0);
+				if (i + currentTime < currentTime)
+				{
+					par1ICommandSender.addChatMessage(new ChatComponentText("Cannot set time to before current time."));
+				}
+				else
+				{
+					this.addTime(par1ICommandSender, i);
+					func_152373_a(par1ICommandSender, this, "commands.time.added", new Object[] { Integer.valueOf(i) });
+				}
+				return;
+			}
 		}
 		throw new WrongUsageException("commands.time.usage", new Object[0]);
 	}
 
 	/**
-	 * Adds the strings available in this command to the given list of tab completion options.
+	 * Adds the strings available in this command to the given list of tab
+	 * completion options.
 	 */
 	@Override
 	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
 	{
-		return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"set", "add"}): par2ArrayOfStr.length == 2 && par2ArrayOfStr[0].equals("set") ? getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"day", "night"}): null;
+		return par2ArrayOfStr.length == 1
+				? getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] { "set", "add" })
+				: par2ArrayOfStr.length == 2 && par2ArrayOfStr[0].equals("set")
+						? getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] { "day", "night" }) : null;
 	}
 
 	/**

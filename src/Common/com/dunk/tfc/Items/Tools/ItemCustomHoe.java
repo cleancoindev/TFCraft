@@ -142,7 +142,9 @@ public class ItemCustomHoe extends ItemHoe implements ISize
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer player, List arraylist, boolean flag)
 	{
+		
 		ItemTerra.addSizeInformation(is, arraylist);
+		arraylist.add(TFC_Core.translate("gui."+this.getReach(is).getName()));
 		ItemTerraTool.addSmithingBonusInformation(is, arraylist);
 	}
 

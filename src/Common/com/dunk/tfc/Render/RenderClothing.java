@@ -41,9 +41,12 @@ public class RenderClothing
 	private ModelPants thinpants = new ModelPants(0.25f);
 	private ModelShirt shirt = new ModelShirt(0.3f);
 	private ModelShirt thinshirt = new ModelShirt(0.19f);
-	private ModelCoat coat = new ModelCoat(0.6f);
-	private ModelCoat thincoat = new ModelCoat(0.55f);
-	private ModelCoat heavycoat = new ModelCoat(0.7f);
+	private ModelCoat coat = new ModelCoat(0.6f,false,false,true,0);
+	private ModelCoat thincoat = new ModelCoat(0.55f,false,false,true,0);
+	private ModelCoat heavycoat = new ModelCoat(0.7f,false,false,true,0);
+	private ModelCoat heaviercoat = new ModelCoat(0.8f,false,false,true,0f);
+	private ModelCoat cloak = new ModelCoat(1f,true,false,true,0f);
+	private ModelCoat robe = new ModelCoat(0.6f,true,false,false,0.05f);
 	private ModelSkirt skirt = new ModelSkirt(0.1f);
 	private ModelHat hat = new ModelHat(-0.1f);
 
@@ -93,8 +96,19 @@ public class RenderClothing
 		case THINPANTS:
 			this.thinpants.render(entity, item, renderer, partialRenderTick);
 			break;
+		case ROBE:
+			this.robe.render(entity, item, renderer, partialRenderTick);
+			break;
 		case HEAVYCOAT:
+		{
 			this.heavycoat.render(entity, item, renderer, partialRenderTick);
+			break;
+		}
+		case CLOAK:
+			this.cloak.render(entity, item, renderer, partialRenderTick);
+			break;
+		case HEAVIERCOAT:
+			this.heaviercoat.render(entity, item, renderer, partialRenderTick);
 			break;
 		case SKIRT:
 			this.skirt.render(entity, item, renderer, partialRenderTick);

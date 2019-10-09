@@ -4,6 +4,7 @@ import com.dunk.tfc.Reference;
 import com.dunk.tfc.TerraFirmaCraft;
 import com.dunk.tfc.Blocks.BlockTerraContainer;
 import com.dunk.tfc.Core.TFCTabs;
+import com.dunk.tfc.Items.Tools.ItemFirestarter;
 import com.dunk.tfc.TileEntities.TEBlastFurnace;
 import com.dunk.tfc.TileEntities.TEMetalSheet;
 import com.dunk.tfc.api.TFCBlocks;
@@ -61,7 +62,7 @@ public class BlockBlastFurnace extends BlockTerraContainer
 
 			if(te.isValid)
 			{
-				if(equippedItem != null && (equippedItem.getItem() == TFCItems.fireStarter || equippedItem.getItem() == TFCItems.flintSteel))
+				if(equippedItem != null && (equippedItem.getItem() instanceof ItemFirestarter || equippedItem.getItem() == TFCItems.flintSteel))
 					if(te.canLight())
 						entityplayer.getCurrentEquippedItem().damageItem(1,entityplayer);
 

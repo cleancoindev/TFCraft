@@ -19,7 +19,7 @@ import net.minecraft.world.WorldType;
 
 public abstract class GenEVTLayer extends GenLayerTFC
 {
-	public static final int LOW = DataLayer.EVT_0_25.layerID;
+	public static final int LOW = DataLayer.EVT_0_125.layerID;//DataLayer.EVT_0_25.layerID;
 	public static final int HIGH = DataLayer.EVT_8.layerID;
 
 	public static GenLayerTFC initialize(long seed, WorldType worldType)

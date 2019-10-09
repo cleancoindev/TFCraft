@@ -120,7 +120,7 @@ public class ContainerMold extends ContainerTFC
 			}
 
 			if (inputStack != null && pi.moldTransferTimer < 100 &&
-					CraftingManagerTFC.getInstance().findMatchingRecipe(this.containerInv, world) != null)
+					CraftingManagerTFC.getInstance().findMatchingRecipe(this.containerInv,(int)this.player.posX,(int)this.player.posY,(int)this.player.posZ, world) != null)
 			{
 				pi.moldTransferTimer++;
 			}
@@ -141,7 +141,7 @@ public class ContainerMold extends ContainerTFC
 				Item inputItem = inputStack.getItem();
 				int newSourceDamage = sourceStack.getItemDamage() + 1;
 				int inputDamage = inputStack.getItemDamage();
-				ItemStack recipeOutput = CraftingManagerTFC.getInstance().findMatchingRecipe(this.containerInv, world);
+				ItemStack recipeOutput = CraftingManagerTFC.getInstance().findMatchingRecipe(this.containerInv,(int)this.player.posX,(int)this.player.posY,(int)this.player.posZ, world);
 
 				if (sourceItem instanceof ItemMeltedMetal && inputItem instanceof ItemMeltedMetal)
 				{

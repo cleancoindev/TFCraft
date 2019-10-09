@@ -32,6 +32,7 @@ public class InitClientWorldPacket extends AbstractPacket
 	private SkillStats playerSkills;
 	private Map<String, Integer> skillMap = new HashMap<String, Integer>();
 	private byte chiselMode;
+	private byte knifeMode;
 
 	// Config Options
 	private boolean debugMode;
@@ -83,6 +84,7 @@ public class InitClientWorldPacket extends AbstractPacket
 			this.craftingTable = true;
 		this.playerSkills = TFC_Core.getSkillStats(p);
 		this.chiselMode = PlayerManagerTFC.getInstance().getPlayerInfoFromPlayer(p).chiselMode;
+		this.knifeMode = (byte) PlayerManagerTFC.getInstance().getPlayerInfoFromPlayer(p).knifeMode;
 	}
 
 	@Override
@@ -100,6 +102,7 @@ public class InitClientWorldPacket extends AbstractPacket
 		buffer.writeBoolean(this.craftingTable);
 		this.playerSkills.toOutBuffer(buffer);
 		buffer.writeByte(this.chiselMode);
+		buffer.writeByte(this.knifeMode);
 
 		// Config Options
 		buffer.writeBoolean(this.debugMode);
@@ -148,6 +151,7 @@ public class InitClientWorldPacket extends AbstractPacket
 		}
 
 		this.chiselMode = buffer.readByte();
+		this.knifeMode = buffer.readByte();
 
 		// Config Options
 		this.debugMode = buffer.readBoolean();
@@ -202,6 +206,7 @@ public class InitClientWorldPacket extends AbstractPacket
 				player.getUniqueID()));
 
 		PlayerManagerTFC.getInstance().getClientPlayer().setChiselMode(this.chiselMode);
+		PlayerManagerTFC.getInstance().getClientPlayer().setKnifeMode(this.knifeMode);
 
 		// Sync Config Options
 		TFCOptions.enableDebugMode = this.debugMode;

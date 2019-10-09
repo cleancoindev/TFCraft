@@ -7,12 +7,14 @@ import net.minecraft.block.BlockFence;
 
 public class TFCBlocks
 {
+	public static int mossRenderId;
 	public static int clayGrassRenderId;
 	public static int floraRenderId;
 	public static int peatGrassRenderId;
 	public static int sulfurRenderId;
 	public static int woodFruitRenderId;
 	public static int leavesFruitRenderId;
+	public static int leavesNewFruitRenderId;
 	public static int woodThickRenderId;
 	public static int woodSupportRenderIdH;
 	public static int woodSupportRenderIdV;
@@ -20,6 +22,7 @@ public class TFCBlocks
 	public static int oreRenderId;
 	public static int moltenRenderId;
 	public static int looseRockRenderId;
+	public static int chimneyRenderId;
 	public static int snowRenderId;
 	public static int firepitRenderId;
 	public static int anvilRenderId;
@@ -46,11 +49,13 @@ public class TFCBlocks
 	public static int fluidRenderId;
 	public static int woodConstructRenderId;
 	public static int potteryRenderId;
+	public static int dryingBricksRenderId;
 	public static int tuyereRenderId;
 	public static int crucibleRenderId;
 	public static int berryRenderId;
 	public static int pipeRenderId;
 	public static int pipeValveRenderId;
+	public static int tileRoofRenderId;
 	public static int waterPlantRenderId;
 	public static int bloomeryRenderId;
 	public static int metalsheetRenderId;
@@ -60,6 +65,7 @@ public class TFCBlocks
 	public static int metalTrapDoorRenderId;
 	public static int vesselRenderId;
 	public static int basketRenderId;
+	public static int drumRenderId;
 	public static int torchRenderId;
 	public static int smokeRenderId;
 	public static int smokeRackRenderId;
@@ -67,6 +73,8 @@ public class TFCBlocks
 	public static int wallRenderId;
 	public static int hopperRenderId;
 	public static int flowerPotRenderId;
+	public static int leafLitterRenderId;
+	public static int undergrowthRenderId;
 
 	public static Block stoneIgIn;
 	public static Block stoneIgEx;
@@ -137,6 +145,25 @@ public class TFCBlocks
 	public static Block detailed;
 	
 	public static Block fauxPalm;
+	
+	public static Block mudBricks;
+	public static Block mudBricks2;
+	public static Block wattle;
+	public static Block wattleDaub;
+	public static Block chimney;
+	public static Block dryingBricks;
+	
+	public static Block chimneyBricks;
+	public static Block chimneyBricks2;
+	
+	public static Block leafLitter;
+	
+	public static Block undergrowthPalm;
+	public static Block undergrowth;
+	public static Block lowUndergrowth;
+	public static Block fern;
+	
+	public static Block thatchRoof;
 
 	public static Block woodConstruct;
 	public static Block woodVert;
@@ -165,6 +192,9 @@ public class TFCBlocks
 
 	public static Block[] doors = new Block[Global.WOOD_ALL.length];
 
+	public static Block bigDrum;
+	public static Block littleDrum;
+	
 	public static Block ingotPile;
 	public static Block barrel;
 	public static Block loom;
@@ -320,6 +350,8 @@ public class TFCBlocks
 	public static Block lava;
 	public static Block lavaStationary;
 	public static Block ice;
+	
+	public static Block tileRoof;
 
 	public static Block waterPlant;
 
@@ -331,6 +363,7 @@ public class TFCBlocks
 	public static Block cactus;
 	public static Block reeds;
 	public static Block pumpkin;
+	public static Block melon;
 	public static Block litPumpkin;
 	public static Block buttonWood;
 	public static Block vine;

@@ -152,9 +152,9 @@ public class SewingPattern
 						//This means we're too far away
 						continue;
 					}
-					if(sewnPoints[x+i][y+j])
+					if(sewnPoints[Math.max(Math.min(x+i, sewnPoints.length-1), 0)][Math.max(Math.min(y+j, sewnPoints[0].length-1), 0)])
 					{
-						validator[x+i][y+j] = false;
+						validator[Math.max(Math.min(x+i, sewnPoints.length-1), 0)][Math.max(Math.min(y+j, sewnPoints[0].length-1), 0)] = false;
 						remainingRequiredStitches--;
 					}
 				}

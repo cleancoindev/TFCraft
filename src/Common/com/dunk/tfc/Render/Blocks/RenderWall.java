@@ -2,6 +2,7 @@ package com.dunk.tfc.Render.Blocks;
 
 import org.lwjgl.opengl.GL11;
 
+import com.dunk.tfc.Render.RenderBlocksWithRotation;
 import com.dunk.tfc.api.TFCBlocks;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.dunk.tfc.Core.Recipes;
 import com.dunk.tfc.Core.TFCTabs;
+import com.dunk.tfc.Core.TFC_Sounds;
 import com.dunk.tfc.Core.Metal.Alloy;
 import com.dunk.tfc.Core.Metal.AlloyManager;
 import com.dunk.tfc.Core.Metal.MetalRegistry;
@@ -22,6 +23,7 @@ import com.dunk.tfc.Items.ItemBone;
 import com.dunk.tfc.Items.ItemBoots;
 import com.dunk.tfc.Items.ItemBurlapSack;
 import com.dunk.tfc.Items.ItemClay;
+import com.dunk.tfc.Items.ItemCloak;
 import com.dunk.tfc.Items.ItemClothing;
 import com.dunk.tfc.Items.ItemClothingPiece;
 import com.dunk.tfc.Items.ItemCoal;
@@ -35,18 +37,23 @@ import com.dunk.tfc.Items.ItemDrink;
 import com.dunk.tfc.Items.ItemDyeCustom;
 import com.dunk.tfc.Items.ItemFertilizer;
 import com.dunk.tfc.Items.ItemFlatGeneric;
+import com.dunk.tfc.Items.ItemFlute;
 import com.dunk.tfc.Items.ItemFruitTreeSapling;
 import com.dunk.tfc.Items.ItemGem;
 import com.dunk.tfc.Items.ItemGlassBottle;
 import com.dunk.tfc.Items.ItemGlassMaterial;
 import com.dunk.tfc.Items.ItemHat;
+import com.dunk.tfc.Items.ItemHorn;
 import com.dunk.tfc.Items.ItemIngot;
 import com.dunk.tfc.Items.ItemLeather;
 import com.dunk.tfc.Items.ItemLogs;
 import com.dunk.tfc.Items.ItemLooseRock;
+import com.dunk.tfc.Items.ItemLyre;
 import com.dunk.tfc.Items.ItemMeltedMetal;
 import com.dunk.tfc.Items.ItemMetalSheet;
 import com.dunk.tfc.Items.ItemMetalSheet2x;
+import com.dunk.tfc.Items.ItemMud;
+import com.dunk.tfc.Items.ItemMudBrick;
 import com.dunk.tfc.Items.ItemOre;
 import com.dunk.tfc.Items.ItemOreSmall;
 import com.dunk.tfc.Items.ItemPants;
@@ -104,6 +111,7 @@ import com.dunk.tfc.Items.Tools.ItemPlasterBucket;
 import com.dunk.tfc.Items.Tools.ItemProPick;
 import com.dunk.tfc.Items.Tools.ItemShears;
 import com.dunk.tfc.Items.Tools.ItemSpindle;
+import com.dunk.tfc.Items.Tools.ItemStaff;
 import com.dunk.tfc.Items.Tools.ItemSteelBucketBlue;
 import com.dunk.tfc.Items.Tools.ItemSteelBucketRed;
 import com.dunk.tfc.Items.Tools.ItemTrowel;
@@ -115,6 +123,7 @@ import com.dunk.tfc.api.TFCOptions;
 import com.dunk.tfc.api.Constant.Global;
 import com.dunk.tfc.api.Enums.EnumDamageType;
 import com.dunk.tfc.api.Enums.EnumFoodGroup;
+import com.dunk.tfc.api.Enums.EnumItemReach;
 import com.dunk.tfc.api.Enums.EnumSize;
 import com.dunk.tfc.api.Enums.EnumWeight;
 import com.dunk.tfc.api.Interfaces.IEquipable;
@@ -139,43 +148,48 @@ public class ItemSetup extends TFCItems
 	{
 		// Harvest Level Durability Mining Speed Damage Enchant
 		// Tier 0
-		igInToolMaterial = EnumHelper.addToolMaterial("IgIn", 1, igInStoneUses, igInStoneEff, 400, 5);
-		sedToolMaterial = EnumHelper.addToolMaterial("Sed", 1, sedStoneUses, sedStoneEff, 400, 5);
-		igExToolMaterial = EnumHelper.addToolMaterial("IgEx", 1, igExStoneUses, igExStoneEff, 400, 5);
-		mMToolMaterial = EnumHelper.addToolMaterial("MM", 1, mMStoneUses, mMStoneEff, 400, 5);
+		igInToolMaterial = EnumHelper.addToolMaterial("IgIn", 1, igInStoneUses, igInStoneEff, 200, 5);
+		sedToolMaterial = EnumHelper.addToolMaterial("Sed", 1, sedStoneUses, sedStoneEff, 185, 5);
+		igExToolMaterial = EnumHelper.addToolMaterial("IgEx", 1, igExStoneUses, igExStoneEff, 195, 5);
+		mMToolMaterial = EnumHelper.addToolMaterial("MM", 1, mMStoneUses, mMStoneEff, 190, 5);
 
 		boneToolMaterial = EnumHelper.addToolMaterial("Bone", 0, boneUses, boneEff, 10, 3);
+		woodToolMaterial = EnumHelper.addToolMaterial("Wood", 0, woodUses, boneEff, 150, 1);
 		smallIronToolMaterial = EnumHelper.addToolMaterial("Small Iron", 0, wroughtIronUses, boneEff, 20, 3);
 
 		// Tier 1
-		copperToolMaterial = EnumHelper.addToolMaterial("Copper", 2, copperUses, copperEff, 650, 8);
+		copperToolMaterial = EnumHelper.addToolMaterial("Copper", 2, copperUses, copperEff, 400, 8);
 		// Tier 2
-		bronzeToolMaterial = EnumHelper.addToolMaterial("Bronze", 2, bronzeUses, bronzeEff, 1000, 13);
+		bronzeToolMaterial = EnumHelper.addToolMaterial("Bronze", 2, bronzeUses, bronzeEff, 800, 13);
 		bismuthBronzeToolMaterial = EnumHelper.addToolMaterial("BismuthBronze", 2, bismuthBronzeUses, bismuthBronzeEff,
-				900, 10);
-		blackBronzeToolMaterial = EnumHelper.addToolMaterial("BlackBronze", 2, blackBronzeUses, blackBronzeEff, 950,
+				750, 10);
+		blackBronzeToolMaterial = EnumHelper.addToolMaterial("BlackBronze", 2, blackBronzeUses, blackBronzeEff, 745,
 				10);
 		// Tier 3
-		ironToolMaterial = EnumHelper.addToolMaterial("Iron", 2, wroughtIronUses, wroughtIronEff, 1350, 10);
+		ironToolMaterial = EnumHelper.addToolMaterial("Iron", 2, wroughtIronUses, wroughtIronEff, 1000, 10);
 		// Tier 4
-		steelToolMaterial = EnumHelper.addToolMaterial("Steel", 2, steelUses, steelEff, 1700, 10);
+		steelToolMaterial = EnumHelper.addToolMaterial("Steel", 2, steelUses, steelEff, 1400, 10);
 		// Tier 5
-		blackSteelToolMaterial = EnumHelper.addToolMaterial("BlackSteel", 2, blackSteelUses, blackSteelEff, 2050, 12);
+		blackSteelToolMaterial = EnumHelper.addToolMaterial("BlackSteel", 2, blackSteelUses, blackSteelEff, 1600, 12);
 		// Tier 6
-		blueSteelToolMaterial = EnumHelper.addToolMaterial("BlueSteel", 3, blueSteelUses, blueSteelEff, 2400, 22);
-		redSteelToolMaterial = EnumHelper.addToolMaterial("RedSteel", 3, redSteelUses, redSteelEff, 2400, 22);
+		blueSteelToolMaterial = EnumHelper.addToolMaterial("BlueSteel", 3, blueSteelUses, blueSteelEff, 2000, 22);
+		redSteelToolMaterial = EnumHelper.addToolMaterial("RedSteel", 3, redSteelUses, redSteelEff, 2000, 22);
 
 		TerraFirmaCraft.LOG.info(new StringBuilder().append("Loading Items").toString());
 
 		fishingRod = new ItemCustomFishingRod().setUnlocalizedName("fishingRod").setTextureName("tools/fishing_rod");
 		coal = new ItemCoal().setUnlocalizedName("coal");
 		stick = new ItemStick().setFull3D().setUnlocalizedName("stick");
+		Items.stick = stick;
 		bow = new ItemCustomBow().setUnlocalizedName("bow").setTextureName("tools/bow");
+		unstrungBow = new ItemTerra().setUnlocalizedName("unstrung bow").setTextureName("tools/bow_unstrung");
+		pole = new ItemTerra().setReach(EnumItemReach.FAR).setUnlocalizedName("pole");
+		
 		Items.bow = (ItemBow) bow;
 		arrow = new ItemArrow().setUnlocalizedName("arrow").setCreativeTab(TFCTabs.TFC_WEAPONS);
 		dye = new ItemDyeCustom().setUnlocalizedName("dyePowder").setTextureName("dye_powder")
 				.setCreativeTab(TFCTabs.TFC_MATERIALS);
-		glassBottle = new ItemGlassBottle().setUnlocalizedName("Glass Bottle");
+		glassBottle = new ItemGlassBottle().setMetal(Global.GLASS).setUnlocalizedName("Glass Bottle");
 		potion = new ItemCustomPotion().setUnlocalizedName("potion").setTextureName("potion");
 		rope = new ItemCustomLeash().setUnlocalizedName("Rope").setCreativeTab(TFCTabs.TFC_TOOLS);
 		Items.lead = rope;
@@ -185,7 +199,7 @@ public class ItemSetup extends TFCItems
 		sluiceItem = new ItemSluice().setFolder("devices/").setUnlocalizedName("SluiceItem")
 				.setCreativeTab(TFCTabs.TFC_DEVICES);
 
-		bone = new ItemBone().setUnlocalizedName("Bone");
+		bone = new ItemBone().setReach(EnumItemReach.MEDIUM).setUnlocalizedName("Bone");
 
 		boneFragment = new ItemTerra().setUnlocalizedName("Bone Fragment");
 
@@ -498,6 +512,7 @@ public class ItemSetup extends TFCItems
 		thickLogs = new ItemThickLogs().setUnlocalizedName("Thick Log");
 
 		// javelins
+		woodenSpear = new ItemJavelin(woodToolMaterial,40).setUnlocalizedName("Wooden Spear");
 		igInStoneJavelin = new ItemJavelin(igInToolMaterial, 60).setUnlocalizedName("IgIn Stone Javelin");
 		sedStoneJavelin = new ItemJavelin(sedToolMaterial, 60).setUnlocalizedName("Sed Stone Javelin");
 		igExStoneJavelin = new ItemJavelin(igExToolMaterial, 60).setUnlocalizedName("IgEx Stone Javelin");
@@ -571,6 +586,8 @@ public class ItemSetup extends TFCItems
 		zincUnshaped = new ItemMeltedMetal().setHasSolidLiquidStates(true).setMaxUnits(100).setCounter(1)
 				.setBaseDamage(0).setUnlocalizedName("Zinc Unshaped");
 
+		woodenStaff = new ItemStaff(woodToolMaterial,110).setUnlocalizedName("Wooden Staff");
+		
 		// Hammers
 		stoneHammer = new ItemHammer(igInToolMaterial, 60).setUnlocalizedName("Stone Hammer")
 				.setMaxDamage(igInStoneUses);
@@ -594,6 +611,7 @@ public class ItemSetup extends TFCItems
 
 		ink = new ItemTerra().setUnlocalizedName("Ink").setCreativeTab(TFCTabs.TFC_MATERIALS);
 		fireStarter = new ItemFirestarter().setFolder("tools/").setUnlocalizedName("Firestarter");
+		bowFireStarter = new ItemFirestarter(50).setChance(2).setFolder("tools/").setUnlocalizedName("Bow Firestarter");
 
 		// Tool heads
 		bismuthBronzePickaxeHead = new ItemMiscToolHead().setUnlocalizedName("Bismuth Bronze Pick Head");
@@ -687,13 +705,20 @@ public class ItemSetup extends TFCItems
 		redSteelSawHead = new ItemMiscToolHead().setUnlocalizedName("Red Steel Saw Blade");
 		steelSawHead = new ItemMiscToolHead().setUnlocalizedName("Steel Saw Blade");
 
-		highCarbonBlackSteelUnshaped = new ItemMeltedMetal().setUnlocalizedName("HC Black Steel Unshaped");
-		weakBlueSteelUnshaped = new ItemMeltedMetal().setUnlocalizedName("Weak Blue Steel Unshaped");
-		highCarbonBlueSteelUnshaped = new ItemMeltedMetal().setUnlocalizedName("HC Blue Steel Unshaped");
-		weakRedSteelUnshaped = new ItemMeltedMetal().setUnlocalizedName("Weak Red Steel Unshaped");
-		highCarbonRedSteelUnshaped = new ItemMeltedMetal().setUnlocalizedName("HC Red Steel Unshaped");
-		weakSteelUnshaped = new ItemMeltedMetal().setUnlocalizedName("Weak Steel Unshaped");
-		highCarbonSteelUnshaped = new ItemMeltedMetal().setUnlocalizedName("HC Steel Unshaped");
+		highCarbonBlackSteelUnshaped = new ItemMeltedMetal().setHasSolidLiquidStates(true).setMaxUnits(100).setCounter(1)
+				.setBaseDamage(0).setUnlocalizedName("HC Black Steel Unshaped");
+		weakBlueSteelUnshaped = new ItemMeltedMetal().setHasSolidLiquidStates(true).setMaxUnits(100).setCounter(1)
+				.setBaseDamage(0).setUnlocalizedName("Weak Blue Steel Unshaped");
+		highCarbonBlueSteelUnshaped = new ItemMeltedMetal().setHasSolidLiquidStates(true).setMaxUnits(100).setCounter(1)
+				.setBaseDamage(0).setUnlocalizedName("HC Blue Steel Unshaped");
+		weakRedSteelUnshaped = new ItemMeltedMetal().setHasSolidLiquidStates(true).setMaxUnits(100).setCounter(1)
+				.setBaseDamage(0).setUnlocalizedName("Weak Red Steel Unshaped");
+		highCarbonRedSteelUnshaped = new ItemMeltedMetal().setHasSolidLiquidStates(true).setMaxUnits(100).setCounter(1)
+				.setBaseDamage(0).setUnlocalizedName("HC Red Steel Unshaped");
+		weakSteelUnshaped = new ItemMeltedMetal().setHasSolidLiquidStates(true).setMaxUnits(100).setCounter(1)
+				.setBaseDamage(0).setUnlocalizedName("Weak Steel Unshaped");
+		highCarbonSteelUnshaped = new ItemMeltedMetal().setHasSolidLiquidStates(true).setMaxUnits(100).setCounter(1)
+				.setBaseDamage(0).setUnlocalizedName("HC Steel Unshaped");
 		// Coke = new
 		// ItemTerra().setUnlocalizedName("Coke").setCreativeTab(null);
 
@@ -749,6 +774,9 @@ public class ItemSetup extends TFCItems
 		redSteelScytheHead = new ItemMiscToolHead().setUnlocalizedName("Red Steel Scythe Blade");
 		steelScytheHead = new ItemMiscToolHead().setUnlocalizedName("Steel Scythe Blade");
 
+		mudBrick = new ItemMudBrick().setUnlocalizedName("Mud Brick");
+		mud = new ItemMud().setUnlocalizedName("Mud").setHasSubtypes(true);
+		
 		woodenBucketEmpty = new ItemCustomBucket(Blocks.air).setUnlocalizedName("Wooden Bucket Empty");
 		woodenBucketWater = new ItemCustomBucket(TFCBlocks.freshWater, woodenBucketEmpty)
 				.setUnlocalizedName("Wooden Bucket Water");
@@ -760,6 +788,23 @@ public class ItemSetup extends TFCItems
 				.setContainerItem(woodenBucketEmpty);
 		woodenBucketGypsum = new ItemPlasterBucket().setUnlocalizedName("Wooden Bucket Gypsum")
 				.setContainerItem(woodenBucketEmpty);
+		woodenBucketVinegar = new ItemCustomBucket(Blocks.air).setFolder("food/").setUnlocalizedName("Wooden Bucket Vinegar")
+				.setContainerItem(woodenBucketEmpty).setCreativeTab(TFCTabs.TFC_FOODS);
+		
+		clayBucketUnfired = new ItemPotteryBase().setMetaNames(new String[]{"Clay Bucket Unfired"}).setUnlocalizedName("Unfired Clay Bucket");
+		clayBucketEmpty = new ItemCustomBucket(Blocks.air).setUnlocalizedName("Ceramic Bucket Empty");
+		clayBucketWater = new ItemCustomBucket(TFCBlocks.freshWater, clayBucketEmpty)
+				.setUnlocalizedName("Ceramic Bucket Water");
+		clayBucketSaltWater = new ItemCustomBucket(TFCBlocks.saltWater, clayBucketEmpty)
+				.setUnlocalizedName("Ceramic Bucket Salt Water");
+		clayBucketMilk = new ItemCustomBucketMilk().setUnlocalizedName("Ceramic Bucket Milk")
+				.setContainerItem(clayBucketEmpty).setCreativeTab(TFCTabs.TFC_FOODS);
+		clayBucketPlaster = new ItemPlasterBucket().setUnlocalizedName("Ceramic Bucket Plaster")
+				.setContainerItem(clayBucketEmpty);
+		clayBucketGypsum = new ItemPlasterBucket().setUnlocalizedName("Ceramic Bucket Gypsum")
+				.setContainerItem(clayBucketEmpty);
+		clayBucketVinegar = new ItemCustomBucket(Blocks.air).setFolder("food/").setUnlocalizedName("Ceramic Bucket Vinegar")
+				.setContainerItem(clayBucketEmpty).setCreativeTab(TFCTabs.TFC_FOODS);
 
 		bismuthBronzeKnifeHead = new ItemMiscToolHead().setUnlocalizedName("Bismuth Bronze Knife Blade");
 		blackBronzeKnifeHead = new ItemMiscToolHead().setUnlocalizedName("Black Bronze Knife Blade");
@@ -850,7 +895,16 @@ public class ItemSetup extends TFCItems
 		doorWillow = new ItemWoodDoor(14).setUnlocalizedName("Willow Door");
 		doorKapok = new ItemWoodDoor(15).setUnlocalizedName("Kapok Door");
 		doorAcacia = new ItemWoodDoor(16).setUnlocalizedName("Acacia Door");
-
+		doorPalm = new ItemWoodDoor(17).setUnlocalizedName("Palm Door");
+		doorEbony = new ItemWoodDoor(18).setUnlocalizedName("Ebony Door");
+		doorFever = new ItemWoodDoor(19).setUnlocalizedName("Fever Door");
+		doorBaobab = new ItemWoodDoor(20).setUnlocalizedName("Baobab Door");
+		doorLimba = new ItemWoodDoor(21).setUnlocalizedName("Limba Door");
+		doorMahogany = new ItemWoodDoor(22).setUnlocalizedName("Mahogany Door");
+		doorTeak = new ItemWoodDoor(23).setUnlocalizedName("Teak Door");
+		doorBamboo = new ItemWoodDoor(24).setUnlocalizedName("Bamboo Door");
+		doorGingko = new ItemWoodDoor(25).setUnlocalizedName("Gingko Door");
+		doorFruitwood = new ItemWoodDoor(26).setUnlocalizedName("Fruitwood Door");
 		
 		waterBottle = new ItemDrink().setWaterRestore(12000).setUnlocalizedName("Water Bottle").setCreativeTab(TFCTabs.TFC_FOODS);
 		beer = new ItemAlcohol().setUnlocalizedName("Beer").setCreativeTab(TFCTabs.TFC_FOODS);
@@ -860,6 +914,7 @@ public class ItemSetup extends TFCItems
 		sake = new ItemAlcohol().setUnlocalizedName("Sake").setCreativeTab(TFCTabs.TFC_FOODS);
 		vodka = new ItemAlcohol().setUnlocalizedName("Vodka").setCreativeTab(TFCTabs.TFC_FOODS);
 		berryWine = new ItemAlcohol().setUnlocalizedName("BerryWine").setCreativeTab(TFCTabs.TFC_FOODS);
+		wine = new ItemAlcohol().setUnlocalizedName("Wine").setCreativeTab(TFCTabs.TFC_FOODS);
 		whiskey = new ItemAlcohol().setUnlocalizedName("Whiskey").setCreativeTab(TFCTabs.TFC_FOODS);
 		cornWhiskey = new ItemAlcohol().setUnlocalizedName("CornWhiskey").setCreativeTab(TFCTabs.TFC_FOODS);
 
@@ -927,6 +982,11 @@ public class ItemSetup extends TFCItems
 						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/wool_coat_color.png"))
 				.setColdResistance(3).setWool(true).setHeatResistance(-2).setMaxDamage(woolUses)
 				.setUnlocalizedName("Wool Coat");
+		woolRobe = new ItemCoat(IEquipable.ClothingType.ROBE)
+				.setResourceLocation(
+						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/wool_robe_color.png"))
+				.setColdResistance(4).setWool(true).setHeatResistance(-2).setMaxDamage(woolUses)
+				.setUnlocalizedName("Wool Robe");
 		woolHat = new ItemHat(IEquipable.ClothingType.CLOTH_HAT)
 				.setResourceLocation(
 						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/wool_hat_color.png"))
@@ -949,6 +1009,10 @@ public class ItemSetup extends TFCItems
 				.setResourceLocation(
 						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/linen_coat_color.png"))
 				.setColdResistance(1).setHeatResistance(-1).setMaxDamage(linenUses).setUnlocalizedName("Linen Coat");
+		linenRobe = new ItemCoat(IEquipable.ClothingType.ROBE)
+				.setResourceLocation(
+						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/linen_robe_color.png"))
+				.setColdResistance(2).setHeatResistance(-1).setMaxDamage(linenUses).setUnlocalizedName("Linen Robe");
 		linenHat = new ItemHat(IEquipable.ClothingType.CLOTH_HAT)
 				.setResourceLocation(
 						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/linen_hat_color.png")).setHeatResistance(1)
@@ -971,6 +1035,10 @@ public class ItemSetup extends TFCItems
 				.setResourceLocation(
 						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/silk_coat_color.png"))
 				.setHeatResistance(2).setMaxDamage(silkUses).setUnlocalizedName("Silk Coat");
+		silkRobe = new ItemCoat(IEquipable.ClothingType.ROBE)
+				.setResourceLocation(
+						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/silk_robe_color.png"))
+				.setHeatResistance(2).setColdResistance(1).setMaxDamage(silkUses).setUnlocalizedName("Silk Robe");
 		silkHat = new ItemHat(IEquipable.ClothingType.CLOTH_HAT)
 				.setResourceLocation(
 						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/silk_hat_color.png"))
@@ -1013,6 +1081,10 @@ public class ItemSetup extends TFCItems
 				.setResourceLocation(
 						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/straw_hat_color.png"))
 				.setHeatResistance(1).setStraw(true).setMaxDamage(strawUses * 4).setUnlocalizedName("Straw Hat");
+		strawHat2 = new ItemHat(EquipType.HEAD, new EquipType[] { EquipType.HEAD2 }, IEquipable.ClothingType.STRAW_HAT)
+				.setResourceLocation(
+						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/straw_hat_color.png"))
+				.setHeatResistance(1).setStraw(true).setMaxDamage(strawUses * 4).setUnlocalizedName("Straw Hat2");
 		grassSkirt = new ItemSkirt(new EquipType[] { EquipType.LEGS2 }, IEquipable.ClothingType.SKIRT)
 				.setResourceLocation(
 						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/grass_skirt_color.png"))
@@ -1022,6 +1094,10 @@ public class ItemSetup extends TFCItems
 						.setResourceLocation(new ResourceLocation(Reference.MOD_ID,
 								"textures/models/armor/clothing/grass_sandals_color.png"))
 						.setStraw(true).setMaxDamage(strawUses).setUnlocalizedName("Grass Sandals");
+		grassCoat = new ItemCloak(IEquipable.ClothingType.CLOAK)
+				.setResourceLocation(
+						new ResourceLocation(Reference.MOD_ID, "textures/models/armor/clothing/grass_coat_color.png"))
+				.setColdResistance(2).setHeatResistance(-2).setMaxDamage(strawUses).setUnlocalizedName("Grass Coat");
 
 		// Leather
 		leatherSandals = ((ItemClothing) (new ItemBoots(IEquipable.ClothingType.SANDALS).setDefaultWalkable(0.05f)
@@ -1052,8 +1128,7 @@ public class ItemSetup extends TFCItems
 				.setUnlocalizedName("Spindle Head").setCreativeTab(TFCTabs.TFC_POTTERY);
 		stoneBrick = new ItemStoneBrick().setFolder("tools/").setUnlocalizedName("ItemStoneBrick");
 		mortar = new ItemTerra().setFolder("tools/").setUnlocalizedName("Mortar").setCreativeTab(TFCTabs.TFC_MATERIALS);
-		vinegar = new ItemCustomBucket(Blocks.air).setFolder("food/").setUnlocalizedName("Vinegar")
-				.setContainerItem(woodenBucketEmpty).setCreativeTab(TFCTabs.TFC_FOODS);
+		
 		hide = new ItemRawHide().setFolder("tools/").setUnlocalizedName("Hide").setCreativeTab(TFCTabs.TFC_MATERIALS);
 		soakedHide = new ItemRawHide().setFolder("tools/").setUnlocalizedName("Soaked Hide")
 				.setCreativeTab(TFCTabs.TFC_MATERIALS);
@@ -1068,6 +1143,10 @@ public class ItemSetup extends TFCItems
 		leather = new ItemLeather().setSpecialCraftingType(flatLeather).setFolder("tools/")
 				.setUnlocalizedName("TFC Leather");
 
+		lyre = new ItemLyre().setUnlocalizedName("Lyre");
+		boneFlute = new ItemFlute().setUnlocalizedName("Bone Flute");
+		hollowBone = new ItemTerra().setUnlocalizedName("Hollow Bone");
+		
 		straw = new ItemStraw().setSpecialCraftingType(flatStraw).setFolder("plants/").setUnlocalizedName("Straw")
 				.setCreativeTab(TFCTabs.TFC_MATERIALS);
 		strawBasket = new ItemBasket().setUnlocalizedName("Straw Basket");
@@ -1080,6 +1159,8 @@ public class ItemSetup extends TFCItems
 		potterySmallVessel = new ItemPotterySmallVessel().setUnlocalizedName("Small Vessel");
 		burlapSack = new ItemBurlapSack().setUnlocalizedName("Burlap Sack");
 		// PotteryPot = new ItemPotteryPot().setUnlocalizedName("Pot");
+		
+		clayTile = new ItemPotteryBase().setMetaNames(new String[] {"Clay Tile","Ceramic Tile"}).setUnlocalizedName("Clay Tile");
 		ceramicMold = new ItemPotteryMoldBase().setHasSolidLiquidStates(true).setMaxUnits(100).setCounter(1)
 				.setBaseDamage(2).setMetaNames(new String[] { "Clay Mold", "Ceramic Mold" }).setUnlocalizedName("Mold");
 		potteryBowl = new ItemPotteryBase().setMetaNames(new String[] { "Clay Bowl", "Ceramic Bowl" })
@@ -1168,6 +1249,12 @@ public class ItemSetup extends TFCItems
 						"Ceramic Mold Javelin Black Bronze" })
 				.setUnlocalizedName("Javelin Mold");
 
+		brassTube = new ItemTerra().setUnlocalizedName("Brass Tube");
+		horn = new ItemTerra().setUnlocalizedName("horn");
+		blowingHorn = new ItemHorn().setUnlocalizedName("blowing horn");
+		brassHorn = new ItemHorn(true).setUnlocalizedName("bugle");
+		conchHorn = new ItemHorn().setUnlocalizedName("conch horn");
+		
 		tuyereCopper = new ItemTuyere(40, 0).setUnlocalizedName("Copper Tuyere");
 		tuyereBronze = new ItemTuyere(80, 1).setUnlocalizedName("Bronze Tuyere");
 		tuyereBlackBronze = new ItemTuyere(80, 1).setUnlocalizedName("Black Bronze Tuyere");
@@ -1218,7 +1305,8 @@ public class ItemSetup extends TFCItems
 
 		Recipes.doors = new Item[] { doorOak, doorAspen, doorBirch, doorChestnut, doorDouglasFir, doorHickory,
 				doorMaple, doorAsh, doorPine, doorSequoia, doorSpruce, doorSycamore, doorWhiteCedar, doorWhiteElm,
-				doorWillow, doorKapok, doorAcacia };
+				doorWillow, doorKapok, doorAcacia, doorPalm, doorEbony, doorFever, doorBaobab,doorLimba, doorMahogany,
+				doorTeak,doorBamboo,doorGingko,doorFruitwood };
 
 		Recipes.axes = new Item[] { sedAxe, igInAxe, igExAxe, mMAxe, bismuthBronzeAxe, blackBronzeAxe, blackSteelAxe,
 				blueSteelAxe, bronzeAxe, copperAxe, wroughtIronAxe, redSteelAxe, steelAxe };
@@ -1279,7 +1367,7 @@ public class ItemSetup extends TFCItems
 		Recipes.seeds = new Item[] { seedsBarley, seedsCabbage, seedsCarrot, seedsGarlic, seedsGreenbean, seedsJute,
 				seedsMaize, seedsOat, seedsOnion, seedsPotato, seedsRedBellPepper, seedsRice, seedsRye, seedsSoybean,
 				seedsSquash, seedsSugarcane, seedsTomato, seedsWheat, seedsYellowBellPepper, seedsFlax, seedsMadder,
-				seedsWeld, seedsWoad };
+				seedsWeld, seedsWoad, seedsPumpkin, seedsMelon,seedsGrapes,seedsBlackEyedPeas };
 
 		((TFCTabs) TFCTabs.TFC_BUILDING).setTabIconItemStack(new ItemStack(TFCBlocks.stoneSedBrick));
 		((TFCTabs) TFCTabs.TFC_DECORATION).setTabIconItemStack(new ItemStack(TFCBlocks.flora));
@@ -1311,36 +1399,36 @@ public class ItemSetup extends TFCItems
 		// Tastes are Sweet, Sour, Salty, Bitter, Umami
 
 		// Proteins
-		porkchopRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 40, false, false)
-				.setDecayRate(2.5f).setCanSmoke().setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
+		porkchopRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 40, true, true,true)
+				.setDecayRate(2.5f).setCanSmoke().setWaterPercentage(0.73f).setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
 						.setUnlocalizedName("Porkchop");
-		fishRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 40, false, true)
-				.setDecayRate(2.5f).setCanSmoke().setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
+		fishRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 40, true, true, true)
+				.setDecayRate(2.5f).setCanSmoke().setWaterPercentage(0.7f).setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
 						.setUnlocalizedName("Fish");
-		beefRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 50, false, false)
-				.setDecayRate(2.5f).setCanSmoke().setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
+		beefRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 50, true, true, true)
+				.setDecayRate(2.5f).setCanSmoke().setWaterPercentage(0.73f).setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
 						.setUnlocalizedName("Beef");
-		chickenRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 40, false, false)
-				.setDecayRate(2.5f).setCanSmoke().setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
+		chickenRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 40, true, true, true)
+				.setDecayRate(2.5f).setCanSmoke().setHasCookedIcon().setWaterPercentage(0.69f).setSmokeAbsorbMultiplier(1F)))
 						.setUnlocalizedName("Chicken");
 		soybean = new ItemFoodTFC(EnumFoodGroup.Protein, 10, 0, 0, 0, 40, true).setUnlocalizedName("Soybeans");
 		eggCooked = new ItemFoodTFC(EnumFoodGroup.Protein, 0, 0, 0, 0, 25).setDecayRate(2.5f)
 				.setUnlocalizedName("Egg Cooked");
-		calamariRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 20, 0, 35, false, false)
+		calamariRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 20, 0, 35, true, true, true)
 				.setCanSmoke().setHasCookedIcon().setSmokeAbsorbMultiplier(1F))).setDecayRate(4.0f)
 						.setUnlocalizedName("Calamari");
-		muttonRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 40, false, false)
-				.setDecayRate(2.5f).setCanSmoke().setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
+		muttonRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 40, true, true,true)
+				.setDecayRate(2.5f).setCanSmoke().setWaterPercentage(0.73f).setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
 						.setUnlocalizedName("Mutton");
-		venisonRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 5, 0, 0, 0, 50, false, false)
-				.setDecayRate(2.5f).setCanSmoke().setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
+		venisonRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 5, 0, 0, 0, 50, true, true,true)
+				.setDecayRate(2.5f).setCanSmoke().setWaterPercentage(0.73f).setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
 						.setUnlocalizedName("Venison");
-		horseMeatRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 40, false, false)
-				.setDecayRate(2.5f).setCanSmoke().setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
+		horseMeatRaw = ((ItemFoodTFC) (new ItemFoodMeat(EnumFoodGroup.Protein, 0, 0, 0, 0, 40, true, true,true)
+				.setDecayRate(2.5f).setCanSmoke().setWaterPercentage(0.73f).setHasCookedIcon().setSmokeAbsorbMultiplier(1F)))
 						.setUnlocalizedName("HorseMeat");
 
 		// Dairy
-		cheese = ((ItemFoodTFC) (new ItemFoodTFC(EnumFoodGroup.Dairy, 0, 10, 20, 0, 35).setDecayRate(0.5f).setCanSmoke()
+		cheese = ((ItemFoodTFC) (new ItemFoodTFC(EnumFoodGroup.Dairy, 0, 10, 20, 0, 35).setWaterPercentage(0.6f).setDecayRate(0.5f).setCanSmoke()
 				.setSmokeAbsorbMultiplier(1F))).setUnlocalizedName("Cheese");
 
 		// Grains
@@ -1380,27 +1468,27 @@ public class ItemSetup extends TFCItems
 		cornmealGround = new ItemFoodTFC(EnumFoodGroup.Grain, 25, 0, 0, 0, 20, false, false).setFolder("food/")
 				.setUnlocalizedName("Cornmeal Ground");
 
-		wheatDough = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20, false, false)
+		wheatDough = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20, false, false).setWaterPercentage(0.7f)
 				.setUnlocalizedName("Wheat Dough");
-		barleyDough = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 5, 20, false, false)
+		barleyDough = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 5, 20, false, false).setWaterPercentage(0.7f)
 				.setUnlocalizedName("Barley Dough");
-		oatDough = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20, false, false).setUnlocalizedName("Oat Dough");
-		ryeDough = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 15, 0, 0, 20, false, false).setUnlocalizedName("Rye Dough");
-		riceDough = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20, false, false)
+		oatDough = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20, false, false).setWaterPercentage(0.7f).setUnlocalizedName("Oat Dough");
+		ryeDough = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 15, 0, 0, 20, false, false).setWaterPercentage(0.7f).setUnlocalizedName("Rye Dough");
+		riceDough = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20, false, false).setWaterPercentage(0.7f)
 				.setUnlocalizedName("Rice Dough");
-		cornmealDough = new ItemFoodTFC(EnumFoodGroup.Grain, 25, 0, 0, 0, 20, false, false)
+		cornmealDough = new ItemFoodTFC(EnumFoodGroup.Grain, 25, 0, 0, 0, 20, false, false).setWaterPercentage(0.7f)
 				.setUnlocalizedName("Cornmeal Dough");
 
-		wheatBread = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20).setUnlocalizedName("Wheat Bread");
-		barleyBread = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 5, 20).setUnlocalizedName("Barley Bread");
-		oatBread = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20).setUnlocalizedName("Oat Bread");
-		ryeBread = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 15, 0, 0, 20).setUnlocalizedName("Rye Bread");
-		riceBread = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20).setUnlocalizedName("Rice Bread");
-		cornBread = new ItemFoodTFC(EnumFoodGroup.Grain, 25, 0, 0, 0, 20).setUnlocalizedName("Corn Bread");
+		wheatBread = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20).setWaterPercentage(0.5f).setNutritionAsIfCooked(true).setUnlocalizedName("Wheat Bread");
+		barleyBread = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 5, 20).setWaterPercentage(0.5f).setNutritionAsIfCooked(true).setUnlocalizedName("Barley Bread");
+		oatBread = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20).setWaterPercentage(0.5f).setNutritionAsIfCooked(true).setUnlocalizedName("Oat Bread");
+		ryeBread = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 15, 0, 0, 20).setWaterPercentage(0.5f).setNutritionAsIfCooked(true).setUnlocalizedName("Rye Bread");
+		riceBread = new ItemFoodTFC(EnumFoodGroup.Grain, 10, 0, 0, 0, 20).setWaterPercentage(0.5f).setNutritionAsIfCooked(true).setUnlocalizedName("Rice Bread");
+		cornBread = new ItemFoodTFC(EnumFoodGroup.Grain, 25, 0, 0, 0, 20).setWaterPercentage(0.5f).setNutritionAsIfCooked(true).setUnlocalizedName("Corn Bread");
 
 		// Vegetables
-		tomato = new ItemFoodTFC(EnumFoodGroup.Vegetable, 30, 5, 0, 0, 50, true).setUnlocalizedName("Tomato");
-		potato = new ItemFoodTFC(EnumFoodGroup.Vegetable, 0, 0, 10, 15, 20, true).setUnlocalizedName("Potato");
+		tomato = new ItemFoodTFC(EnumFoodGroup.Vegetable, 30, 5, 0, 0, 50, true).setWaterPercentage(0.945f).setUnlocalizedName("Tomato");
+		potato = new ItemFoodTFC(EnumFoodGroup.Vegetable, 0, 0, 10, 15, 20, true).setWaterPercentage(0.8f).setUnlocalizedName("Potato");
 		onion = new ItemFoodTFC(EnumFoodGroup.Vegetable, 10, 25, 0, 0, 20, true)
 		{
 			@Override
@@ -1421,76 +1509,83 @@ public class ItemSetup extends TFCItems
 					return this.metaIcons[1];
 				return super.getIconFromDamage(i);
 			}
-		}.setUnlocalizedName(TFCOptions.onionsAreGross ? "Rutabaga" : "Onion");
-		cabbage = new ItemFoodTFC(EnumFoodGroup.Vegetable, 10, 0, 0, 0, 30, true).setUnlocalizedName("Cabbage");
-		mushroomFoodB = new ItemFoodTFC(EnumFoodGroup.Vegetable, 10, 0, 0, 0, 30, true)
-				.setUnlocalizedName("Brown Mushroom");
-		mushroomFoodR = new ItemFoodTFC(EnumFoodGroup.Vegetable, 10, 0, 0, 0, 30, true)
-				.setUnlocalizedName("Red Mushroom");
-		pumpkinGuts = new ItemFoodTFC(EnumFoodGroup.Vegetable, 10, 0, 0, 0, 30, true).setUnlocalizedName("Pumpkin");
+		}.setWaterPercentage(0.89f).setUnlocalizedName(TFCOptions.onionsAreGross ? "Rutabaga" : "Onion");
+		cabbage = new ItemFoodTFC(EnumFoodGroup.Vegetable, 10, 0, 0, 10, 30, true).setWaterPercentage(0.91f).setUnlocalizedName("Cabbage");
+		mushroomFoodB = new ItemFoodTFC(EnumFoodGroup.Vegetable, 10, 0, 0, 0, 60, true)
+				.setWaterPercentage(0.9f).setUnlocalizedName("Brown Mushroom");
+		mushroomFoodR = new ItemFoodTFC(EnumFoodGroup.Vegetable, 10, 0, 0, 0, 60, true, true, true, true)
+				.setWaterPercentage(0.9f).setUnlocalizedName("Red Mushroom");
+		pumpkinGuts = new ItemFoodTFC(EnumFoodGroup.Vegetable, 10, 0, 0, 0, 30, true).setWaterPercentage(0.85f).setUnlocalizedName("Pumpkin");
+		melonSlice = new ItemFoodTFC(EnumFoodGroup.Fruit, 50, 0, 0, 0, 0, true).setWaterPercentage(0.9145f).setWaterRestoreAmount(1200).setUnlocalizedName("Melon");
 		pumpkinShell = new ItemPumpkinShell().setUnlocalizedName("Pumpkin Shell");
-		garlic = new ItemFoodTFC(EnumFoodGroup.Vegetable, 0, 0, 0, 10, 20, true).setUnlocalizedName("Garlic");
-		carrot = new ItemFoodTFC(EnumFoodGroup.Vegetable, 20, 0, 0, 0, 20, true).setUnlocalizedName("Carrot");
-		greenbeans = new ItemFoodTFC(EnumFoodGroup.Vegetable, 20, 0, 0, 0, 20, true).setUnlocalizedName("Greenbeans");
-		greenBellPepper = new ItemFoodTFC(EnumFoodGroup.Vegetable, 10, 0, 0, 0, 20, true)
+		garlic = new ItemFoodTFC(EnumFoodGroup.Vegetable, 0, 0, 0, 10, 20, true).setWaterPercentage(0.59f).setUnlocalizedName("Garlic");
+		carrot = new ItemFoodTFC(EnumFoodGroup.Vegetable, 20, 0, 0, 0, 20, true).setWaterPercentage(0.88f).setUnlocalizedName("Carrot");
+		greenbeans = new ItemFoodTFC(EnumFoodGroup.Vegetable, 20, 0, 0, 0, 20, true).setWaterPercentage(0.9f).setWaterPercentage(0.5f).setUnlocalizedName("Greenbeans");
+		blackEyedPeas = new ItemFoodTFC(EnumFoodGroup.Vegetable, 20, 0, 0, 0, 25, true).setWaterPercentage(0.9f).setWaterPercentage(0.5f).setUnlocalizedName("Black-Eyed Peas");
+		greenBellPepper = new ItemFoodTFC(EnumFoodGroup.Vegetable, 10, 0, 0, 0, 20, true).setWaterPercentage(0.94f)
 				.setUnlocalizedName("Green Bell Pepper");
-		yellowBellPepper = new ItemFoodTFC(EnumFoodGroup.Vegetable, 15, 0, 0, 0, 20, true)
+		yellowBellPepper = new ItemFoodTFC(EnumFoodGroup.Vegetable, 15, 0, 0, 0, 20, true).setWaterPercentage(0.94f)
 				.setUnlocalizedName("Yellow Bell Pepper");
-		redBellPepper = new ItemFoodTFC(EnumFoodGroup.Vegetable, 20, 0, 0, 0, 20, true)
+		redBellPepper = new ItemFoodTFC(EnumFoodGroup.Vegetable, 20, 0, 0, 0, 20, true).setWaterPercentage(0.94f)
 				.setUnlocalizedName("Red Bell Pepper");
-		squash = new ItemFoodTFC(EnumFoodGroup.Vegetable, 20, 0, 0, 0, 20, true).setUnlocalizedName("Squash");
-		seaWeed = new ItemFoodTFC(EnumFoodGroup.Vegetable, 0, 0, 10, 10, 10, true).setUnlocalizedName("Sea Weed");
-		sugar = new ItemFoodTFC(EnumFoodGroup.None, 30, 0, 0, 0, 0, true).setDecayRate(0.01f)
+		squash = new ItemFoodTFC(EnumFoodGroup.Vegetable, 20, 0, 0, 0, 20, true).setWaterPercentage(0.86f).setUnlocalizedName("Squash");
+		seaWeed = new ItemFoodTFC(EnumFoodGroup.Vegetable, 0, 0, 80, 10, 10, true).setWaterPercentage(0.5f).setUnlocalizedName("Sea Weed");
+		sugar = new ItemFoodTFC(EnumFoodGroup.None, 100, 0, 0, 0, 0, true).setWaterPercentage(0f).setDecayRate(0.01f)
 				.setUnlocalizedName("Sugar");
+		grapes = new ItemFoodTFC(EnumFoodGroup.Fruit, 50,30,0,0,0, true).setDecayRate(1.8f).setWaterPercentage(0.9f).setUnlocalizedName("Grapes");
 
 		// Fruit are in the foodID range of 50,000
-		redApple = new ItemFoodTFC(EnumFoodGroup.Fruit, 25, 5, 0, 10, 0, true).setDecayRate(2.0f)
+		redApple = new ItemFoodTFC(EnumFoodGroup.Fruit, 45, 5, 0, 5, 0, true).setDecayRate(2.0f).setWaterPercentage(0.86f)
 				.setUnlocalizedName(Global.FRUIT_META_NAMES[0]);
-		banana = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 5, 0, 0, 0, true).setDecayRate(2.0f)
+		banana = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 5, 0, 0, 0, true).setDecayRate(2.0f).setWaterPercentage(0.75f)
 				.setUnlocalizedName(Global.FRUIT_META_NAMES[1]);
-		orange = new ItemFoodTFC(EnumFoodGroup.Fruit, 50, 30, 0, 10, 0, true).setDecayRate(2.0f)
+		orange = new ItemFoodTFC(EnumFoodGroup.Fruit, 50, 30, 0, 10, 0, true).setWaterPercentage(0.87f).setWaterRestoreAmount(900).setDecayRate(2.0f)
 				.setUnlocalizedName(Global.FRUIT_META_NAMES[2]);
-		greenApple = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 15, 0, 10, 0, true).setDecayRate(2.0f)
+		greenApple = new ItemFoodTFC(EnumFoodGroup.Fruit, 35, 30, 0, 10, 0, true).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName(Global.FRUIT_META_NAMES[3]);
-		lemon = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 50, 0, 10, 0, true).setDecayRate(2.0f)
+		lemon = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 100, 0, 10, 0, true).setWaterPercentage(0.9f).setDecayRate(2.0f)
 				.setUnlocalizedName(Global.FRUIT_META_NAMES[4]);
-		olive = new ItemFoodTFC(EnumFoodGroup.Fruit, 10, 0, 3, 10, 0, true).setDecayRate(2.0f)
+		olive = new ItemFoodTFC(EnumFoodGroup.Fruit, 10, 0, 3, 50, 0, true).setWaterPercentage(0.6f).setDecayRate(2.0f)
 				.setUnlocalizedName(Global.FRUIT_META_NAMES[5]);
-		cherry = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 5, 0, 0, 0, true).setDecayRate(2.0f)
+		cherry = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 15, 0, 0, 0, true).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName(Global.FRUIT_META_NAMES[6]);
-		peach = new ItemFoodTFC(EnumFoodGroup.Fruit, 25, 10, 0, 0, 0, true).setDecayRate(2.0f)
+		peach = new ItemFoodTFC(EnumFoodGroup.Fruit, 55, 10, 0, 0, 5, true).setWaterPercentage(0.87f).setWaterRestoreAmount(900).setDecayRate(2.0f)
 				.setUnlocalizedName(Global.FRUIT_META_NAMES[7]);
-		plum = new ItemFoodTFC(EnumFoodGroup.Fruit, 20, 15, 0, 0, 0, true).setDecayRate(2.0f)
+		plum = new ItemFoodTFC(EnumFoodGroup.Fruit, 35, 15, 0, 0, 0, true).setWaterPercentage(0.87f).setDecayRate(2.0f)
 				.setUnlocalizedName(Global.FRUIT_META_NAMES[8]);
+		papaya = new ItemFoodTFC(EnumFoodGroup.Fruit, 55, 5, 0, 0, 0, true).setDecayRate(2.0f).setWaterPercentage(0.86f)
+				.setUnlocalizedName(Global.FRUIT_META_NAMES[9]);
+		date = new ItemFoodTFC(EnumFoodGroup.Fruit, 55, 20, 0, 0, 0, true).setDecayRate(2.0f).setWaterPercentage(0.75f)
+				.setUnlocalizedName(Global.FRUIT_META_NAMES[10]);
 
-		wintergreenBerry = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 0, 0, 20, 0).setDecayRate(2.0f)
+		wintergreenBerry = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 0, 0, 20, 0).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName("Wintergreen Berry");
-		blueberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 20, 0, 0, 0).setDecayRate(2.0f)
+		blueberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 40, 20, 0, 0, 0).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName("Blueberry");
-		raspberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 35, 15, 0, 5, 0).setDecayRate(2.0f)
+		raspberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 35, 15, 0, 5, 0).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName("Raspberry");
-		strawberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 5, 0, 5, 0).setDecayRate(2.0f)
+		strawberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 35, 25, 0, 5, 0).setWaterPercentage(0.91f).setDecayRate(2.0f)
 				.setUnlocalizedName("Strawberry");
-		blackberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 30, 0, 0, 0).setDecayRate(2.0f)
+		blackberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 30, 0, 0, 0).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName("Blackberry");
-		bunchberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 20, 5, 0, 0, 0).setDecayRate(2.0f)
+		bunchberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 20, 5, 0, 0, 0).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName("Bunchberry");
-		cranberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 5, 0, 45, 0).setDecayRate(2.0f)
+		cranberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 30, 5, 0, 45, 0).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName("Cranberry");
-		snowberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 10, 0, 0, 90, 0).setDecayRate(2.0f)
+		snowberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 10, 0, 0, 90, 0).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName("Snowberry");
-		elderberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 20, 40, 0, 10, 0).setDecayRate(2.0f)
+		elderberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 20, 40, 0, 10, 0).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName("Elderberry");
-		gooseberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 20, 40, 0, 0, 0).setDecayRate(2.0f)
+		gooseberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 20, 40, 0, 0, 0).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName("Gooseberry");
-		cloudberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 40, 40, 0, 30, 0).setDecayRate(2.0f)
+		cloudberry = new ItemFoodTFC(EnumFoodGroup.Fruit, 40, 40, 0, 30, 0).setWaterPercentage(0.86f).setDecayRate(2.0f)
 				.setUnlocalizedName("Cloudberry");
 
 		sandwich = new ItemSandwich().setUnlocalizedName("Sandwich");
 		salad = new ItemSalad().setUnlocalizedName("Salad");
 		// Soup = new ItemSoup().setUnlocalizedName("Soup");
 
-		sugarcane = new ItemFoodTFC(EnumFoodGroup.None, 30, 0, 0, 0, 0, false, false).setDecayRate(0.75f)
+		sugarcane = new ItemFoodTFC(EnumFoodGroup.None, 70, 0, 0, 0, 0, false, true).setDecayRate(0.75f)
 				.setFolder("plants/").setUnlocalizedName("Sugarcane");
 		// Hemp = new
 		// ItemTerra().setFolder("plants/").setUnlocalizedName("Hemp").setCreativeTab(null);
@@ -1519,6 +1614,10 @@ public class ItemSetup extends TFCItems
 		seedsMadder = new ItemCustomSeeds(20).setUnlocalizedName("Seeds Madder");
 		seedsWeld = new ItemCustomSeeds(21).setUnlocalizedName("Seeds Weld");
 		seedsWoad = new ItemCustomSeeds(22).setUnlocalizedName("Seeds Woad");
+		seedsPumpkin= new ItemCustomSeeds(23).setUnlocalizedName("Seeds Pumpkin");
+		seedsMelon = new ItemCustomSeeds(24).setUnlocalizedName("Seeds Melon");
+		seedsGrapes = new ItemCustomSeeds(25).setUnlocalizedName("Seeds Grapes");
+		seedsBlackEyedPeas = new ItemCustomSeeds(26).setUnlocalizedName("Seeds Black-Eyed Peas");
 		// SeedsHemp = new ItemCustomSeeds(22).setUnlocalizedName("Seeds Hemp");
 
 		fruitTreeSapling = new ItemFruitTreeSapling().setUnlocalizedName("FruitSapling");
@@ -2149,14 +2248,18 @@ public class ItemSetup extends TFCItems
 		TFCFuelHandler.registerFuel(singlePlank, 400);
 		TFCFuelHandler.registerFuel(woodenBucketEmpty, 300);
 		TFCFuelHandler.registerFuel(fireStarter, 100);
+		TFCFuelHandler.registerFuel(bowFireStarter, 200);
 		TFCFuelHandler.registerFuel(logs, 800);
 		TFCFuelHandler.registerFuel(thickLogs, 2400);
 		TFCFuelHandler.registerFuel(sluiceItem, 300);
 		TFCFuelHandler.registerFuel(rope, 50);
 		TFCFuelHandler.registerFuel(arrow, 20);
 		TFCFuelHandler.registerFuel(bow, 100);
+		TFCFuelHandler.registerFuel(unstrungBow, 100);
 		TFCFuelHandler.registerFuel(fishingRod, 100);
 		TFCFuelHandler.registerFuel(stick, 100);
+		TFCFuelHandler.registerFuel(pole, 180);
+		TFCFuelHandler.registerFuel(woodenSpear, 150);
 		TFCFuelHandler.registerFuel(coal, 1600);
 		TFCFuelHandler.registerFuel(woolCloth, 20);
 		TFCFuelHandler.registerFuel(silkCloth, 20);

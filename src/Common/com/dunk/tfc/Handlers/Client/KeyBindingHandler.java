@@ -11,6 +11,7 @@ import com.dunk.tfc.Handlers.Network.AbstractPacket;
 import com.dunk.tfc.Handlers.Network.KeyPressPacket;
 import com.dunk.tfc.Items.Tools.ItemChisel;
 import com.dunk.tfc.Items.Tools.ItemCustomHoe;
+import com.dunk.tfc.Items.Tools.ItemKnife;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -47,6 +48,10 @@ public class KeyBindingHandler
 				else if(player.getCurrentEquippedItem().getItem() instanceof ItemCustomHoe)
 				{
 					pi.switchHoeMode(player);
+				}
+				else if(player.getCurrentEquippedItem().getItem() instanceof ItemKnife)
+				{
+					pi.switchKnifeMode(player);
 				}
 			}
 			else if (keyLockTool.isPressed() && pi != null)
