@@ -7,6 +7,7 @@ import java.util.List;
 import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Core.TFC_MobData;
 import com.dunk.tfc.Core.TFC_Time;
+import com.dunk.tfc.Entities.AI.EntityAIGetFood;
 import com.dunk.tfc.Entities.AI.EntityAIMateTFC;
 import com.dunk.tfc.Entities.AI.EntityAISitTFC;
 import com.dunk.tfc.Entities.AI.EntityAITargetNonTamedTFC;
@@ -97,6 +98,7 @@ public class EntityWolfTFC extends EntityWolf implements IAnimal, IInnateArmor, 
 		this.targetCow = new EntityAITargetNonTamedTFC(this, EntityCowTFC.class, 200, false);
 		this.targetDeer = new EntityAITargetNonTamedTFC(this, EntityDeer.class, 200, false);
 		this.targetHorse = new EntityAITargetNonTamedTFC(this, EntityHorseTFC.class, 200, false);
+		
 		if (this.worldObj.difficultySetting != EnumDifficulty.PEACEFUL)
 		{
 			peacefulAI = false;
@@ -109,6 +111,14 @@ public class EntityWolfTFC extends EntityWolf implements IAnimal, IInnateArmor, 
 		}
 		else
 			peacefulAI = true;
+		
+		this.targetTasks.addTask(2, new EntityAIGetFood(this,TFCItems.horseMeatRaw,214.3f,32,1f));
+		this.targetTasks.addTask(2, new EntityAIGetFood(this,TFCItems.porkchopRaw,214.3f,32,1f));
+		this.targetTasks.addTask(2, new EntityAIGetFood(this,TFCItems.beefRaw,214.3f,32,1f));
+		this.targetTasks.addTask(2, new EntityAIGetFood(this,TFCItems.fishRaw,214.3f,32,1f));
+		this.targetTasks.addTask(2, new EntityAIGetFood(this,TFCItems.muttonRaw,214.3f,32,1f));
+		this.targetTasks.addTask(2, new EntityAIGetFood(this,TFCItems.chickenRaw,214.3f,32,1f));
+		this.targetTasks.addTask(2, new EntityAIGetFood(this,TFCItems.calamariRaw,214.3f,32,1f));
 
 		hunger = 168000;
 		animalID = TFC_Time.getTotalTicks() + getEntityId();
@@ -199,6 +209,7 @@ public class EntityWolfTFC extends EntityWolf implements IAnimal, IInnateArmor, 
 	@Override
 	public boolean checkFamiliarity(InteractionEnum interaction, EntityPlayer player)
 	{
+		
 		boolean flag = false;
 		switch (interaction)
 		{
@@ -475,6 +486,7 @@ public class EntityWolfTFC extends EntityWolf implements IAnimal, IInnateArmor, 
 	{
 		if(!worldObj.isRemote)
 		{
+			TFC_Core.sendInfoMessage(player, new ChatComponentTranslation("" + getHunger()));
 			if (player.isSneaking() && this.getOwner() != null && canFamiliarize())
 			{
 				this.familiarize(player);
@@ -711,7 +723,7 @@ public class EntityWolfTFC extends EntityWolf implements IAnimal, IInnateArmor, 
 		{
 			if (TFC_Time.getTotalTicks() >= timeOfConception + pregnancyRequiredTime)
 			{
-				int i = rand.nextInt(2) + 1;
+				int i = rand.nextInt(3) + 4;
 				for (int x = 0; x < i; x++)
 				{
 					ArrayList<Float> data = new ArrayList<Float>();

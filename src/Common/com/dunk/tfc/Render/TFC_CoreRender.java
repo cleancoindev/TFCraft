@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
+import com.dunk.tfc.Blocks.BlockTileRoof;
 import com.dunk.tfc.Blocks.Devices.BlockSluice;
 import com.dunk.tfc.Blocks.Flora.BlockBranch;
 import com.dunk.tfc.Blocks.Flora.BlockFruitLeaves;
@@ -212,6 +213,10 @@ public class TFC_CoreRender
 
 	private static boolean isSnow(IBlockAccess access, int x, int y, int z)
 	{
+		if(access.getBlock(x, y-1, z) instanceof BlockTileRoof || access.getBlock(x, y-1, z) instanceof BlockBranch)
+		{
+			return false;
+		}
 		Material material = access.getBlock(x, y, z).getMaterial();
 		// Also, world items could be snowy. So we want that to be possible.
 		return material == Material.snow || material == Material.craftedSnow || (access.getBlock(x, y, z)
@@ -220,6 +225,7 @@ public class TFC_CoreRender
 
 	private static int getDrift(IBlockAccess access, int x, int y, int z)
 	{
+		
 		if (isSnow(access, x, y, z))
 		{
 			if (access.getBlock(x, y, z).equals(TFCBlocks.snow))

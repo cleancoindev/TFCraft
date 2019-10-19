@@ -26,6 +26,8 @@ import com.dunk.tfc.WorldGen.MapGen.MapGenRiverRavine;
 import com.dunk.tfc.api.TFCBlocks;
 import com.dunk.tfc.api.TFCOptions;
 import com.dunk.tfc.api.Constant.Global;
+import com.dunk.tfc.api.Enums.EnumAnimalSpawn;
+import com.dunk.tfc.api.Enums.EnumRegion;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -278,8 +280,72 @@ public class TFCChunkProviderGenerate extends ChunkProviderGenerate
 
 	}
 
+	//This will return a list containing the Enums which can spawn in this chunk.
+	public static List<EnumAnimalSpawn> getLegalSpawnsByChunk(World world, TFCBiome biome, int x, int z)
+	{
+		int region = TFC_Climate.getRegionLayer(world, x, Global.SEALEVEL, z);
+		List<EnumAnimalSpawn> spawnableCreatureList = new ArrayList<EnumAnimalSpawn>();
+		
+		float temp = TFC_Climate.getBioTemperatureHeight(world, x, world.getTopSolidOrLiquidBlock(x, z), z);
+		float rain = TFC_Climate.getRainfall(world, x, 150, z);
+		float evt = 0.0f;
+		if (TFC_Climate.getCacheManager(world) != null && TFC_Climate.getCacheManager(world).getEVTLayerAt(x,
+				z) != null)
+			evt = TFC_Climate.getCacheManager(world).getEVTLayerAt(x, z).floatdata1;
+		boolean isMountainous = biome == TFCBiome.MOUNTAINS || biome == TFCBiome.HIGH_HILLS;
+		
+		boolean isPlains = evt == 0.125f || (evt == 0.250f && rain <= 750);
+		
+		Random random = world.rand;
+		
+		for(EnumAnimalSpawn animal : EnumAnimalSpawn.REGIONS[region])
+		{
+			
+			if(isAnimalSpawnLegal(animal,random,biome,temp,rain))
+			{
+				spawnableCreatureList.add(animal);
+			}
+		}
+		return spawnableCreatureList;
+	}
+	
+	public static boolean isAnimalSpawnLegal(EnumAnimalSpawn animal, Random rand, TFCBiome biome, float temperature, float rain)
+	{
+		if(animal.specificBiomes)
+		{
+			boolean legalBiome = false;
+			for(int i : animal.allowableBiomes)
+			{
+				if(i == biome.biomeID)
+				{
+					legalBiome = true;
+				}
+			}
+			if(!legalBiome)
+			{
+				return false;
+			}
+		}
+		if(animal.minRain <= rain && animal.maxRain >= rain && animal.minTemp <= temperature && animal.maxTemp >= temperature)
+		{
+			float idealRain = (animal.minRain + animal.maxRain)*0.5f;
+			float idealTemp = (animal.minTemp + animal.maxTemp)*0.5f;
+			float rainFactor = 1f - (Math.abs(rain - idealRain) / (idealRain - animal.minRain));	//When the rain is closer to ideal, this approaches 1
+			float tempFactor = 1f - (Math.abs(temperature - idealTemp) / (idealTemp - animal.minTemp)); //When the temp is closer to ideal, this approaches 1
+			float factor = (float) Math.sqrt(tempFactor * rainFactor);
+			if(rand.nextDouble() < factor * animal.rarity)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static List<SpawnListEntry> getCreatureSpawnsByChunk(World world, TFCBiome biome, int x, int z)
 	{
+		
+		int region = TFC_Climate.getRegionLayer(world, x, Global.SEALEVEL, z);
+		
 		List<SpawnListEntry> spawnableCreatureList = new ArrayList<SpawnListEntry>();
 		spawnableCreatureList.add(new SpawnListEntry(EntityChickenTFC.class, 24, 0, 0));
 		float temp = TFC_Climate.getBioTemperatureHeight(world, x, world.getTopSolidOrLiquidBlock(x, z), z);
@@ -291,6 +357,8 @@ public class TFCChunkProviderGenerate extends ChunkProviderGenerate
 		boolean isMountainous = biome == TFCBiome.MOUNTAINS || biome == TFCBiome.HIGH_HILLS;
 		// To adjust animal spawning at higher altitudes
 		int mountainousAreaModifier = isMountainous ? -1 : 0;
+		boolean isPlains = evt == 0.125f || (evt == 0.250f && rain <= 750);
+		EnumRegion continent = EnumRegion.values()[region];
 		if (isMountainous)
 		{
 			if (temp < 25 && temp > -10)
@@ -304,7 +372,7 @@ public class TFCChunkProviderGenerate extends ChunkProviderGenerate
 			}
 		}
 		else // run of the mill plains, but not too cold
-		if (temp > 0 && rain > 100 && rain <= 500)
+		if (isPlains)
 		{
 			if (temp > 20)
 			{
@@ -318,7 +386,7 @@ public class TFCChunkProviderGenerate extends ChunkProviderGenerate
 			}
 		}
 		// regular temperate forest
-		if (temp > 0 && temp < 21 && rain > 250)
+		if (temp > 0 && temp < 21 && !isPlains)
 		{
 			spawnableCreatureList.add(new SpawnListEntry(EntityPigTFC.class, 2 + mountainousAreaModifier,
 					2 + mountainousAreaModifier, 3 + mountainousAreaModifier));
@@ -650,7 +718,7 @@ public class TFCChunkProviderGenerate extends ChunkProviderGenerate
 				float rain = rainCofs[zCoord] * (rainfallLayer[arrayIndexDL] == null ? DataLayer.RAIN_400.floatdata1
 						: rainfallLayer[arrayIndexDL].floatdata1);
 				TFCBiome biome = (TFCBiome) getBiome(xCoord, zCoord);
-				if(rain < 100 && biome == TFCBiome.SWAMPLAND)
+				if (rain < 100 && biome == TFCBiome.SWAMPLAND)
 				{
 					rain = 100;
 				}
@@ -722,7 +790,8 @@ public class TFCChunkProviderGenerate extends ChunkProviderGenerate
 					{
 						for (int j = -1; j < 2 && !localVariation; j++)
 						{
-							if (i + xCoord >= 0 && i + xCoord < 16 && j + zCoord >= 0 && j + zCoord < 16 && rand.nextBoolean())
+							if (i + xCoord >= 0 && i + xCoord < 16 && j + zCoord >= 0 && j + zCoord < 16 && rand
+									.nextBoolean())
 							{
 								localVariation |= variation[i + xCoord][j + zCoord];
 							}
@@ -792,7 +861,13 @@ public class TFCChunkProviderGenerate extends ChunkProviderGenerate
 							subSurfaceBlock = TFC_Core.getTypeForSand(15);
 							alternateSubsurfaceMeta = 15;
 						}
-
+						if (Math.abs(zCoord + chunkZ * 16) > 27000)
+						{
+							subSurfaceBlock = Blocks.snow;
+							alternateSubsurfaceMeta = 0;
+							surfaceBlock = Blocks.snow;
+							alternateSurfaceMeta = 0;
+						}
 						if (biome == TFCBiome.BEACH || biome == TFCBiome.OCEAN || biome == TFCBiome.DEEP_OCEAN)
 						{
 							desert = false;
@@ -882,7 +957,7 @@ public class TFCChunkProviderGenerate extends ChunkProviderGenerate
 							}
 
 							// Determine the soil depth based on world height
-							
+
 							int dirtH = Math.max(8 - (((height + 96 - Global.SEALEVEL)) / 16), 0);
 
 							if (var13 > 0)
@@ -943,8 +1018,16 @@ public class TFCChunkProviderGenerate extends ChunkProviderGenerate
 
 										if (c > 1 + (5 - drainage.data1))
 										{
-											idsBig[newIndexBig] = TFC_Core.getTypeForGravel(rock1.data1);
-											metaBig[newIndexBig] = (byte) TFC_Core.getSoilMeta(rock1.data1);
+											if (Math.abs(zCoord + chunkZ * 16) > 27000)
+											{
+												idsBig[newIndexBig] = Blocks.packed_ice;
+												metaBig[newIndexBig] = 0;
+											}
+											else
+											{
+												idsBig[newIndexBig] = TFC_Core.getTypeForGravel(rock1.data1);
+												metaBig[newIndexBig] = (byte) TFC_Core.getSoilMeta(rock1.data1);
+											}
 										}
 									}
 								}

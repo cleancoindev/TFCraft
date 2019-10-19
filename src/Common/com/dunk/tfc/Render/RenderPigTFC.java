@@ -4,8 +4,10 @@ import org.lwjgl.opengl.GL11;
 
 import com.dunk.tfc.Reference;
 import com.dunk.tfc.Core.TFC_Core;
+import com.dunk.tfc.Core.TFC_Time;
 import com.dunk.tfc.Entities.Mobs.EntityPigTFC;
 import com.dunk.tfc.api.Entities.IAnimal;
+import com.dunk.tfc.api.Entities.IAnimal.GenderEnum;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderPig;
@@ -16,7 +18,9 @@ import net.minecraft.util.ResourceLocation;
 public class RenderPigTFC extends RenderPig
 {
 
-	private static final ResourceLocation PIG_TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/mob/pig.png");
+	private static final ResourceLocation BOAR_TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/mob/pig.png");
+	private static final ResourceLocation PIG_DOMESTIC_TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/mob/pig_domestic.png");
+	private static final ResourceLocation BOAR_PIGLET_TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/mob/piglet.png");
 	public RenderPigTFC(ModelBase par1ModelBase, ModelBase par2ModelBase, float par3)
 	{
 		super(par1ModelBase,par2ModelBase, par3);
@@ -34,6 +38,22 @@ public class RenderPigTFC extends RenderPig
 		this.shadowSize = 0.35f + (TFC_Core.getPercentGrown((IAnimal)par1Entity)*0.35f);
 		super.doRender(par1Entity, par2, par4, par6, par8, par9);
 	}
+	
+	protected ResourceLocation getTexture(IAnimal entity)
+	{
+		float percent = TFC_Core.getPercentGrown(entity);
+		//percent = (TFC_Time.getTotalTicks()%1000)*0.003f;
+		//percent = Math.min(1f, percent);
+		if(percent < 0.65f && !((EntityPigTFC)entity).isDomesticated() ){
+			return BOAR_PIGLET_TEXTURE;
+		}
+		else if(!((EntityPigTFC)entity).isDomesticated()){
+			return BOAR_TEXTURE;
+		}
+		else{
+			return PIG_DOMESTIC_TEXTURE;
+		}
+	}
 
 	@Override
 	protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2)
@@ -45,6 +65,6 @@ public class RenderPigTFC extends RenderPig
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity)
 	{
-		return PIG_TEXTURE;
+		return getTexture((IAnimal)entity);
 	}
 }

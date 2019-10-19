@@ -7,16 +7,20 @@ import com.dunk.tfc.Blocks.BlockTerra;
 import com.dunk.tfc.Blocks.Flora.BlockBranch;
 import com.dunk.tfc.Blocks.Flora.BlockLeafLitter;
 import com.dunk.tfc.Core.TFC_Climate;
+import com.dunk.tfc.Entities.Mobs.EntityWolfTFC;
 import com.dunk.tfc.api.TFCBlocks;
+import com.dunk.tfc.api.TFCItems;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.EnumSkyBlock;
@@ -38,9 +42,9 @@ public class BlockCustomSnow extends BlockTerra
 	{
 		Block block = world.getBlock(i, j - 1, k);
 		
-		if (block == TFCBlocks.ice || block == TFCBlocks.pottery)
+		if (block == TFCBlocks.pottery)
 			return false;
-		if (block == TFCBlocks.leaves || block == TFCBlocks.leaves2 || block == TFCBlocks.thatch || block instanceof BlockBranch)
+		if (block == TFCBlocks.leaves || block == TFCBlocks.leaves2 || block == TFCBlocks.thatch || block instanceof BlockBranch || block == TFCBlocks.ice)
 			return true;
 		return World.doesBlockHaveSolidTopSurface(world, i, j - 1, k);
 	}
@@ -108,11 +112,28 @@ public class BlockCustomSnow extends BlockTerra
 		// meta  speed
 		//    0  0.98   -  one layer
 		//    7  0.10   -  eight layers = like leaves
-		
+		float extraSlow = 1f;
+		if(entity instanceof EntityPlayer)
+		{
+			ItemStack bootsI = ((EntityPlayer)entity).getCurrentArmor(0);
+			if(bootsI != null && (bootsI.getItem() == TFCItems.wolfFurBoots || bootsI.getItem() == TFCItems.bearFurBoots))
+			{
+				return;
+			}
+		}
+		else if(entity instanceof EntityLiving)
+		{
+			extraSlow *= 1.5f/Math.min(0.1,((EntityLiving)entity).height);
+			extraSlow = (float) Math.pow(extraSlow, 1.5f);
+		}
 		int meta = world.getBlockMetadata(x, y, z) & 7;
-		double speed = 0.9375 - (0.0625 * (meta - meta/2));
-		entity.motionX *= speed;
-		entity.motionZ *= speed;
+		double speed = 0.9375 - (0.0625 * (meta - meta/2) * extraSlow);
+		speed = Math.max(speed,0);
+		if(!(entity instanceof EntityWolfTFC))
+		{
+			entity.motionX *= speed;
+			entity.motionZ *= speed;
+		}
 	}
 
 	@Override

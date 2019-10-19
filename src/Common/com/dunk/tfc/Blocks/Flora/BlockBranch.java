@@ -159,7 +159,8 @@ public class BlockBranch extends BlockTerra
 					}
 					return;
 				}
-				else if (b.isBlockSolid(world, x, y + i, z, 1) && !(bUp instanceof BlockCustomLeaves))
+				else if (b.isBlockSolid(world, x, y + i, z,
+						1) && !(bUp instanceof BlockCustomLeaves) && !(b instanceof BlockCustomLeaves))
 				{
 					if (bUp.isReplaceable(world, x, y + i + 1, z))
 					{
@@ -270,14 +271,14 @@ public class BlockBranch extends BlockTerra
 
 	private void handleLeafLossAndGrowth(World world, int x, int y, int z, Random rand, int dayDelta)
 	{
-		int randomChance = 100;
+		int randomChance = 1;
 		if (isEnd() && rand.nextInt(randomChance) == 0 && canLoseLeaves(world, x, y, z) && !world.isRemote)
 		{
 			// Temporarily stop some trees from growing leaves back
 			int meta = world.getBlockMetadata(x, y, z);
 			int region = TFC_Climate.getRegionLayer(world, x, Global.SEALEVEL, z);
 			boolean isUTAcacia = (this instanceof BlockBranch2 && meta == 0 && EnumTree.REGIONS[region] == EnumTree.AFRICA);
-			boolean isBirchAspen = !(this instanceof BlockBranch2) &&( meta == 1||meta==2);
+			boolean isBirchAspen = !(this instanceof BlockBranch2) && (meta == 1 || meta == 2);
 			// Regrow leaves in the spring
 			int season = TFC_Time.getSeasonAdjustedMonth(z);
 			float lostDaysMultiplier = 0;
@@ -293,7 +294,7 @@ public class BlockBranch extends BlockTerra
 				int daySkip = TFC_Time.daysInMonth / 4;
 				for (int i = -dayDelta; i <= 0; i += daySkip)
 				{
-					temp = TFC_Climate.getHeightAdjustedBioTemp(world, days + i, x, y, z);
+					temp = TFC_Climate.getHeightAdjustedTempSpecificDay(world, days + i, x, y, z);
 					if (temp <= 10 && TFC_Time.getSeasonFromDayOfYear(days + i, z) >= TFC_Time.OCTOBER)
 					{
 						lostDaysMultiplier++;
@@ -305,7 +306,7 @@ public class BlockBranch extends BlockTerra
 				int daySkip = TFC_Time.daysInMonth / 4;
 				for (int i = -dayDelta; i <= 0; i += daySkip)
 				{
-					temp = TFC_Climate.getHeightAdjustedBioTemp(world, days + i, x, y, z);
+					temp = TFC_Climate.getHeightAdjustedTempSpecificDay(world, days + i, x, y, z);
 					if (temp > 10 && TFC_Time.getSeasonFromDayOfYear(days + i, z) <= TFC_Time.AUGUST)
 					{
 						lostDaysMultiplier++;
@@ -347,9 +348,10 @@ public class BlockBranch extends BlockTerra
 						{
 							int num = Math.min(numTries / 2, 3);
 							int i = rand.nextInt(3 + num * 2) - (1 + num);
-							int j = rand.nextInt(((isUTAcacia||isBirchAspen) ? (1 * (num / 2)) : (2 * (num / 2))) + 1);
+							int j = rand
+									.nextInt(((isUTAcacia || isBirchAspen) ? (1 * (num / 2)) : (2 * (num / 2))) + 1);
 							int k = rand.nextInt(3 + num * 2) - (1 + num);
-							if(isBirchAspen)
+							if (isBirchAspen)
 							{
 								i = Math.min(Math.max(i, -2), 2);
 								k = Math.min(Math.max(k, -2), 2);
@@ -567,13 +569,11 @@ public class BlockBranch extends BlockTerra
 	public static boolean shouldLoseLeaf(World world, int x, int y, int z, Random rand, boolean block2, int season,
 			float temp, int meta)
 	{
-		if (season >= TFC_Time.OCTOBER && temp <= 10 && BlockBranch.canLoseLeaves(meta, block2 ? 1 : 0) && rand
-				.nextBoolean())
+		if (season >= TFC_Time.OCTOBER && temp <= 10 && BlockBranch.canLoseLeaves(meta, block2 ? 1 : 0))
 		{
-			if (rand.nextInt(11) > temp)
-			{
-				return true;
-			}
+
+			return true;
+
 		}
 		return false;
 	}

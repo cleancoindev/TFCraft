@@ -444,6 +444,10 @@ public class RenderBranch implements ISimpleBlockRenderingHandler
 		{
 			width *= 0.5f;
 		}
+		else if ((!((BlockBranch) block).isEnd()) && (!BlockBranch.renderSmallConiferBranch(meta, branch instanceof BlockBranch2 ? 1 : 0) && !(branch.getSourceX() == 0 && branch.getSourceZ() == 0 )))
+		{
+			width *= 0.75f;
+		}
 		if ((block == TFCBlocks.branchEnd2__y_ || block == TFCBlocks.branchEnd2_x__ || block == TFCBlocks.branchEnd2___z || block == TFCBlocks.branchEnd2_Xy_ || block == TFCBlocks.branchEnd2_X__ || block == TFCBlocks.branchEnd2_X_z || block == TFCBlocks.branchEnd2__yZ || block == TFCBlocks.branchEnd2_x_Z || block == TFCBlocks.branchEnd2___Z || block == TFCBlocks.branchEnd2_xyz || block == TFCBlocks.branchEnd2_x_z || block == TFCBlocks.branchEnd2_X_Z || block == TFCBlocks.branchEnd2_XyZ || block == TFCBlocks.branchEnd2_xyZ || block == TFCBlocks.branchEnd2_xy_ || block == TFCBlocks.branchEnd2__yz || block == TFCBlocks.branchEnd2_Xy_) && world
 				.getBlockMetadata(x, y, z) == 1)
 		{

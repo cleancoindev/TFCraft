@@ -558,12 +558,13 @@ public class TEFirepit extends TEFireEntity implements IInventory
 			// push the input fuel down the stack
 			handleFuelStack();
 
+			
 			if (fireTemp < 1 && worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != 0)
 			{
 				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 3);
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
-			else if (fireTemp >= 1 && worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != 1)
+			else if (fireTemp >= 1 && worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 0)
 			{
 				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 3);
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);

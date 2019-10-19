@@ -248,30 +248,30 @@ public class BlockLogPile extends BlockTerraContainer
 			return true;
 		}
 		if ((world.getBlock(x - 1, y, z) == Blocks.air || world.getBlock(x - 1, y, z) == Blocks.fire) 
-				&& !checkIsFlammable(world, x + 1, y, z, ForgeDirection.WEST)
-				&& !checkIsFlammable(world, x, y, z-1, ForgeDirection.SOUTH) 
-				&& !checkIsFlammable(world, x, y, z+1, ForgeDirection.NORTH))
+				&& world.getBlock(x+1,y,z)!= TFCBlocks.logPile && !checkIsFlammable(world, x + 1, y, z, ForgeDirection.WEST)
+				&& world.getBlock(x,y,z-1)!= TFCBlocks.logPile && !checkIsFlammable(world, x, y, z-1, ForgeDirection.SOUTH) 
+				&& world.getBlock(x,y,z+1)!= TFCBlocks.logPile && !checkIsFlammable(world, x, y, z+1, ForgeDirection.NORTH))
 		{
 			passedCheck = true;
 		}
 		else if ((world.getBlock(x + 1, y, z) == Blocks.air || world.getBlock(x + 1, y, z) == Blocks.fire) 
-				&& !checkIsFlammable(world, x - 1, y, z, ForgeDirection.EAST) 
-				&& !checkIsFlammable(world, x, y, z-1,ForgeDirection.SOUTH) 
-				&& !checkIsFlammable(world, x, y, z+1, ForgeDirection.NORTH))
+				&& world.getBlock(x-1,y,z)!= TFCBlocks.logPile && !checkIsFlammable(world, x - 1, y, z, ForgeDirection.EAST) 
+				&& world.getBlock(x,y,z-1)!= TFCBlocks.logPile && !checkIsFlammable(world, x, y, z-1,ForgeDirection.SOUTH) 
+				&& world.getBlock(x,y,z+1)!= TFCBlocks.logPile && !checkIsFlammable(world, x, y, z+1, ForgeDirection.NORTH))
 		{
 			passedCheck = true;
 		}
 		else if ((world.getBlock(x, y, z - 1) == Blocks.air || world.getBlock(x, y, z - 1) == Blocks.fire) 
-				&& !checkIsFlammable(world, x + 1, y, z, ForgeDirection.WEST) 
-				&& !checkIsFlammable(world, x - 1, y, z,ForgeDirection.EAST) 
-				&& !checkIsFlammable(world, x, y, z+1, ForgeDirection.NORTH))
+				&& world.getBlock(x+1,y,z)!= TFCBlocks.logPile && !checkIsFlammable(world, x + 1, y, z, ForgeDirection.WEST) 
+				&& world.getBlock(x-1,y,z)!= TFCBlocks.logPile && !checkIsFlammable(world, x - 1, y, z,ForgeDirection.EAST) 
+				&& world.getBlock(x,y,z+1)!= TFCBlocks.logPile && !checkIsFlammable(world, x, y, z+1, ForgeDirection.NORTH))
 		{
 			passedCheck = true;
 		}
 		else if ((world.getBlock(x, y, z + 1) == Blocks.air || world.getBlock(x, y, z + 1) == Blocks.fire) 
-				&& !checkIsFlammable(world, x, y, z-1, ForgeDirection.SOUTH) 
-				&& !checkIsFlammable(world, x + 1, y, z,ForgeDirection.WEST) 
-				&& !checkIsFlammable(world, x - 1, y, z, ForgeDirection.EAST))
+				&& world.getBlock(x,y,z-1)!= TFCBlocks.logPile && !checkIsFlammable(world, x, y, z-1, ForgeDirection.SOUTH) 
+				&& world.getBlock(x+1,y,z)!= TFCBlocks.logPile && !checkIsFlammable(world, x + 1, y, z,ForgeDirection.WEST) 
+				&& world.getBlock(x-1,y,z)!= TFCBlocks.logPile && !checkIsFlammable(world, x - 1, y, z, ForgeDirection.EAST))
 		{
 			passedCheck = true;
 		}

@@ -135,7 +135,7 @@ public class BlockCustomIce extends BlockIce
 		int meta = world.getBlockMetadata(x,y,z);
 		if (meta == 0)
 			return 9;//sea ice is cloudy
-		return this.getLightOpacity();
+		return super.getLightOpacity();
 	}
 
 	protected Block getBlockMelt(World world, int i, int j, int k, boolean moving)

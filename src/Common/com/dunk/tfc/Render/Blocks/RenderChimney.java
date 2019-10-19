@@ -54,6 +54,7 @@ public class RenderChimney implements ISimpleBlockRenderingHandler
 				//???
 			}
 		}
+		renderer.renderAllFaces = false;
 		return true;
 	}
 

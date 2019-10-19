@@ -42,6 +42,7 @@ public class TEChimney extends NetworkTileEntity
 						{
 							this.smoking += rand.nextInt(50) + 5;
 							foundSmoke = true;
+						//	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 						}
 					}
 				}
@@ -54,35 +55,49 @@ public class TEChimney extends NetworkTileEntity
 				{
 					EntityLivingBase e = (EntityLivingBase) iterator.next();
 					e.setFire(2);
+					
 				}
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			if (yCoord < 255)
 			{
 				TileEntity aboveTe = worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
-				if (aboveTe instanceof TEChimney && ((TEChimney) aboveTe).smoking < 5)
+				if (aboveTe instanceof TEChimney && ((TEChimney) aboveTe).smoking < 5 && smoking > 0)
 				{
 					((TEChimney) aboveTe).smoking += smoking;
 					smoking = 0;
+					if(smoking == 0)
+					{
+						worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+					}
 				}
 				if (aboveTe instanceof TEChimney && ((TEChimney) aboveTe).onFire < 10 && onFire > 0)
 				{
 					((TEChimney) aboveTe).onFire += onFire - 1;
 					onFire = 0;
+					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				}
 			}
 			if (onFire > 0)
 			{
 				onFire--;
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			else if (onFire < 0)
 			{
 				onFire = 0;
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			if (smoking > 0)
 			{
+				
 				smoking--;
+				if(smoking == 0)
+				{
+					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				}
 			}
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			
 		}
 	}
 

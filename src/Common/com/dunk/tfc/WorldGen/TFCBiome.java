@@ -44,8 +44,8 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class TFCBiome extends BiomeGenBase
 {
-	public static float riverDepthMin = -0.5F;
-	public static float riverDepthMax = -0.3F;
+	public static float riverDepthMin = -0.7F;
+	public static float riverDepthMax = -0.4F;
 	public float temperatureTFC;
 
 	public BiomeDecoratorTFC theBiomeDecorator;
@@ -81,7 +81,7 @@ public class TFCBiome extends BiomeGenBase
 			.setBiomeColor(0xa6a41c);
 	public static final TFCBiome DEEP_OCEAN = new TFCBiome(36).setBiomeName("Deep Ocean")
 			.setMinMaxHeight(-1.5F, 0.00001F).setBiomeColor(0x0e055a);
-	public static final TFCBiome LAKE = new TFCBiome(2).setBiomeName("Lake").setMinMaxHeight(-0.5F, 0.001F)
+	public static final TFCBiome LAKE = new TFCBiome(2).setBiomeName("Lake").setMinMaxHeight(-0.5F, 0.1F)
 			.setBiomeColor(0x4a8e9e).setLilyPads(2);
 
 	protected static WorldGenCustomTallTrees worldGenAcaciaKoaTrees;
@@ -117,6 +117,9 @@ public class TFCBiome extends BiomeGenBase
 	protected static WorldGenPineShort worldGenPineShortTrees;
 	protected static WorldGenDouglasFir worldGenRedwoodShortTrees;
 	protected static WorldGenPineShort worldGenSpruceShortTrees;
+	protected static WorldGenDouglasFir worldGenPineTall;
+	protected static WorldGenDouglasFir worldGenSpruceTall;
+	protected static WorldGenDouglasFir worldGenCedarTall;
 	protected static WorldGenCustomShortTrees worldGenSycamoreShortTrees;
 	protected static WorldGenCustomShortTrees worldGenWhiteElmShortTrees;
 	protected static WorldGenCustomWillowTrees worldGenWillowShortTrees;
@@ -141,6 +144,10 @@ public class TFCBiome extends BiomeGenBase
 	protected static WorldGenCustomCedarTrees worldGenWhiteCedarTallTreesFromSapling;
 	protected static WorldGenCustomTallTrees worldGenWhiteElmTallTreesFromSapling;
 
+	protected static WorldGenDouglasFir worldGenPineTallFromSapling;
+	protected static WorldGenDouglasFir worldGenSpruceTallFromSapling;
+	protected static WorldGenDouglasFir worldGenCedarTallFromSapling;
+	
 	protected static WorldGenCustomShortTrees worldGenAshShortTreesFromSapling;
 	protected static WorldGenBirchTree worldGenAspenShortTreesFromSapling;
 	protected static WorldGenBirchTree worldGenBirchShortTreesFromSapling;
@@ -295,8 +302,12 @@ public class TFCBiome extends BiomeGenBase
 		worldGenPalmTrees = new WorldGenCustomPalmTrees(false, 1);
 		worldGenOakShortTrees = new WorldGenCustomShortTrees(false, 0, false);
 		worldGenPineShortTrees = new WorldGenPineShort(false, 8, false);
+		
 		worldGenRedwoodShortTrees = new WorldGenDouglasFir(false,9,false,false);
 		worldGenSpruceShortTrees = new WorldGenPineShort(false, 10, false);
+		worldGenPineTall = new WorldGenDouglasFir(false, 8, false,false);
+		worldGenSpruceTall = new WorldGenDouglasFir(false, 10, false,false);
+		worldGenCedarTall = new WorldGenDouglasFir(false, 12, false,false);
 		worldGenSycamoreShortTrees = new WorldGenCustomShortTrees(false, 11, false);
 		worldGenWhiteElmShortTrees = new WorldGenCustomShortTrees(false, 13, false);
 		worldGenWillowShortTrees = new WorldGenCustomWillowTrees(false, 14,false);
@@ -338,6 +349,9 @@ public class TFCBiome extends BiomeGenBase
 		worldGenOakShortTreesFromSapling = new WorldGenCustomShortTrees(false, 0, true);
 		worldGenPineShortTreesFromSapling = new WorldGenPineShort(false, 8, true);
 		worldGenRedwoodShortTreesFromSapling = new WorldGenDouglasFir(false,9,true,true);
+		worldGenPineTallFromSapling = new WorldGenDouglasFir(false, 8, false,true);
+		worldGenSpruceTallFromSapling = new WorldGenDouglasFir(false, 10, false,true);
+		worldGenCedarTallFromSapling = new WorldGenDouglasFir(false, 12, false,true);
 		worldGenSpruceShortTreesFromSapling = new WorldGenPineShort(false, 10, true);
 		worldGenSycamoreShortTreesFromSapling = new WorldGenCustomShortTrees(false, 11, true);
 		worldGenWhiteElmShortTreesFromSapling = new WorldGenCustomShortTrees(false, 13, true);
@@ -569,28 +583,28 @@ public class TFCBiome extends BiomeGenBase
 			case ASH:
 			{
 				if (j)
-					return r.nextInt(160) == 0 ? worldGenBigAshFromSapling : worldGenAshTallTreesFromSapling;
+					return r.nextInt(80) == 0 ? worldGenBigAshFromSapling : worldGenAshTallTreesFromSapling;
 				else
 					return worldGenAshShortTreesFromSapling;
 			}
 			case ASPEN:
 			{
 				if (j)
-					return r.nextInt(160) == 0 ? worldGenBigAspenFromSapling : worldGenAspenShortTreesFromSapling;
+					return r.nextInt(80) == 0 ? worldGenBigAspenFromSapling : worldGenAspenShortTreesFromSapling;
 				else
 					return worldGenAspenShortTreesFromSapling;
 			}
 			case BIRCH:
 			{
 				if (j)
-					return r.nextInt(160) == 0 ? worldGenBigBirchFromSapling : worldGenBirchShortTreesFromSapling;
+					return r.nextInt(80) == 0 ? worldGenBigBirchFromSapling : worldGenBirchShortTreesFromSapling;
 				else
 					return worldGenBirchShortTreesFromSapling;
 			}
 			case CHESTNUT:
 			{
 				if (j)
-					return r.nextInt(160) == 0 ? worldGenBigChestnutFromSapling : worldGenChestnutTallTreesFromSapling;
+					return r.nextInt(80) == 0 ? worldGenBigChestnutFromSapling : worldGenChestnutTallTreesFromSapling;
 				else
 					return worldGenChestnutShortTreesFromSapling;
 			}
@@ -604,21 +618,21 @@ public class TFCBiome extends BiomeGenBase
 			case HICKORY:
 			{
 				if (j)
-					return r.nextInt(160) == 0 ? worldGenBigHickoryFromSapling : worldGenHickoryTallTreesFromSapling;
+					return r.nextInt(80) == 0 ? worldGenBigHickoryFromSapling : worldGenHickoryTallTreesFromSapling;
 				else
 					return worldGenHickoryShortTreesFromSapling;
 			}
 			case MAPLE:
 			{
 				if (j)
-					return r.nextInt(160) == 0 ? worldGenBigMapleFromSapling : worldGenMapleTallTreesFromSapling;
+					return r.nextInt(80) == 0 ? worldGenBigMapleFromSapling : worldGenMapleTallTreesFromSapling;
 				else
 					return worldGenMapleShortTreesFromSapling;
 			}
 			case OAK:
 			{
 				if (j)
-					return r.nextInt(160) == 0 ? worldGenBigOakFromSapling : worldGenOakTallTreesFromSapling;
+					return r.nextInt(80) == 0 ? worldGenBigOakFromSapling : worldGenOakTallTreesFromSapling;
 				else
 					return worldGenOakShortTreesFromSapling;
 			}
@@ -627,7 +641,7 @@ public class TFCBiome extends BiomeGenBase
 				// if (j)
 				// return worldGenPineTallTreesFromSapling;
 				// else
-				return worldGenPineShortTreesFromSapling;
+				return r.nextInt(120) == 0 ?worldGenPineTallFromSapling:worldGenPineShortTreesFromSapling;
 			}
 			case REDWOOD:
 			{
@@ -638,23 +652,23 @@ public class TFCBiome extends BiomeGenBase
 			}
 			case SPRUCE:
 			{
-				return worldGenSpruceShortTreesFromSapling;
+				return r.nextInt(120) == 0 ?worldGenSpruceTallFromSapling:worldGenSpruceShortTreesFromSapling;
 			}
 			case SYCAMORE:
 			{
 				if (j)
-					return r.nextInt(160) == 0 ? worldGenBigSycamoreFromSapling : worldGenSycamoreTallTreesFromSapling;
+					return r.nextInt(80) == 0 ? worldGenBigSycamoreFromSapling : worldGenSycamoreTallTreesFromSapling;
 				else
 					return worldGenSycamoreShortTreesFromSapling;
 			}
 			case WHITECEDAR:
 			{
-				return worldGenWhiteCedarTallTreesFromSapling;
+				return r.nextInt(150) == 0 ?worldGenCedarTallFromSapling:worldGenWhiteCedarTallTreesFromSapling;
 			}
 			case WHITEELM:
 			{
 				if (j)
-					return r.nextInt(160) == 0 ? worldGenBigWhiteElmFromSapling : worldGenWhiteElmTallTreesFromSapling;
+					return r.nextInt(80) == 0 ? worldGenBigWhiteElmFromSapling : worldGenWhiteElmTallTreesFromSapling;
 				else
 					return worldGenWhiteElmShortTreesFromSapling;
 			}
@@ -664,14 +678,14 @@ public class TFCBiome extends BiomeGenBase
 			}
 			case KAPOK:
 			{
-				return r.nextInt(40) == 0 ? worldGenBigKapok : worldGenTallKapok;// new
+				return r.nextInt(20) == 0 ? worldGenBigKapok : worldGenTallKapok;// new
 																					// WorldGenCustomShortTrees(false,
 																					// 15,
 																					// fromSapling);
 			}
 			case KOA:
 			{
-				return j&&r.nextInt(80)==0?worldGenAcaciaKoaBigTreesFromSapling:worldGenAcaciaKoaTreesFromSapling;
+				return j&&r.nextInt(40)==0?worldGenAcaciaKoaBigTreesFromSapling:worldGenAcaciaKoaTreesFromSapling;
 			}
 			case PALM:
 			{
@@ -683,7 +697,7 @@ public class TFCBiome extends BiomeGenBase
 			}
 			case EBONY:
 			{
-				return (j&&r.nextInt(80)==0? worldGenEbonyBigTreesFromSapling:worldGenEbonyTallTreesFromSapling);
+				return (j&&r.nextInt(40)==0? worldGenEbonyBigTreesFromSapling:worldGenEbonyTallTreesFromSapling);
 			}
 			
 			case FEVERTREE:
@@ -700,11 +714,11 @@ public class TFCBiome extends BiomeGenBase
 			}
 			case MAHOGANY:
 			{
-				return (j&r.nextInt(80)==0? worldGenMahoganyBigTreesFromSapling:worldGenMahoganyTallTreesFromSapling);
+				return (j&r.nextInt(40)==0? worldGenMahoganyBigTreesFromSapling:worldGenMahoganyTallTreesFromSapling);
 			}
 			case TEAK:
 			{
-				return r.nextInt(40) == 0 ? worldGenBigTeakFromSapling : worldGenTeakTreesFromSapling;
+				return r.nextInt(20) == 0 ? worldGenBigTeakFromSapling : worldGenTeakTreesFromSapling;
 			}
 			case BAMBOO:
 			{
@@ -714,7 +728,7 @@ public class TFCBiome extends BiomeGenBase
 			{
 				if(j)
 				{
-					return (r.nextInt(64)==0?worldGenBigGingkoTreesFromSapling:worldGenTallGingkoTreesFromSapling);
+					return (r.nextInt(32)==0?worldGenBigGingkoTreesFromSapling:worldGenTallGingkoTreesFromSapling);
 				}
 				return worldGenGingkoTreesFromSapling;
 			}
@@ -726,28 +740,28 @@ public class TFCBiome extends BiomeGenBase
 		case ASH:
 		{
 			if (j)
-				return r.nextInt(80) == 0 ? worldGenBigAsh : worldGenAshTallTrees;
+				return r.nextInt(40) == 0 ? worldGenBigAsh : worldGenAshTallTrees;
 			else
 				return worldGenAshShortTrees;
 		}
 		case ASPEN:
 		{
 			if (j)
-				return r.nextInt(80) == 0 ? worldGenBigAspen : worldGenAspenShortTrees;
+				return r.nextInt(40) == 0 ? worldGenBigAspen : worldGenAspenShortTrees;
 			else
 				return worldGenAspenShortTrees;
 		}
 		case BIRCH:
 		{
 			if (j)
-				return r.nextInt(80) == 0 ? worldGenBigBirch : worldGenBirchShortTrees;
+				return r.nextInt(40) == 0 ? worldGenBigBirch : worldGenBirchShortTrees;
 			else
 				return worldGenBirchShortTrees;
 		}
 		case CHESTNUT:
 		{
 			if (j)
-				return r.nextInt(80) == 0 ? worldGenBigChestnut : worldGenChestnutTallTrees;
+				return r.nextInt(40) == 0 ? worldGenBigChestnut : worldGenChestnutTallTrees;
 			else
 				return worldGenChestnutShortTrees;
 		}
@@ -761,21 +775,21 @@ public class TFCBiome extends BiomeGenBase
 		case HICKORY:
 		{
 			if (j)
-				return r.nextInt(80) == 0 ? worldGenBigHickory : worldGenHickoryTallTrees;
+				return r.nextInt(40) == 0 ? worldGenBigHickory : worldGenHickoryTallTrees;
 			else
 				return worldGenHickoryShortTrees;
 		}
 		case MAPLE:
 		{
 			if (j)
-				return r.nextInt(80) == 0 ? worldGenBigMaple : worldGenMapleTallTrees;
+				return r.nextInt(40) == 0 ? worldGenBigMaple : worldGenMapleTallTrees;
 			else
 				return worldGenMapleShortTrees;
 		}
 		case OAK:
 		{
 			if (j)
-				return r.nextInt(80) == 0 ? worldGenBigOak : worldGenOakTallTrees;
+				return r.nextInt(40) == 0 ? worldGenBigOak : worldGenOakTallTrees;
 			else
 				return worldGenOakShortTrees;
 		}
@@ -784,7 +798,7 @@ public class TFCBiome extends BiomeGenBase
 			// if (j)
 			// return worldGenPineTallTrees;
 			// else
-			return worldGenPineShortTrees;
+			return r.nextInt(80) == 0 ?worldGenPineTall:worldGenPineShortTrees;
 		}
 		case REDWOOD:
 		{
@@ -795,23 +809,23 @@ public class TFCBiome extends BiomeGenBase
 		}
 		case SPRUCE:
 		{
-			return worldGenSpruceShortTrees;
+			return r.nextInt(80) == 0 ?worldGenSpruceTall:worldGenSpruceShortTrees;
 		}
 		case SYCAMORE:
 		{
 			if (j)
-				return r.nextInt(80) == 0 ? worldGenBigSycamore : worldGenSycamoreTallTrees;
+				return r.nextInt(40) == 0 ? worldGenBigSycamore : worldGenSycamoreTallTrees;
 			else
 				return worldGenSycamoreShortTrees;
 		}
 		case WHITECEDAR:
 		{
-			return worldGenWhiteCedarTallTrees;
+			return r.nextInt(80) == 0 ?worldGenCedarTall:worldGenWhiteCedarTallTrees;
 		}
 		case WHITEELM:
 		{
 			if (j)
-				return r.nextInt(80) == 0 ? worldGenBigWhiteElm : worldGenWhiteElmTallTrees;
+				return r.nextInt(40) == 0 ? worldGenBigWhiteElm : worldGenWhiteElmTallTrees;
 			else
 				return worldGenWhiteElmShortTrees;
 		}
@@ -821,13 +835,13 @@ public class TFCBiome extends BiomeGenBase
 		}
 		case KAPOK:
 		{
-			return r.nextInt(100) == 0 ? worldGenBigKapok : worldGenTallKapok;// new
+			return r.nextInt(15) == 0 ? worldGenBigKapok : worldGenTallKapok;// new
 																				// WorldGenCustomShortTrees(false,
 																				// 15,fromSapling);
 		}
 		case KOA:
 		{
-			return j&&r.nextInt(80)==0?worldGenAcaciaKoaBigTrees:worldGenAcaciaKoaTrees;
+			return j&&r.nextInt(25)==0?worldGenAcaciaKoaBigTrees:worldGenAcaciaKoaTrees;
 		}
 		case PALM:
 		{
@@ -839,7 +853,7 @@ public class TFCBiome extends BiomeGenBase
 		}
 		case EBONY:
 		{
-			return (j&r.nextInt(80)==0? worldGenEbonyBigTrees:worldGenEbonyTallTrees);
+			return (j&r.nextInt(32)==0? worldGenEbonyBigTrees:worldGenEbonyTallTrees);
 		}
 		case FEVERTREE:
 		{
@@ -859,7 +873,7 @@ public class TFCBiome extends BiomeGenBase
 		}
 		case TEAK:
 		{
-			return r.nextInt(80) == 0 ? worldGenBigTeak : worldGenTeakTrees;
+			return r.nextInt(30) == 0 ? worldGenBigTeak : worldGenTeakTrees;
 		}
 		case BAMBOO:
 		{
@@ -869,7 +883,7 @@ public class TFCBiome extends BiomeGenBase
 		{
 			if(j)
 			{
-				return (r.nextInt(32)==0?worldGenBigGingkoTrees:worldGenTallGingkoTrees);
+				return (r.nextInt(16)==0?worldGenBigGingkoTrees:worldGenTallGingkoTrees);
 			}
 			return worldGenGingkoTrees;
 		}

@@ -14,6 +14,7 @@ import com.dunk.tfc.WorldGen.WorldCacheManager;
 import com.dunk.tfc.WorldGen.Generators.WorldGenGrowCrops;
 import com.dunk.tfc.api.Constant.Global;
 import com.dunk.tfc.api.Crafting.AnvilManager;
+import com.dunk.tfc.api.Enums.EnumRegion;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
@@ -89,12 +90,14 @@ public class ChunkEventHandler
 				cd.lastSpringGen = TFC_Time.getYear();
 
 				Random rand = new Random(event.world.getSeed() + ((chunkX >> 3) - (chunkZ >> 3)) * (chunkZ >> 3));
-				int cropid = rand.nextInt(CropManager.getInstance().getTotalCrops());
-				CropIndex crop = CropManager.getInstance().getCropFromId(cropid);
-				if (event.world.rand.nextInt(25) == 0 && crop != null)
+				int region = TFC_Climate.getRegionLayer(event.world, chunkX, Global.SEALEVEL, chunkZ);
+				CropIndex[] regionCrops = CropManager.getInstance().REGIONS.get(EnumRegion.values()[region]);
+				int regionCropId = rand.nextInt(regionCrops.length);
+				CropIndex crop = CropManager.getInstance().getCropFromId(regionCropId);
+				if (event.world.rand.nextInt(15) == 0 && crop != null)
 				{
 					int num = 1 + event.world.rand.nextInt(5);
-					WorldGenGrowCrops cropGen = new WorldGenGrowCrops(cropid);
+					WorldGenGrowCrops cropGen = new WorldGenGrowCrops(regionCropId);
 					int x = (chunkX << 4) + event.world.rand.nextInt(16) + 8;
 					int z = (chunkZ << 4) + event.world.rand.nextInt(16) + 8;
 					cropGen.generate(event.world, event.world.rand, x, z, num);

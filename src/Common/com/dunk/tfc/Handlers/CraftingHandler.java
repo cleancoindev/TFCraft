@@ -63,7 +63,7 @@ public class CraftingHandler
 		if (iinventory != null)
 		{
 			// Tool Damaging
-			if (item == TFCItems.stoneBrick)
+			if (item == TFCItems.stoneBrick || item == TFCItems.slateShingle)
 			{
 				List<ItemStack> chisels = OreDictionary.getOres("itemChisel", false);
 				handleItem(player, iinventory, chisels);
@@ -102,6 +102,20 @@ public class CraftingHandler
 			{
 				List<ItemStack> knives = OreDictionary.getOres("itemKnife", false);
 				handleItem(player, iinventory, knives);		
+			}
+			else if(item == TFCItems.clayTile)
+			{
+				for (int i = 0; i < iinventory.getSizeInventory(); i++)
+				{
+					if (iinventory.getStackInSlot(i) == null)
+						continue;
+					if (iinventory.getStackInSlot(i).getItem() == TFCItems.logs)
+					{
+						ItemStack itemL = iinventory.getStackInSlot(i).copy();
+						iinventory.setInventorySlotContents(i, itemL);
+						iinventory.getStackInSlot(i).stackSize = iinventory.getStackInSlot(i).stackSize + 1;
+					}
+				}
 			}
 			else if (item == TFCItems.wool)
 			{

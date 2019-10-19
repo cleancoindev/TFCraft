@@ -4,12 +4,15 @@ import com.dunk.tfc.Core.TFC_Climate;
 import com.dunk.tfc.Core.TFC_Core;
 import com.dunk.tfc.Core.TFC_Time;
 import com.dunk.tfc.api.TFCBlocks;
+import com.dunk.tfc.api.TFCOptions;
 import com.dunk.tfc.api.Constant.Global;
 
+import codechicken.lib.math.MathHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.WorldProvider;
@@ -21,7 +24,7 @@ public class TFCProvider extends WorldProvider
 {
 	private int moonPhase;
 	private int moonPhaseLastCalculated;
-
+	private double radiansPerTick = 0.000261799; // 15 degrees per hour
 	@Override
 	protected void registerWorldChunkManager()
 	{
@@ -119,8 +122,8 @@ public class TFCProvider extends WorldProvider
 
 		if (temp <= 0 && biome != TFCBiome.DEEP_OCEAN)
 		{
-			if (worldObj.isAirBlock(x, y + 1, z) && TFC_Core.isWater(id) && worldObj.rand.nextInt(4) == 0
-					&& isNextToShoreOrIce(x, y, z))
+			if ((worldObj.isAirBlock(x, y + 1, z)||Math.abs(z)>27000) && TFC_Core.isWater(id)
+					&& (isNextToShoreOrIce(x, y, z)||Math.abs(z)>27000))
 			{
 				Material mat = worldObj.getBlock(x, y, z).getMaterial();
 				boolean salty = TFC_Core.isSaltWaterIncludeIce(id, meta, mat);
@@ -190,6 +193,76 @@ public class TFCProvider extends WorldProvider
 		}
 		return false;
 	}
+	
+	@Override
+	public float calculateCelestialAngle(long p_76563_1_, float partialTick)
+    {
+		
+		if(worldObj.isRemote && !TFCOptions.enableDefaultCelestialAngle)
+		{
+			//The hour angle of the sun is cos(w) = -tan(p)tan(d)
+			//where w is the hour angle, p is the latitude (positive for north) and d is the declination of the sun
+			if(Minecraft.getMinecraft().renderViewEntity != null)
+			{
+			double zPos = Minecraft.getMinecraft().renderViewEntity.posZ;
+			zPos = Math.min(29999, Math.max(-29999, zPos));
+			double declinationRad = -0.4091d * Math.cos((Math.PI*2d/(double)TFC_Time.daysInYear) *((TFC_Time.getDayOfYear()+TFC_Time.daysInMonth*2) + ((double)TFC_Time.daysInYear * 10d/365d)));
+			double latitudeRad = (Math.PI/2d) * (zPos/-30000d);
+			double cosHour = -Math.tan(latitudeRad) * Math.tan(declinationRad);
+			double solarHours = cosHour <= 1 && cosHour >=-1?Math.acos(cosHour):cosHour * -1;
+			int sunRiseTicksBeforeNoon = (int) (solarHours / radiansPerTick); //the number of ticks before solar noon that the sun will rise and the number of ticks after that it will set
+			
+			//f1 should represent the percentage of the day, where 0 = midnight and 1 is 24 hours later
+			float f1;
+			int j = (int)((p_76563_1_+6000) % 24000L);
+			int sunrise = 12000 - sunRiseTicksBeforeNoon;
+			int sunset = 12000 + sunRiseTicksBeforeNoon;
+			if( j < sunrise)
+			{
+				f1 = (((float)j + partialTick) / sunrise) * 0.25f;	//The angle will be the fraction towards 1 quarter from midnight to sunrise
+			}
+			else if(j > sunset)
+			{
+				f1 = 0.75f + (((float)j-sunset + partialTick) / (24000-sunset)) * 0.25f;	//The angle will be the fraction towards 1 quarter from midnight to sunrise
+			}
+			else
+			{
+				//j is between sunrise and sunset
+				//calculate how far between sunrise and sunset it is
+				f1 = (float) (0.25f + (((float)j -sunrise + partialTick) / (sunRiseTicksBeforeNoon*2d))*0.5f);
+			}
+			f1 = Math.min(1.0f, Math.max(0.0f, f1));
+			f1 += 0.5f;
+			f1 %= 1f;
+			/*
+			//Default code
+			int j = (int)(p_76563_1_ % 24000L);
+	        float f1 = ((float)j + p_76563_3_) / 24000.0F - 0.25F;
+
+	        if (f1 < 0.0F)
+	        {
+	            ++f1;
+	        }
+
+	        if (f1 > 1.0F)
+	        {
+	            --f1;
+	        }*/
+			return f1;
+			/*
+			f1 *= 2f;
+	        float f2 = f1;
+	        f1 = 1.0F - (float)((Math.cos((double)f1 * Math.PI) + 1.0D) / 2.0D);
+	        f1 = f2 + (f1 - f2) / 3.0F;
+	        return f1;*/
+			}
+			return super.calculateCelestialAngle(p_76563_1_, partialTick);
+		}
+		else
+		{
+			return super.calculateCelestialAngle(p_76563_1_, partialTick);
+		}
+    }
 
 	@Override
 	public boolean canDoRainSnowIce(Chunk chunk)

@@ -266,7 +266,7 @@ public class WorldGenCustomBigTree extends WorldGenTreeBase
 	@Override
 	public boolean placeLeaves(World world, Random random, int xCoord, int yCoord, int zCoord)
 	{
-		int radius = 3;
+		int radius = 2;
 		boolean allowVines = (WorldGenForests.shouldPlantGrow(EnumForestPlant.VINE, rainfall, temperatureAvg,
 				evt, random));
 		boolean lost = BlockBranch.shouldLoseLeaf(world, xCoord, yCoord, zCoord, random, block2);
@@ -347,7 +347,7 @@ public class WorldGenCustomBigTree extends WorldGenTreeBase
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z)
 	{
-		int distFromEdge = 4;
+		int distFromEdge = 5;
 		// We don't want to generate too close to chunk boundaries, because that
 		// gets out of hand
 		if ((x % 16 > 16 - distFromEdge || Math.abs(
@@ -431,11 +431,11 @@ public class WorldGenCustomBigTree extends WorldGenTreeBase
 			}
 		}
 
-		int extraBranchLength = 4;
+		int extraBranchLength = 2;
 		// if(treeId == 0)
 		// {
 
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < height/2; i++)
 		{
 			if (rand.nextInt(i + 1) == 0)
 			{

@@ -96,6 +96,7 @@ entity.fishTFC.name=Bass
 entity.horseTFC.name=Horse
 entity.pheasantTFC.name=Pheasant
 entity.pigTFC.name=Pig
+entity.boarTFC.name=Wild Boar
 entity.sheepTFC.name=Sheep
 entity.squidTFC.name=Squid
 entity.wolfTFC.name=Wolf
@@ -423,7 +424,9 @@ item.Clay.Fire Clay.name=Fire Clay
 
 item.Clay Tile.Ceramic Tile.name=Ceramic Tile
 item.Clay Tile.Clay Tile.name=Clay Tile
+item.Slate Shingle.name=Slate Shingle
 tile.TileRoof.name=Ceramic Tile Roof
+tile.SlateRoof.name=Slate Roof
 
 item.Flat Clay.clay flat light.name=Flat Clay
 item.Flat Clay.clay flat dark.name=Flat Clay
@@ -2847,6 +2850,7 @@ gui.wool_penalty3=resistance by 1
 gui.default_walkable=Default speed bonus
 gui.walkable_bonus.sand=Speed bonus on sand
 gui.walkable_bonus_socks=Speed bonus with boots
+gui.snow_walkable=No penalty from snow
 
 #== Misc GUI ==
 gui.Blueprint=Blueprint

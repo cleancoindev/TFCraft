@@ -98,6 +98,15 @@ public class Recipes
 
 		GameRegistry.addRecipe(new ItemStack(TFCBlocks.tileRoof, 1, 4), "   ", " X ", "XLX", 'L',
 				new ItemStack(TFCItems.singlePlank, 1, WILD), 'X', new ItemStack(TFCItems.clayTile, 1, 1));
+		
+		GameRegistry.addRecipe(new ItemStack(TFCBlocks.slateRoof, 1, 0), "X  ", "LX ", " LX", 'L',
+				new ItemStack(TFCItems.singlePlank, 1, WILD), 'X', new ItemStack(TFCItems.slateShingle, 1, 0));
+
+		GameRegistry.addRecipe(new ItemStack(TFCBlocks.slateRoof, 1, 0), "  X", " XL", "XL ", 'L',
+				new ItemStack(TFCItems.singlePlank, 1, WILD), 'X', new ItemStack(TFCItems.slateShingle, 1, 0));
+
+		GameRegistry.addRecipe(new ItemStack(TFCBlocks.slateRoof, 1, 4), "   ", " X ", "XLX", 'L',
+				new ItemStack(TFCItems.singlePlank, 1, WILD), 'X', new ItemStack(TFCItems.slateShingle, 1, 0));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCBlocks.littleDrum, 1), " L ", "SBS", 'L',
 				new ItemStack(TFCItems.leather, 1, 0), 'S', "materialString", 'B',
@@ -114,6 +123,17 @@ public class Recipes
 
 			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.pole, 1),
 					new ItemStack(TFCItems.logs, 1, 2 * i), "itemKnife"));
+			
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.clayTile,1,0), "X ", "LX", 'L',
+					new ItemStack(TFCItems.logs, 1, 2 * i + 1), 'X', "lumpClay"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.clayTile,1,0), "X ", "LX", 'L',
+					new ItemStack(TFCItems.logs, 1, 2 * i), 'X', "lumpClay"));
+			
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.clayTile,1,0), " X", "XL", 'L',
+					new ItemStack(TFCItems.logs, 1, 2 * i + 1), 'X', "lumpClay"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(TFCItems.clayTile,1,0), " X", "XL", 'L',
+					new ItemStack(TFCItems.logs, 1, 2 * i), 'X', "lumpClay"));
+			
 			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.pole, 1),
 					new ItemStack(TFCItems.logs, 1, 2 * i + 1), "itemKnife"));
 			int l = i % 16;
@@ -494,12 +514,16 @@ public class Recipes
 					new ItemStack(TFCBlocks.stoneIgExSmooth, 1, j));
 		}
 
+		GameRegistry
+		.addRecipe(new ShapelessOreRecipe(new ItemStack(TFCItems.slateShingle, 2, 0),
+				new ItemStack(TFCItems.stoneBrick, 1, 1 + Global.STONE_MM_START), "itemChisel"));
+		
 		for (int j = 0; j < Global.STONE_MM.length; j++)
 		{
 			GameRegistry.addRecipe(new ItemStack(TFCBlocks.stoneMMBrick, 4, j), "PXP", "XPX", "PXP", 'P',
 					new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_MM_START), 'X',
 					new ItemStack(TFCItems.mortar, 1));
-			GameRegistry.addRecipe(new ItemStack((j + Global.STONE_MM_START < 16?TFCBlocks.chimneyBricks:TFCBlocks.chimneyBricks2), 2, j + Global.STONE_MM_START), "P P", "X X", "P P", 'P',
+			GameRegistry.addRecipe(new ItemStack((j + Global.STONE_MM_START < 16?TFCBlocks.chimneyBricks:TFCBlocks.chimneyBricks2), 2, (j + Global.STONE_MM_START)%16), "P P", "X X", "P P", 'P',
 					new ItemStack(TFCItems.stoneBrick, 1, j + Global.STONE_MM_START), 'X',
 					new ItemStack(TFCItems.mortar, 1));
 			GameRegistry

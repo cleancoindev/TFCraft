@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.dunk.tfc.Entities.Mobs.EntitySkeletonTFC;
 import com.dunk.tfc.Items.ItemQuiver;
+import com.dunk.tfc.Items.Tools.ItemJavelin;
 import com.dunk.tfc.Render.Models.ModelSkeletonTFC;
 import com.dunk.tfc.api.TFCItems;
 
@@ -19,11 +20,13 @@ import net.minecraft.util.ResourceLocation;
 @SideOnly(Side.CLIENT)
 public class RenderSkeletonTFC extends RenderBiped
 {
-	private static final ResourceLocation SKELETON_TEXTURE = new ResourceLocation("textures/entity/skeleton/skeleton.png");
-	private static final ResourceLocation WITHER_TEXTURE = new ResourceLocation("textures/entity/skeleton/wither_skeleton.png");
+	private static final ResourceLocation SKELETON_TEXTURE = new ResourceLocation(
+			"textures/entity/skeleton/skeleton.png");
+	private static final ResourceLocation WITHER_TEXTURE = new ResourceLocation(
+			"textures/entity/skeleton/wither_skeleton.png");
 	public static final RenderQuiver QUIVER_RENDER = new RenderQuiver();
-	public static ItemStack quiver = new ItemStack(TFCItems.quiver,1,1);
-	public static ItemStack ammo = ((ItemQuiver)TFCItems.quiver).addItem(quiver, new ItemStack(TFCItems.arrow,16,0));
+	public static ItemStack quiver = new ItemStack(TFCItems.quiver, 1, 1);
+	public static ItemStack ammo = ((ItemQuiver) TFCItems.quiver).addItem(quiver, new ItemStack(TFCItems.arrow, 16, 0));
 
 	public RenderSkeletonTFC()
 	{
@@ -50,24 +53,28 @@ public class RenderSkeletonTFC extends RenderBiped
 	@Override
 	protected ResourceLocation getEntityTexture(EntityLiving par1EntityLiving)
 	{
-		return this.getTextureLocation((EntitySkeletonTFC)par1EntityLiving);
+		return this.getTextureLocation((EntitySkeletonTFC) par1EntityLiving);
 	}
 
 	/**
-	 * Allows the render to do any OpenGL state modifications necessary before the model is rendered. Args:
-	 * entityLiving, partialTickTime
+	 * Allows the render to do any OpenGL state modifications necessary before
+	 * the model is rendered. Args: entityLiving, partialTickTime
 	 */
 	@Override
 	protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2)
 	{
+		ItemStack itemstack = par1EntityLivingBase.getHeldItem();
 
-		QUIVER_RENDER.render(par1EntityLivingBase,quiver);
-		this.scaleRender((EntitySkeletonTFC)par1EntityLivingBase, par2);
+		if (itemstack != null && (itemstack.getItem() == TFCItems.bow || itemstack.getItem() instanceof ItemJavelin))
+		{
+			QUIVER_RENDER.render(par1EntityLivingBase, quiver);
+		}
+		this.scaleRender((EntitySkeletonTFC) par1EntityLivingBase, par2);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity par1Entity)
 	{
-		return this.getTextureLocation((EntitySkeletonTFC)par1Entity);
+		return this.getTextureLocation((EntitySkeletonTFC) par1Entity);
 	}
 }

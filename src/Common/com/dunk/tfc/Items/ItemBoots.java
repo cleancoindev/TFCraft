@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.dunk.tfc.Core.TFC_Core;
+import com.dunk.tfc.api.TFCItems;
 import com.dunk.tfc.api.Interfaces.IBoots;
 import com.dunk.tfc.api.Interfaces.IEquipable.ClothingType;
 import com.dunk.tfc.api.Interfaces.IEquipable.EquipType;
@@ -59,6 +60,10 @@ public class ItemBoots extends ItemClothing implements IBoots
 			{
 				arraylist.add(TFC_Core.translate("gui.default_walkable") + ":  " + (defaultSpeed*100)+"%");
 			}			
+			if(this == TFCItems.bearFurBoots || this == TFCItems.wolfFurBoots)
+			{
+				arraylist.add(TFC_Core.translate("gui.snow_walkable"));
+			}
 		}
 	}
 	@Override

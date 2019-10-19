@@ -1,5 +1,7 @@
 package com.dunk.tfc.Render.Blocks;
 
+import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 
 import com.dunk.tfc.Blocks.BlockMudBricks;
@@ -29,7 +31,8 @@ public class RenderTileRoof implements ISimpleBlockRenderingHandler
 			// GL11.glRotatef(-30, 0, 1, 0);
 			GL11.glRotatef(-45, 1, 0, 0);
 			// rotate(renderer, 1);
-			renderer.overrideBlockTexture = block.getIcon(block==TFCBlocks.tileRoof?123:124, 0);
+			renderer.overrideBlockTexture = block == TFCBlocks.slateRoof ? TFCBlocks.stoneMM.getIcon(0, 1)
+					: block.getIcon(block == TFCBlocks.tileRoof ? 123 : 124, 0);
 			renderInvBlock(block, 0, renderer);
 			GL11.glRotatef(45, 1, 0, 0);
 			renderer.clearOverrideBlockTexture();
@@ -45,7 +48,8 @@ public class RenderTileRoof implements ISimpleBlockRenderingHandler
 
 			GL11.glRotatef(-45, 1, 0, 0);
 			// rotate(renderer, 1);
-			renderer.overrideBlockTexture = block.getIcon(123, 0);
+			renderer.overrideBlockTexture = renderer.overrideBlockTexture = block == TFCBlocks.slateRoof
+					? TFCBlocks.stoneMM.getIcon(0, 1) : block.getIcon(123, 0);
 			renderInvBlock(block, 0, renderer);
 			GL11.glRotatef(45, 1, 0, 0);
 			renderer.clearOverrideBlockTexture();
@@ -58,7 +62,8 @@ public class RenderTileRoof implements ISimpleBlockRenderingHandler
 			GL11.glRotatef(180, 0, 1, 0);
 			GL11.glRotatef(-45, 1, 0, 0);
 			// rotate(renderer, 1);
-			renderer.overrideBlockTexture = block.getIcon(123, 0);
+			renderer.overrideBlockTexture = renderer.overrideBlockTexture = block == TFCBlocks.slateRoof
+					? TFCBlocks.stoneMM.getIcon(0, 1) : block.getIcon(123, 0);
 			renderInvBlock(block, 0, renderer);
 			GL11.glRotatef(45, 1, 0, 0);
 			GL11.glRotatef(180, 0, 1, 0);
@@ -69,7 +74,8 @@ public class RenderTileRoof implements ISimpleBlockRenderingHandler
 
 			GL11.glRotatef(-45, 1, 0, 0);
 			// rotate(renderer, 1);
-			renderer.overrideBlockTexture = block.getIcon(123, 0);
+			renderer.overrideBlockTexture = renderer.overrideBlockTexture = block == TFCBlocks.slateRoof
+					? TFCBlocks.stoneMM.getIcon(0, 1) : block.getIcon(123, 0);
 			renderInvBlock(block, 0, renderer);
 			GL11.glRotatef(45, 1, 0, 0);
 
@@ -127,6 +133,7 @@ public class RenderTileRoof implements ISimpleBlockRenderingHandler
 		boolean centerSlopeRight = false;
 		boolean centerSlopeLeft = false;
 		int meta = world.getBlockMetadata(x, y, z);
+		// The ceramic Tile Roof
 		if (block == TFCBlocks.tileRoof)
 		{
 			if (meta == 4 || meta == 5)
@@ -2366,8 +2373,8 @@ public class RenderTileRoof implements ISimpleBlockRenderingHandler
 					float oldYRot = ((RenderBlocksWithRotation) renderer).yRotation;
 					((RenderBlocksWithRotation) renderer).yRotation = 0;
 					Block b = world.getBlock(x, y - 1, z);
-					if (b != null && b
-							.isOpaqueCube() && (b.getMaterial() == Material.rock || b.getMaterial() == Material.wood || b instanceof BlockMudBricks))
+					if (b != null && b.isOpaqueCube() && (b.getMaterial() == Material.rock || b
+							.getMaterial() == Material.wood || b instanceof BlockMudBricks))
 					{
 						// renderer.overrideBlockTexture = b.getIcon(2,
 						// world.getBlockMetadata(x, y - 1, z));
@@ -2407,38 +2414,44 @@ public class RenderTileRoof implements ISimpleBlockRenderingHandler
 						{
 							((RenderBlocksWithRotation) renderer).renderDiagonal += 32;
 						}
-						if (centerPiece && world.getBlockMetadata(x, y, z) >= 4)
+						if (world.getBlockMetadata(x, y, z) >= 4)
 						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = 0;
 							if (orMeta == 4)
 							{
-								((RenderBlocksWithRotation) renderer).renderDiagonal = 5;
-								if (corner && blockBack == block && blockBackMeta == 5)
+								if(!centerSlopeLeft)
 								{
-									((RenderBlocksWithRotation) renderer).renderDiagonal += 2;
+									((RenderBlocksWithRotation) renderer).renderDiagonal += ((RenderBlocksWithRotation) renderer).CENTER_ROOF_EAST;
 								}
-								if (corner && blockFront == block && blockFrontMeta == 5)
+								if(!centerSlopeRight)
 								{
-									((RenderBlocksWithRotation) renderer).renderDiagonal += 8;
+									((RenderBlocksWithRotation) renderer).renderDiagonal += ((RenderBlocksWithRotation) renderer).CENTER_ROOF_WEST;
 								}
 							}
 							else if (orMeta == 5)
 							{
-								((RenderBlocksWithRotation) renderer).renderDiagonal = 10;
-								if (corner && blockBack == block && blockBackMeta == 4)
+								
+								if(!centerSlopeLeft)
 								{
-									((RenderBlocksWithRotation) renderer).renderDiagonal += 4;
+									((RenderBlocksWithRotation) renderer).renderDiagonal += ((RenderBlocksWithRotation) renderer).CENTER_ROOF_NORTH;
 								}
-								if (corner && blockFront == block && blockFrontMeta == 4)
+								if(!centerSlopeRight)
 								{
-									((RenderBlocksWithRotation) renderer).renderDiagonal += 1;
+									((RenderBlocksWithRotation) renderer).renderDiagonal += ((RenderBlocksWithRotation) renderer).CENTER_ROOF_SOUTH;
 								}
+								
+								
 							}
-
-							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).renderDiagonal << 6;
+							if(((RenderBlocksWithRotation) renderer).renderDiagonal == 0)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal = 64;
+							}
 						}
 						((RenderBlocksWithRotation) renderer).yRotation = 0;
-						renderer.setRenderBounds(0, 1, 0, 1, 2, 1);
-						renderer.renderStandardBlock(world.getBlock(x, y - 1, z), x, y - 1, z);
+						renderer.setRenderBounds(0, 0, 0, 1, 1, 1);
+						((RenderBlocksWithRotation) renderer).useTextureBelow = true;
+						renderer.renderStandardBlock(world.getBlock(x, y - 1, z), x, y, z);
+						((RenderBlocksWithRotation) renderer).useTextureBelow = false;
 						((RenderBlocksWithRotation) renderer).renderDiagonal = -1;
 						/*
 						 * for (int i = 0; i < 8; i++) { if(oldYRot == 0) {
@@ -2463,11 +2476,12 @@ public class RenderTileRoof implements ISimpleBlockRenderingHandler
 			}
 			renderer.renderAllFaces = false;
 		}
-		else
+		else if (block == TFCBlocks.thatchRoof)
 		{
+			// The thatch roof
 			renderer = new RenderBlocksWithRotation(renderer);
-			((RenderBlocksWithRotation)renderer).yRotation =(float)( Math.PI +  (meta * (Math.PI/2)));
-			
+			((RenderBlocksWithRotation) renderer).yRotation = (float) (Math.PI + (meta * (Math.PI / 2)));
+
 			((RenderBlocksWithRotation) renderer).staticTexture = true;
 			Vec3 xV = Vec3.createVectorHelper(1, 0, 0);
 			Vec3 zV = Vec3.createVectorHelper(0, 0, 1);
@@ -2483,50 +2497,797 @@ public class RenderTileRoof implements ISimpleBlockRenderingHandler
 
 			Block blockFront = world.getBlock(x - (int) zV.xCoord, y, z - (int) zV.zCoord);
 			Block blockBack = world.getBlock(x + (int) zV.xCoord, y, z + (int) zV.zCoord);
-			
-			int blockFrontMeta,blockBackMeta;
+
+			int blockFrontMeta, blockBackMeta;
 			blockFrontMeta = world.getBlockMetadata(x - (int) zV.xCoord, y, z - (int) zV.zCoord);
-			 blockBackMeta = world.getBlockMetadata(x + (int) zV.xCoord, y, z + (int) zV.zCoord);
-			double xP,yP,zP;
+			blockBackMeta = world.getBlockMetadata(x + (int) zV.xCoord, y, z + (int) zV.zCoord);
+			double xP, yP, zP;
 			xP = 0d;
 			yP = -0.25d;
 			zP = 0.5d;
-			renderer.setRenderBounds(xP, yP, zP,xP+ 1F, yP+ 1.414F,zP+ 0.4F);
+			renderer.setRenderBounds(xP, yP, zP, xP + 1F, yP + 1.414F, zP + 0.4F);
 			// GL11.glRotatef(-30, 0, 1, 0);
 			renderer.renderAllFaces = true;
-			((RenderBlocksWithRotation)renderer).rotation = (float) (Math.PI/4);
+			((RenderBlocksWithRotation) renderer).rotation = (float) (Math.PI / 4);
 			// rotate(renderer, 1);
 			renderer.overrideBlockTexture = block.getIcon(124, 0);
 			renderer.renderStandardBlock(block, x, y, z);
-			if(blockFront == block && (blockFrontMeta+2)%4 == meta && meta  < 2)
+			
+			if (blockFront == block && (blockFrontMeta + 2) % 4 == meta && meta < 2)
 			{
-				((RenderBlocksWithRotation)renderer).rotation = 0;
+				float rot = ((RenderBlocksWithRotation) renderer).rotation;
+				((RenderBlocksWithRotation) renderer).rotation = 0;
 
-				renderer.setRenderBounds(-0.01, 0.9, -0.31,1.01, 1.25,0.31);
+				renderer.setRenderBounds(-0.005, 0.9, -0.31, 1.005, 1.25, 0.31);
 				renderer.renderStandardBlock(block, x, y, z);
+				((RenderBlocksWithRotation) renderer).rotation = rot;
+			}
+			renderer.clearOverrideBlockTexture();
+			if(world.getBlock(x, y+1, z) == TFCBlocks.snow)
+			{
+				renderer.setRenderBounds(xP-0.01, yP, zP + 0.1, xP + 1.01F, yP + 1.414F + 0.0625 , zP + 0.4F +0.1);
+				renderer.renderStandardBlock( TFCBlocks.snow, x, y, z);
+				
+				if (blockFront == block && (blockFrontMeta + 2) % 4 == meta && meta < 2)
+				{
+					((RenderBlocksWithRotation) renderer).rotation = 0;
+
+					renderer.setRenderBounds(-0.02, 1, -0.34, 1.02, 1.3675, 0.34);
+					renderer.renderStandardBlock(TFCBlocks.snow, x, y, z);
+				}
 			}
 			
+			
+
 			((RenderBlocksWithRotation) renderer).staticTexture = false;
 			float oldYRot = ((RenderBlocksWithRotation) renderer).yRotation;
 			((RenderBlocksWithRotation) renderer).yRotation = 0;
 			Block b = world.getBlock(x, y - 1, z);
-			if (b != null && b
-					.isOpaqueCube() && (b.getMaterial() == Material.rock || b.getMaterial() == Material.wood || b instanceof BlockMudBricks))
+			if (b != null && b.isOpaqueCube() && (b.getMaterial() == Material.rock || b
+					.getMaterial() == Material.wood || b instanceof BlockMudBricks))
 			{
 				// renderer.overrideBlockTexture = b.getIcon(2,
 				// world.getBlockMetadata(x, y - 1, z));
+				((RenderBlocksWithRotation) renderer).renderAllFaces= true;
 				renderer.clearOverrideBlockTexture();
 				((RenderBlocksWithRotation) renderer).rotation = 0;
-				double startX, endX;
-				startX = world.getBlock(x - 1, y, z) == block ? 0 : 0.001;
-				endX =  0.9;
-				((RenderBlocksWithRotation) renderer).renderDiagonal = (int) (oldYRot / (Math.PI / 2)) % 4;
+			
 				((RenderBlocksWithRotation) renderer).renderDiagonal = meta;
 				((RenderBlocksWithRotation) renderer).yRotation = 0;
-				
-				renderer.setRenderBounds(0, 1, 0, 1, 2, 1);
-				renderer.renderStandardBlock(world.getBlock(x, y - 1, z), x, y - 1, z);
+
+				renderer.setRenderBounds(0, 0, 0, 1, 1, 1);
+				((RenderBlocksWithRotation) renderer).useTextureBelow = true;
+				renderer.renderStandardBlock(world.getBlock(x, y - 1, z), x, y, z);
+				((RenderBlocksWithRotation) renderer).useTextureBelow = false;
 				((RenderBlocksWithRotation) renderer).renderDiagonal = -1;
+				((RenderBlocksWithRotation) renderer).renderAllFaces= false;
+			}
+			renderer.clearOverrideBlockTexture();
+		}
+		else if (block == TFCBlocks.slateRoof)
+		{
+			renderer = new RenderBlocksWithRotation(renderer);
+			renderer.renderAllFaces = true;
+
+			
+			
+			
+			
+			int maxTimes = meta < 4 ? 1 : 2;
+			for (int times = 0; times < maxTimes; times++)
+			{
+				((RenderBlocksWithRotation) renderer).rotation = ((RenderBlocksWithRotation) renderer).rot45 - (((RenderBlocksWithRotation) renderer).rot1 * 10f);
+				((RenderBlocksWithRotation) renderer).yRotation = (float) ((meta + (times == 1 ? 2
+						: 0)) % 4) * (float) Math.PI / 2f;
+
+				Vec3 xV = Vec3.createVectorHelper(1, 0, 0);
+				Vec3 zV = Vec3.createVectorHelper(0, 0, 1);
+
+				Random rand = new Random(x + y * 2 + z * 3);
+
+				xV.rotateAroundY(((RenderBlocksWithRotation) renderer).yRotation);
+				zV.rotateAroundY(((RenderBlocksWithRotation) renderer).yRotation);
+				xV.xCoord = Math.round(xV.xCoord);
+				xV.yCoord = Math.round(xV.yCoord);
+				xV.zCoord = Math.round(xV.zCoord);
+				zV.xCoord = Math.round(zV.xCoord);
+				zV.yCoord = Math.round(zV.yCoord);
+				zV.zCoord = Math.round(zV.zCoord);
+
+				// This gives us the RNG for the block on our right
+				Random randRight = new Random((x - (int) xV.xCoord) + y * 2 + (z - (int) xV.zCoord) * 3);
+				Random randBack = new Random((x - (int) zV.xCoord) + y * 2 + (z - (int) zV.zCoord) * 3);
+				Random randFront = new Random((x + (int) zV.xCoord) + y * 2 + (z + (int) zV.zCoord) * 3);
+
+				long rSeed = rand.nextLong();
+				long rightSeed = randRight.nextLong();
+				long backSeed = randBack.nextLong();
+				long frontSeed = randFront.nextLong();
+
+				Block blockDownBackRight = world.getBlock(x - (int) zV.xCoord - (int) xV.xCoord, y - 1,
+						z - (int) zV.zCoord - (int) xV.zCoord);
+				Block blockDownFrontRight = world.getBlock(x + (int) zV.xCoord - (int) xV.xCoord, y - 1,
+						z + (int) zV.zCoord - (int) xV.zCoord);
+				Block blockDownBackLeft = world.getBlock(x - (int) zV.xCoord + (int) xV.xCoord, y - 1,
+						z - (int) zV.zCoord + (int) xV.zCoord);
+				Block blockDownFrontLeft = world.getBlock(x + (int) zV.xCoord + (int) xV.xCoord, y - 1,
+						z + (int) zV.zCoord + (int) xV.zCoord);
+				
+				Block blockFrontLeft = world.getBlock(x + (int) zV.xCoord + (int) xV.xCoord, y,
+						z + (int) zV.zCoord + (int) xV.zCoord);
+				Block blockFrontRight = world.getBlock(x - (int) xV.xCoord + (int) zV.xCoord, y,
+						z - (int) xV.zCoord + (int) zV.zCoord);
+				Block blockUpFront = world.getBlock(x + (int) zV.xCoord, y + 1, z + (int) zV.zCoord);
+				Block blockDownBack = world.getBlock(x - (int) zV.xCoord, y - 1, z - (int) zV.zCoord);
+				Block blockDownRight = world.getBlock(x - (int) xV.xCoord, y - 1, z - (int) xV.zCoord);
+				Block blockDownLeft = world.getBlock(x + (int) xV.xCoord, y - 1, z + (int) xV.zCoord);
+				Block blockLeft = world.getBlock(x + (int) xV.xCoord, y, z + (int) xV.zCoord);
+				Block blockRight = world.getBlock(x - (int) xV.xCoord, y, z - (int) xV.zCoord);
+				Block blockBackLeft = world.getBlock(x + (int) xV.xCoord - (int) zV.xCoord, y,
+						z + (int) xV.zCoord - (int) zV.zCoord);
+				
+				int blockFrontMeta, blockBackMeta, blockUpFrontMeta, blockDownBackMeta, blockLeftMeta, blockRightMeta;
+				Block blockBack = world.getBlock(x - (int) zV.xCoord, y, z - (int) zV.zCoord);
+				Block blockFront = world.getBlock(x + (int) zV.xCoord, y, z + (int) zV.zCoord);
+				blockBackMeta = world.getBlockMetadata(x - (int) zV.xCoord, y, z - (int) zV.zCoord);
+				blockFrontMeta = world.getBlockMetadata(x + (int) zV.xCoord, y, z + (int) zV.zCoord);
+				int blockFrontLeftMeta, blockFrontRightMeta, blockBackLeftMeta, blockDownRightMeta, blockDownLeftMeta;
+
+				int blockDownBackRightMeta = world.getBlockMetadata(x - (int) zV.xCoord - (int) xV.xCoord, y - 1,
+						z - (int) zV.zCoord - (int) xV.zCoord);
+				int blockDownFrontRightMeta = world.getBlockMetadata(x + (int) zV.xCoord - (int) xV.xCoord, y - 1,
+						z + (int) zV.zCoord - (int) xV.zCoord);
+				int blockDownBackLeftMeta = world.getBlockMetadata(x - (int) zV.xCoord + (int) xV.xCoord, y - 1,
+						z - (int) zV.zCoord + (int) xV.zCoord);
+				int blockDownFrontLeftMeta = world.getBlockMetadata(x + (int) zV.xCoord + (int) xV.xCoord, y - 1,
+						z + (int) zV.zCoord + (int) xV.zCoord);
+				
+				
+				blockFrontLeftMeta = world.getBlockMetadata(x + (int) zV.xCoord + (int) xV.xCoord, y,
+						z + (int) zV.zCoord + (int) xV.zCoord);
+				blockFrontRightMeta = world.getBlockMetadata(x - (int) xV.xCoord + (int) zV.xCoord, y,
+						z - (int) xV.zCoord + (int) zV.zCoord);
+				blockUpFrontMeta = world.getBlockMetadata(x + (int) zV.xCoord, y + 1, z + (int) zV.zCoord);
+				blockDownBackMeta = world.getBlockMetadata(x - (int) zV.xCoord, y - 1, z - (int) zV.zCoord);
+				blockLeftMeta = world.getBlockMetadata(x + (int) xV.xCoord, y, z + (int) xV.zCoord);
+				blockRightMeta = world.getBlockMetadata(x - (int) xV.xCoord, y, z - (int) xV.zCoord);
+				blockBackLeftMeta = world.getBlockMetadata(x + (int) xV.xCoord - (int) zV.xCoord, y,
+						z + (int) xV.zCoord - (int) zV.zCoord);
+				blockDownRightMeta = world.getBlockMetadata(x - (int) xV.xCoord, y - 1, z - (int) xV.zCoord);
+				blockDownLeftMeta = world.getBlockMetadata(x + (int) xV.xCoord, y - 1, z + (int) xV.zCoord);
+
+				// If we are going to make a corner, we would have to turn the
+				// view.
+
+				double slateLength = 1.414 * 0.25;
+
+				boolean connectBackLeft = false;
+				boolean connectBackRight = false;
+				boolean connectFrontLeft = false;
+				boolean connectFrontRight = false;
+
+				double overhang = 0.065;
+
+				connectBackLeft = blockBack == block && blockBackMeta == (meta + 1) % 4 && blockBackMeta < 4;
+				connectBackRight = blockBack == block && blockBackMeta == (meta + 3) % 4 && blockBackMeta < 4;
+				connectFrontRight = blockFront == block && blockFrontMeta == (meta + 1) % 4 && blockFrontMeta < 4 && !connectBackRight && !connectBackLeft;
+				connectFrontLeft = blockFront == block && blockFrontMeta == (meta + 3) % 4 && blockFrontMeta < 4 && !connectBackRight && !connectBackLeft;
+
+				
+				if (maxTimes == 2 && meta == 4 && blockDownRight == block && ((blockDownRightMeta == 1 && times == 0) || (blockDownRightMeta == 3 && times == 1)))
+				{
+					connectFrontRight = true;
+				}
+				if (maxTimes == 2 && meta == 4 && blockDownRight == block && (((blockDownRightMeta == 0 || blockDownRightMeta == 2) && times == 0 && ((blockDownFrontRight == block && blockDownFrontRightMeta == 1) || (blockDownBackRight == block && blockDownBackRightMeta == 1))) || ((blockDownRightMeta == 0 || blockDownRightMeta == 2) && ((blockDownFrontRight == block && blockDownFrontRightMeta == 3) || (blockDownBackRight == block && blockDownBackRightMeta == 3)) && times == 1)))
+				{
+					connectFrontRight = true;
+				}
+				if (maxTimes == 2 && meta == 4 && blockDownLeft == block && ((blockDownLeftMeta == 3 && times == 0) || (blockDownLeftMeta == 1 && times == 1)))
+				{
+					connectFrontLeft = true;
+				}
+				if (maxTimes == 2 && meta == 4 && blockDownLeft == block && (((blockDownLeftMeta == 0 || blockDownLeftMeta == 2) && times == 0 && ((blockDownFrontLeft == block && blockDownFrontLeftMeta == 3) || (blockDownBackLeft == block && blockDownBackLeftMeta == 3))) || ((blockDownLeftMeta == 0 || blockDownLeftMeta == 2) && ((blockDownFrontLeft == block && blockDownFrontLeftMeta == 1) || (blockDownBackLeft == block && blockDownBackLeftMeta == 1)) && times == 1)))
+				{
+					connectFrontLeft = true;
+				}
+
+				if (maxTimes == 2 && meta == 5 && blockDownRight == block && ((blockDownRightMeta == 2 && times == 0) || (blockDownRightMeta == 0 && times == 1)))
+				{
+					connectFrontRight = true;
+				}
+				if (maxTimes == 2 && meta == 5 && blockDownRight == block && (((blockDownRightMeta == 1 || blockDownRightMeta == 3) && times == 0 && ((blockDownFrontRight == block && blockDownFrontRightMeta == 2) || (blockDownBackRight == block && blockDownBackRightMeta == 2))) || ((blockDownRightMeta == 1 || blockDownRightMeta == 3) && ((blockDownFrontRight == block && blockDownFrontRightMeta == 0) || (blockDownBackRight == block && blockDownBackRightMeta == 0)) && times == 1)))
+				{
+					connectFrontRight = true;
+				}
+				if (maxTimes == 2 && meta == 5 && blockDownLeft == block && ((blockDownLeftMeta == 0 && times == 0) || (blockDownLeftMeta == 2 && times == 1)))
+				{
+					connectFrontLeft = true;
+				}
+				if (maxTimes == 2 && meta == 5 && blockDownLeft == block && (((blockDownLeftMeta == 1 || blockDownLeftMeta == 3) && times == 0 && ((blockDownFrontLeft == block && blockDownFrontLeftMeta == 0) || (blockDownBackLeft == block && blockDownBackLeftMeta == 0))) || ((blockDownLeftMeta == 1 || blockDownLeftMeta == 3) && ((blockDownFrontLeft == block && blockDownFrontLeftMeta == 2) || (blockDownBackLeft == block && blockDownBackLeftMeta == 2)) && times == 1)))
+				{
+					connectFrontLeft = true;
+				}
+
+				renderer.overrideBlockTexture = TFCBlocks.stoneMM.getIcon(0, 1);
+				// Even though we are rendering the slates as if they are a 4x4
+				// grid on the roof, in reality we don't want it to look this
+				// way. we want it to look like rectangles.
+				// Thus, each square will share some properties with 1
+				// neighbour. Which neighbour depends on whether i is even or
+				// odd.
+				double zOffset = -0.21;
+				double yOffset = 0.38;
+				double slateLayer = 0.015;
+				double layerRatio = 0.7;
+				// This is how we render the slates on the slate roof
+				// i will be the y direction going up
+
+				int maxI = meta < 4 ? 4 : 2;
+
+				for (int i = 0; i < maxI; i++)
+				{
+					// j will be the x direction going right
+					// If we're doing a back left corner, our maxJ, which is
+					// where the block will render differently, will be 1 at the
+					// bottom and 4 at the top
+					int maxJ = connectFrontRight ? 3 - i : connectBackRight ? i : 3;
+					int minJ = connectFrontLeft ? i : connectBackLeft ? 3 - i : 0;
+					for (int j = minJ; j <= maxJ; j++)
+					{
+						// This is how much the currentTile should be stretched
+						// or shrunk based on its neighors
+						double localLengthAdjustment = 0;
+						Random localRandom = new Random();
+						localRandom.setSeed(rSeed);
+						Random localRight = new Random();
+						localRight.setSeed(rightSeed);
+
+						int j2 = i % 2 == 0 ? j / 2 : (j + 1) / 2;
+
+						localRandom = new Random(localRandom.nextInt((i + 1) * 123 + (321 * (j2 + 1))));
+
+						localRight = new Random(localRight.nextInt((i + 1) * 123 + (321 * (0 + 1))));
+
+						localLengthAdjustment = (localRandom.nextDouble() - 0.5) * 0.25;
+						double rightAdjustment = (localRight.nextDouble() - 0.5) * 0.25;
+						double localLayerFactor = (localRandom.nextDouble() * 0.25 + 0.75);
+						double rightLayerFactor = (localRight.nextDouble() * 0.25 + 0.75);
+						// System.out.println(x + ", " + y + ", " + z +": " +
+						// "["+i+","+j+"] local: " + localLengthAdjustment + ",
+						// right: " + rightAdjustment);
+						if (j == 3 && i % 2 == 1)
+						{
+							localLayerFactor = rightLayerFactor;
+							localLengthAdjustment = rightAdjustment;
+						}
+
+						if (j == minJ && connectBackLeft)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_RIGHT;
+						}
+						else if (j == minJ && connectFrontLeft)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_RIGHT;
+						}
+						else if (j == maxJ && connectFrontRight)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_LEFT;
+						}
+						else if (j == maxJ && connectBackRight)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_LEFT;
+						}
+						else
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = -1;
+						}
+						boolean overhangLeft = j == minJ && !(blockLeft == block && (blockLeftMeta == meta || blockLeftMeta == (meta + 1) % 4 || blockLeftMeta == (meta + 3) % 4));
+						boolean overhangRight = j == maxJ && !(blockRight == block && (blockRightMeta == meta || blockRightMeta == (meta + 1) % 4 || blockRightMeta == (meta + 3) % 4));
+						renderer.setRenderBounds((overhangRight ? -overhang : 0) + (3 - j) * 0.25,
+								yOffset + (0.0625 * i), zOffset + i * slateLength - 0.1 + localLengthAdjustment,
+								(overhangLeft ? overhang : 0) + (4 - j) * 0.25,
+								yOffset + 0.0625 * (layerRatio * localLayerFactor) + (0.0625 * i),
+								zOffset + (i + 1) * slateLength);
+						renderer.renderStandardBlock(block, x, y, z);
+
+						renderer.setRenderBounds(
+								(overhangRight ? -overhang : 0) + (3 - j) * 0.25 + (i % 2 == 1 && j % 2 == 0
+										? slateLayer : i % 2 == 0 && j % 2 == 1 ? slateLayer : 0),
+								yOffset + 0.0625 * (layerRatio * localLayerFactor) + (0.0625 * i),
+								zOffset + i * slateLength - 0.1 + localLengthAdjustment + slateLayer * (1 + (localRandom
+										.nextDouble() * 2)),
+								(overhangLeft ? overhang : 0) + (4 - j) * 0.25 - (i % 2 == 1 && j % 2 == 1 ? slateLayer
+										: i % 2 == 0 && j % 2 == 0 ? slateLayer : 0),
+								yOffset + 0.0625 + (0.0625 * i), zOffset + (i + 1) * slateLength);
+						renderer.renderStandardBlock(block, x, y, z);
+					}
+				}
+				if (world.getBlock(x, y + 1, z) == TFCBlocks.snow)
+				{
+					renderer.clearOverrideBlockTexture();
+					
+					double overhangRight = !(blockLeft == block) ? overhang * 1.1 : 0;
+					double overhangLeft = !(blockRight == block) ? overhang * 1.1 : 0;
+					((RenderBlocksWithRotation) renderer).rotation = ((RenderBlocksWithRotation) renderer).rot45 - ((RenderBlocksWithRotation) renderer).rot1 * 2f;
+					if (connectFrontRight)
+					{
+						((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_LEFT;
+						overhangLeft = overhang * 2.25;
+					}
+					if (connectFrontLeft)
+					{
+						((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_RIGHT;
+						overhangRight = overhang * 2.25;
+					}
+					if (connectBackRight)
+					{
+						((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_LEFT;
+					}
+					if (connectBackLeft)
+					{
+						((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_RIGHT;
+					}
+
+					if (meta > 3)
+					{
+						if(!connectFrontLeft )
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = -1;
+						}
+						renderer.setRenderBounds(0.5, 0.15 + yOffset, 0 + zOffset, 1 + overhangRight,
+								0.11 + 0.125 + yOffset, (1.414 * (meta > 3 ? 0.575 : 1.06d)) + zOffset);
+						renderer.renderStandardBlock(TFCBlocks.snow, x, y, z);
+						
+						if ( connectFrontLeft)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_RIGHT;
+							overhangRight = overhang * 1.25;
+						}
+						if (connectFrontRight)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_LEFT;
+							overhangLeft = overhang * 1.25f;
+						}
+						
+						if (connectBackLeft)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_LEFT;
+						}
+						if (connectBackRight)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_RIGHT;
+						}
+						if(!connectFrontRight)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = -1;
+						}
+						renderer.setRenderBounds(0 - overhangLeft, 0.15 + yOffset, 0 + zOffset, 0.5,
+								0.11 + 0.125 + yOffset, (1.414 * (meta > 3 ? 0.575 : 1.06d)) + zOffset);
+						renderer.renderStandardBlock(TFCBlocks.snow, x, y, z);
+					}
+					else
+					{
+						renderer.setRenderBounds(0 - overhangLeft, 0.15 + yOffset, 0 + zOffset, 1 + overhangRight,
+								0.11 + 0.125 + yOffset, (1.414 * (meta > 3 ? 0.575 : 1.06d)) + zOffset);
+						renderer.renderStandardBlock(TFCBlocks.snow, x, y, z);
+					}
+
+					/*
+					 * renderer.setRenderBounds(0.5 - overhangLeft*1.75 , 0.15+
+					 * yOffset, 0.5+ zOffset, 1 + overhangRight*1.75,
+					 * 0.125+0.125 + yOffset,(1.414 * meta>3?0.8:1d)+ zOffset);
+					 * renderer.renderStandardBlock(TFCBlocks.snow, x, y, z);
+					 */
+
+					((RenderBlocksWithRotation) renderer).rotation = ((RenderBlocksWithRotation) renderer).rot45 - (((RenderBlocksWithRotation) renderer).rot1 * 10f);
+					renderer.overrideBlockTexture = TFCBlocks.stoneMM.getIcon(0, 1);
+				}
+
+				// If we are at a corner, we will have to finish the roof after
+				// rotating.
+				if (connectBackRight || connectBackLeft || connectFrontLeft || connectFrontRight)
+				{
+
+					// This updates our connections based on the rotation we did
+					// because of our connection
+					if (connectBackRight)
+					{
+						((RenderBlocksWithRotation) renderer).yRotation -= Math.PI * 0.5;
+						connectBackLeft = true;
+						connectBackRight = connectFrontLeft = connectFrontRight = false;
+						rightSeed = backSeed;
+					}
+					else if (connectBackLeft)
+					{
+						((RenderBlocksWithRotation) renderer).yRotation += Math.PI * 0.5;
+						connectBackRight = true;
+						connectBackLeft = connectFrontLeft = connectFrontRight = false;
+						rightSeed = rSeed;
+
+					}
+					else if (connectFrontLeft)
+					{
+						((RenderBlocksWithRotation) renderer).yRotation -= Math.PI * 0.5;
+						connectFrontRight = true;
+						connectFrontLeft = meta > 3;
+						connectBackLeft = connectBackRight = false;
+						rightSeed = rSeed;
+					}
+					else if (connectFrontRight)
+					{
+						((RenderBlocksWithRotation) renderer).yRotation += Math.PI * 0.5;
+						connectFrontLeft = true;
+						connectFrontRight = meta > 3;
+						connectBackLeft = connectBackRight = false;
+						rightSeed = frontSeed;
+					}
+					for (int i = 0; i < maxI; i++)
+					{
+						// j will be the x direction going right
+						// If we're doing a back left corner, our maxJ, which is
+						// where the block will render differently, will be 1 at
+						// the bottom and 4 at the top
+						int maxJ = connectFrontRight ? 3 - i : connectBackRight ? i : 3;
+						int minJ = connectFrontLeft ? i : connectBackLeft ? 3 - i : 0;
+						for (int j = minJ; j <= maxJ; j++)
+						{
+							// This is how much the currentTile should be
+							// stretched or shrunk based on its neighors
+							double localLengthAdjustment = 0;
+							Random localRandom = new Random();
+							localRandom.setSeed(rSeed);
+							Random localRight = new Random();
+							localRight.setSeed(rightSeed);
+
+							int j2 = i % 2 == 0 ? j / 2 : (j + 1) / 2;
+
+							localRandom = new Random(localRandom.nextInt((i + 1) * 123 + (321 * (j2 + 1))));
+
+							localRight = new Random(localRight.nextInt((i + 1) * 123 + (321 * (0 + 1))));
+
+							localLengthAdjustment = (localRandom.nextDouble() - 0.5) * 0.25;
+							double rightAdjustment = (localRight.nextDouble() - 0.5) * 0.25;
+							double localLayerFactor = (localRandom.nextDouble() * 0.25 + 0.75);
+							double rightLayerFactor = (localRight.nextDouble() * 0.25 + 0.75);
+							// System.out.println(x + ", " + y + ", " + z +": "
+							// + "["+i+","+j+"] local: " + localLengthAdjustment
+							// + ", right: " + rightAdjustment);
+							if (j == 3 && i % 2 == 1)
+							{
+								localLayerFactor = rightLayerFactor;
+								localLengthAdjustment = rightAdjustment;
+							}
+
+							if (j == minJ && connectBackLeft)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_RIGHT;
+							}
+							else if (j == minJ && connectFrontLeft)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_RIGHT;
+							}
+							else if (j == maxJ && connectFrontRight)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_LEFT;
+							}
+							else if (j == maxJ && connectBackRight)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_LEFT;
+							}
+							else
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal = -1;
+							}
+							boolean overhangLeft = j == minJ && ((connectFrontLeft || connectBackLeft) || !((blockFront == block && connectFrontRight && (blockFrontMeta == meta || blockFrontMeta == (meta + 1) % 4 || blockFrontMeta == (meta + 3) % 4)) || (blockBack == block && connectBackRight && (blockBackMeta == meta || blockBackMeta == (meta + 1) % 4 || blockBackMeta == (meta + 3) % 4))));
+							// if we connect on the right, we're automatically
+							// going to overhang. If we're connected on the
+							// left, we need to check whether we're checking the
+							// front or back
+							boolean overhangRight = j == maxJ && ((connectFrontRight || connectBackRight) || !((blockFront == block && connectFrontLeft && (blockFrontMeta == meta || blockFrontMeta == (meta + 1) % 4 || blockFrontMeta == (meta + 3) % 4)) || (blockBack == block && connectBackLeft && (blockBackMeta == meta || blockBackMeta == (meta + 1) % 4 || blockBackMeta == (meta + 3) % 4))));
+
+							renderer.setRenderBounds((overhangRight ? -overhang : 0) + (3 - j) * 0.25,
+									yOffset + (0.0625 * i), zOffset + i * slateLength - 0.1 + localLengthAdjustment,
+									(overhangLeft ? overhang : 0) + (4 - j) * 0.25,
+									yOffset + 0.0625 * (layerRatio * localLayerFactor) + (0.0625 * i),
+									zOffset + (i + 1) * slateLength);
+							renderer.renderStandardBlock(block, x, y, z);
+
+							renderer.setRenderBounds(
+									(overhangRight ? -overhang : 0) + (3 - j) * 0.25 + (i % 2 == 1 && j % 2 == 0
+											? slateLayer : i % 2 == 0 && j % 2 == 1 ? slateLayer : 0),
+									yOffset + 0.0625 * (layerRatio * localLayerFactor) + (0.0625 * i),
+									zOffset + i * slateLength - 0.1 + localLengthAdjustment + slateLayer * (1 + (localRandom
+											.nextDouble() * 2)),
+									(overhangLeft ? overhang : 0) + (4 - j) * 0.25 - (i % 2 == 1 && j % 2 == 1
+											? slateLayer : i % 2 == 0 && j % 2 == 0 ? slateLayer : 0),
+									yOffset + 0.0625 + (0.0625 * i), zOffset + (i + 1) * slateLength);
+							renderer.renderStandardBlock(block, x, y, z);
+						}
+					}
+					if (world.getBlock(x, y + 1, z) == TFCBlocks.snow)
+					{
+						renderer.clearOverrideBlockTexture();
+						double overhangRight = !(blockFront == block) ? overhang * 1.1 : 0;
+						double overhangLeft = !(blockFront == block) ? overhang * 1.1 : 0;
+						((RenderBlocksWithRotation) renderer).rotation = ((RenderBlocksWithRotation) renderer).rot45 - ((RenderBlocksWithRotation) renderer).rot1 * 2f;
+						;
+
+						if (connectFrontRight)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_LEFT;
+							overhangLeft = overhang * 2.25f;
+						}
+						if (connectFrontLeft)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_RIGHT;
+							overhangRight = overhang * 2.25;
+						}
+						if (connectBackRight)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_LEFT;
+						}
+						if (connectBackLeft)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_RIGHT;
+						}
+
+						if (meta > 3)
+						{
+							
+							
+							renderer.setRenderBounds(0.5, 0.15 + yOffset, 0 + zOffset, 1 + overhangRight,
+									0.11 + 0.125 + yOffset, (1.414 * (meta > 3 ? 0.575 : 1.06d)) + zOffset);
+							renderer.renderStandardBlock(TFCBlocks.snow, x, y, z);
+							
+							if (connectFrontRight)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_RIGHT;
+								overhangRight = overhang * 1.25;
+							}
+							if (connectFrontLeft)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_LEFT;
+								overhangLeft = overhang * 1.25f;
+							}
+							
+							if (connectBackLeft)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_UP_LEFT;
+							}
+							if (connectBackRight)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal = ((RenderBlocksWithRotation) renderer).DIAGONAL_DOWN_RIGHT;
+							}
+							renderer.setRenderBounds(0 - overhangLeft, 0.15 + yOffset, 0 + zOffset, 0.5,
+									0.11 + 0.125 + yOffset, (1.414 * (meta > 3 ? 0.575 : 1.06d)) + zOffset);
+							renderer.renderStandardBlock(TFCBlocks.snow, x, y, z);
+						}
+						else
+						{
+							renderer.setRenderBounds(0 - overhangLeft, 0.15 + yOffset, 0 + zOffset, 1 + overhangRight,
+									0.11 + 0.125 + yOffset, (1.414 * (meta > 3 ? 0.575 : 1.06d)) + zOffset);
+							renderer.renderStandardBlock(TFCBlocks.snow, x, y, z);
+						}
+
+						/*
+						 * renderer.setRenderBounds(0 - overhangLeft*1.75 ,
+						 * 0.15+ yOffset, 0.5+ zOffset, 0.5 +
+						 * overhangRight*1.75, 0.125+0.125 + yOffset,(1.414 *
+						 * meta> 3 ?0.8:1d)+ zOffset);
+						 * renderer.renderStandardBlock(TFCBlocks.snow, x, y,
+						 * z);
+						 */
+
+						((RenderBlocksWithRotation) renderer).rotation = ((RenderBlocksWithRotation) renderer).rot45 - (((RenderBlocksWithRotation) renderer).rot1 * 10f);
+						renderer.overrideBlockTexture = TFCBlocks.stoneMM.getIcon(0, 1);
+					}
+				}
+			}
+			//Here is where we handle the connected textures
+			if(meta >-1)
+			{
+				//Regular roofing
+				((RenderBlocksWithRotation) renderer).staticTexture = false;
+				((RenderBlocksWithRotation) renderer).yRotation = (float) (meta % 4) * (float) Math.PI / 2f;
+				float oldYRot = ((RenderBlocksWithRotation) renderer).yRotation;
+				//((RenderBlocksWithRotation) renderer).yRotation = 0;
+				Block b = world.getBlock(x, y - 1, z);
+				if (b != null && b.isOpaqueCube() && (b.getMaterial() == Material.rock || b
+						.getMaterial() == Material.wood || b instanceof BlockMudBricks))
+				{
+					// renderer.overrideBlockTexture = b.getIcon(2,
+					// world.getBlockMetadata(x, y - 1, z));
+					renderer.clearOverrideBlockTexture();
+					((RenderBlocksWithRotation) renderer).rotation = 0;
+					double startX, endX;
+					startX = world.getBlock(x - 1, y, z) == block ? 0 : 0.001;
+					endX = 0.9;
+					boolean connectBackLeft = false;
+					boolean connectBackRight = false;
+					boolean connectFrontLeft = false;
+					boolean connectFrontRight = false;
+					
+					Vec3 xV = Vec3.createVectorHelper(1, 0, 0);
+					Vec3 zV = Vec3.createVectorHelper(0, 0, 1);
+
+					xV.rotateAroundY(((RenderBlocksWithRotation) renderer).yRotation);
+					zV.rotateAroundY(((RenderBlocksWithRotation) renderer).yRotation);
+					xV.xCoord = Math.round(xV.xCoord);
+					xV.yCoord = Math.round(xV.yCoord);
+					xV.zCoord = Math.round(xV.zCoord);
+					zV.xCoord = Math.round(zV.xCoord);
+					zV.yCoord = Math.round(zV.yCoord);
+					zV.zCoord = Math.round(zV.zCoord);
+					
+					Block blockDownBackRight = world.getBlock(x - (int) zV.xCoord - (int) xV.xCoord, y - 1,
+							z - (int) zV.zCoord - (int) xV.zCoord);
+					Block blockDownFrontRight = world.getBlock(x + (int) zV.xCoord - (int) xV.xCoord, y - 1,
+							z + (int) zV.zCoord - (int) xV.zCoord);
+					Block blockDownBackLeft = world.getBlock(x - (int) zV.xCoord + (int) xV.xCoord, y - 1,
+							z - (int) zV.zCoord + (int) xV.zCoord);
+					Block blockDownFrontLeft = world.getBlock(x + (int) zV.xCoord + (int) xV.xCoord, y - 1,
+							z + (int) zV.zCoord + (int) xV.zCoord);
+					
+					Block blockFrontLeft = world.getBlock(x + (int) zV.xCoord + (int) xV.xCoord, y,
+							z + (int) zV.zCoord + (int) xV.zCoord);
+					Block blockFrontRight = world.getBlock(x - (int) xV.xCoord + (int) zV.xCoord, y,
+							z - (int) xV.zCoord + (int) zV.zCoord);
+					Block blockUpFront = world.getBlock(x + (int) zV.xCoord, y + 1, z + (int) zV.zCoord);
+					Block blockDownBack = world.getBlock(x - (int) zV.xCoord, y - 1, z - (int) zV.zCoord);
+					Block blockDownRight = world.getBlock(x - (int) xV.xCoord, y - 1, z - (int) xV.zCoord);
+					Block blockDownLeft = world.getBlock(x + (int) xV.xCoord, y - 1, z + (int) xV.zCoord);
+					Block blockLeft = world.getBlock(x + (int) xV.xCoord, y, z + (int) xV.zCoord);
+					Block blockRight = world.getBlock(x - (int) xV.xCoord, y, z - (int) xV.zCoord);
+					Block blockBackLeft = world.getBlock(x + (int) xV.xCoord - (int) zV.xCoord, y,
+							z + (int) xV.zCoord - (int) zV.zCoord);
+					
+					int blockFrontMeta, blockBackMeta, blockUpFrontMeta, blockDownBackMeta, blockLeftMeta, blockRightMeta;
+					Block blockBack = world.getBlock(x - (int) zV.xCoord, y, z - (int) zV.zCoord);
+					Block blockFront = world.getBlock(x + (int) zV.xCoord, y, z + (int) zV.zCoord);
+					blockBackMeta = world.getBlockMetadata(x - (int) zV.xCoord, y, z - (int) zV.zCoord);
+					blockFrontMeta = world.getBlockMetadata(x + (int) zV.xCoord, y, z + (int) zV.zCoord);
+					int blockFrontLeftMeta, blockFrontRightMeta, blockBackLeftMeta, blockDownRightMeta, blockDownLeftMeta;
+
+					int blockDownBackRightMeta = world.getBlockMetadata(x - (int) zV.xCoord - (int) xV.xCoord, y - 1,
+							z - (int) zV.zCoord - (int) xV.zCoord);
+					int blockDownFrontRightMeta = world.getBlockMetadata(x + (int) zV.xCoord - (int) xV.xCoord, y - 1,
+							z + (int) zV.zCoord - (int) xV.zCoord);
+					int blockDownBackLeftMeta = world.getBlockMetadata(x - (int) zV.xCoord + (int) xV.xCoord, y - 1,
+							z - (int) zV.zCoord + (int) xV.zCoord);
+					int blockDownFrontLeftMeta = world.getBlockMetadata(x + (int) zV.xCoord + (int) xV.xCoord, y - 1,
+							z + (int) zV.zCoord + (int) xV.zCoord);
+					
+					
+					blockFrontLeftMeta = world.getBlockMetadata(x + (int) zV.xCoord + (int) xV.xCoord, y,
+							z + (int) zV.zCoord + (int) xV.zCoord);
+					blockFrontRightMeta = world.getBlockMetadata(x - (int) xV.xCoord + (int) zV.xCoord, y,
+							z - (int) xV.zCoord + (int) zV.zCoord);
+					blockUpFrontMeta = world.getBlockMetadata(x + (int) zV.xCoord, y + 1, z + (int) zV.zCoord);
+					blockDownBackMeta = world.getBlockMetadata(x - (int) zV.xCoord, y - 1, z - (int) zV.zCoord);
+					blockLeftMeta = world.getBlockMetadata(x + (int) xV.xCoord, y, z + (int) xV.zCoord);
+					blockRightMeta = world.getBlockMetadata(x - (int) xV.xCoord, y, z - (int) xV.zCoord);
+					blockBackLeftMeta = world.getBlockMetadata(x + (int) xV.xCoord - (int) zV.xCoord, y,
+							z + (int) xV.zCoord - (int) zV.zCoord);
+					blockDownRightMeta = world.getBlockMetadata(x - (int) xV.xCoord, y - 1, z - (int) xV.zCoord);
+					blockDownLeftMeta = world.getBlockMetadata(x + (int) xV.xCoord, y - 1, z + (int) xV.zCoord);
+					
+					connectBackLeft = blockBack == block && blockBackMeta == (meta + 1) % 4 && blockBackMeta < 4;
+					connectBackRight = blockBack == block && blockBackMeta == (meta + 3) % 4 && blockBackMeta < 4;
+					connectFrontRight = blockFront == block && blockFrontMeta == (meta + 1) % 4 && blockFrontMeta < 4 && !connectBackRight && !connectBackLeft;
+					connectFrontLeft = blockFront == block && blockFrontMeta == (meta + 3) % 4 && blockFrontMeta < 4 && !connectBackRight && !connectBackLeft;
+					int times = 0;
+					boolean corner = connectFrontRight || connectFrontLeft || connectBackLeft || connectBackRight;
+					boolean outCorner = connectBackLeft || connectBackRight;
+					
+					if (maxTimes == 2 && meta == 4 && blockDownRight == block && ((blockDownRightMeta == 1 && times == 0) || (blockDownRightMeta == 3 && times == 1)))
+					{
+						connectFrontRight = true;
+					}
+					if (maxTimes == 2 && meta == 4 && blockDownRight == block && (((blockDownRightMeta == 0 || blockDownRightMeta == 2) && times == 0 && ((blockDownFrontRight == block && blockDownFrontRightMeta == 1) || (blockDownBackRight == block && blockDownBackRightMeta == 1))) || ((blockDownRightMeta == 0 || blockDownRightMeta == 2) && ((blockDownFrontRight == block && blockDownFrontRightMeta == 3) || (blockDownBackRight == block && blockDownBackRightMeta == 3)) && times == 1)))
+					{
+						connectFrontRight = true;
+					}
+					if (maxTimes == 2 && meta == 4 && blockDownLeft == block && ((blockDownLeftMeta == 3 && times == 0) || (blockDownLeftMeta == 1 && times == 1)))
+					{
+						connectFrontLeft = true;
+					}
+					if (maxTimes == 2 && meta == 4 && blockDownLeft == block && (((blockDownLeftMeta == 0 || blockDownLeftMeta == 2) && times == 0 && ((blockDownFrontLeft == block && blockDownFrontLeftMeta == 3) || (blockDownBackLeft == block && blockDownBackLeftMeta == 3))) || ((blockDownLeftMeta == 0 || blockDownLeftMeta == 2) && ((blockDownFrontLeft == block && blockDownFrontLeftMeta == 1) || (blockDownBackLeft == block && blockDownBackLeftMeta == 1)) && times == 1)))
+					{
+						connectFrontLeft = true;
+					}
+
+					if (maxTimes == 2 && meta == 5 && blockDownRight == block && ((blockDownRightMeta == 2 && times == 0) || (blockDownRightMeta == 0 && times == 1)))
+					{
+						connectFrontRight = true;
+					}
+					if (maxTimes == 2 && meta == 5 && blockDownRight == block && (((blockDownRightMeta == 1 || blockDownRightMeta == 3) && times == 0 && ((blockDownFrontRight == block && blockDownFrontRightMeta == 2) || (blockDownBackRight == block && blockDownBackRightMeta == 2))) || ((blockDownRightMeta == 1 || blockDownRightMeta == 3) && ((blockDownFrontRight == block && blockDownFrontRightMeta == 0) || (blockDownBackRight == block && blockDownBackRightMeta == 0)) && times == 1)))
+					{
+						connectFrontRight = true;
+					}
+					if (maxTimes == 2 && meta == 5 && blockDownLeft == block && ((blockDownLeftMeta == 0 && times == 0) || (blockDownLeftMeta == 2 && times == 1)))
+					{
+						connectFrontLeft = true;
+					}
+					if (maxTimes == 2 && meta == 5 && blockDownLeft == block && (((blockDownLeftMeta == 1 || blockDownLeftMeta == 3) && times == 0 && ((blockDownFrontLeft == block && blockDownFrontLeftMeta == 0) || (blockDownBackLeft == block && blockDownBackLeftMeta == 0))) || ((blockDownLeftMeta == 1 || blockDownLeftMeta == 3) && ((blockDownFrontLeft == block && blockDownFrontLeftMeta == 2) || (blockDownBackLeft == block && blockDownBackLeftMeta == 2)) && times == 1)))
+					{
+						connectFrontLeft = true;
+					}
+					
+					
+					boolean backwardsCorner = false;
+					int orMeta = meta;
+					centerPiece = meta > 3;
+					((RenderBlocksWithRotation) renderer).renderDiagonal = meta;//(int) (oldYRot / (Math.PI / 2)) % 4;
+					if (corner)
+					{
+						// If there's a corner, we're also the rotated
+						// version
+						// of ourselves.
+						if (!backwardsCorner)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal += (int) ((((oldYRot / (Math.PI / 2)) + (connectFrontLeft?1:3)) % 4) + 1) << 2;
+						}
+						else
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal += (int) ((((oldYRot / (Math.PI / 2)) - 1) % 4) + 1) << 2;
+						}
+					}
+					if (((RenderBlocksWithRotation) renderer).renderDiagonal == 10 && meta == 2)
+					{
+						((RenderBlocksWithRotation) renderer).renderDiagonal = 7;
+					}
+					else if (meta == 1 && ((RenderBlocksWithRotation) renderer).renderDiagonal == 5)
+					{
+						((RenderBlocksWithRotation) renderer).renderDiagonal = 18;
+					}
+					else if (meta == 0 && ((RenderBlocksWithRotation) renderer).renderDiagonal == 16)
+					{
+						((RenderBlocksWithRotation) renderer).renderDiagonal = 13;
+					}
+					if (outCorner)
+					{
+						((RenderBlocksWithRotation) renderer).renderDiagonal += 32;
+					}
+					if (centerPiece && world.getBlockMetadata(x, y, z) >= 4)
+					{
+						if(meta == 4)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = 0;
+							if(!connectFrontRight)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal += ((RenderBlocksWithRotation) renderer).CENTER_ROOF_WEST;
+							}
+							if(!connectFrontLeft)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal += ((RenderBlocksWithRotation) renderer).CENTER_ROOF_EAST;
+							}							
+						}
+						else if(meta == 5)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = 0;
+							if(!connectFrontRight)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal += ((RenderBlocksWithRotation) renderer).CENTER_ROOF_SOUTH;
+							}
+							if(!connectFrontLeft)
+							{
+								((RenderBlocksWithRotation) renderer).renderDiagonal += ((RenderBlocksWithRotation) renderer).CENTER_ROOF_NORTH;
+							}							
+						}
+						
+						if(((RenderBlocksWithRotation) renderer).renderDiagonal == 0)
+						{
+							((RenderBlocksWithRotation) renderer).renderDiagonal = 64;
+						}
+					}
+					((RenderBlocksWithRotation) renderer).yRotation = 0;
+
+					renderer.setRenderBounds(0, 0, 0, 1, 1, 1);
+					((RenderBlocksWithRotation) renderer).useTextureBelow = true;
+					renderer.renderStandardBlock(world.getBlock(x, y - 1, z), x, y, z);
+					((RenderBlocksWithRotation) renderer).useTextureBelow = false;
+					((RenderBlocksWithRotation) renderer).renderDiagonal = -1;
+				}
 			}
 			renderer.clearOverrideBlockTexture();
 		}

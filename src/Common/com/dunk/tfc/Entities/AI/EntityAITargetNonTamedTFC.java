@@ -30,7 +30,7 @@ public class EntityAITargetNonTamedTFC extends EntityAITargetNonTamed
     	{
 			IAnimal animal = (IAnimal) entityTameable;
 			int familiarity = animal.getFamiliarity();
-			if (this.targetClass == EntityPlayer.class && animal.checkFamiliarity(InteractionEnum.TOLERATEPLAYER, null))
+			if (this.targetClass == EntityPlayer.class && animal.checkFamiliarity(InteractionEnum.TOLERATEPLAYER, null) || animal.getHunger() > 144000)
 			{
 				return false;
 			}

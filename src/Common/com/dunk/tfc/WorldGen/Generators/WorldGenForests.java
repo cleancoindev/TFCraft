@@ -83,16 +83,22 @@ public class WorldGenForests implements IWorldGenerator
 		int xCoord = chunkX;
 		int yCoord = Global.SEALEVEL + 1;
 		int zCoord = chunkZ;
-
-		// int numTrees = 1;
-		int numPlants = 25;
-		int numTrees = (int) (30f * (rainfall / 2000f) * (Math.min(Math.max(0.1f, evt), 1f)));
-		int numActualTrees = 0;
+		
 		if (getNearWater(world, xCoord, yCoord, zCoord))
 		{
 			rainfall = Math.max(rainfall*2, 400);
 			// evt /= 2;
 		}
+		if(world.getBiomeGenForCoords(chunkX, chunkZ) == TFCBiome.SWAMPLAND)
+		{
+			rainfall *=1.25f;
+		}
+		// int numTrees = 1;
+		int numPlants = 25;
+		int numTrees = (int) (30f * (rainfall / 2000f) * (Math.min(Math.max(0.1f, evt), 1f)));
+		numTrees = (int)(numTrees * (Math.min(2000f, rainfall) / 2000f ));
+		int numActualTrees = 0;
+		
 		for (int var2 = 0; var2 < numTrees; ++var2)
 		{
 			xCoord = chunkX + random.nextInt(16);
@@ -353,7 +359,7 @@ public class WorldGenForests implements IWorldGenerator
 				for (int y1 = -2; y1 < 1; ++y1)
 				{
 					if (world.blockExists(x + x1, y + y1, z + z1)
-							&& TFC_Core.isWater(world.getBlock(x + x1, y + y1, z + z1)))
+							&& TFC_Core.isFreshWater(world.getBlock(x + x1, y + y1, z + z1)))
 						return true;
 				}
 			}

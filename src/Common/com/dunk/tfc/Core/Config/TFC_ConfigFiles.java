@@ -21,6 +21,7 @@ import static com.dunk.tfc.api.TFCOptions.enableCaveInsDestroyOre;
 import static com.dunk.tfc.api.TFCOptions.enableCropsDie;
 import static com.dunk.tfc.api.TFCOptions.enableDebugMode;
 import static com.dunk.tfc.api.TFCOptions.enableDebugInventoryRendering;
+import static com.dunk.tfc.api.TFCOptions.enableDefaultCelestialAngle;
 import static com.dunk.tfc.api.TFCOptions.enableFiniteWater;
 import static com.dunk.tfc.api.TFCOptions.enableNEIHiding;
 import static com.dunk.tfc.api.TFCOptions.enableOverworkingChunks;
@@ -412,6 +413,7 @@ public class TFC_ConfigFiles
 		enableSeedDrops = generalConfig.getBoolean("enableSeedDrops", GENERAL, enableSeedDrops, "Set this to false to disable seeds being placed on the ground when a crop on farmland dies from natural causes such as freezing temperatures, old age, or not enough sunlight.", "config.gui.TFCConfig.general.enableSeedDrops");
 		enableDebugMode = generalConfig.getBoolean("enableDebugMode", GENERAL, enableDebugMode, "Set this to true if you want to turn on debug mode which is useful for bug hunting.", "config.gui.TFCConfig.general.enableDebugMode");
 		enableDebugInventoryRendering = generalConfig.getBoolean("enableDebugInventoryRendering", GENERAL, enableDebugInventoryRendering, "Set this to true if you want to turn on a mode which will render held blocks in a larger form for viewing in the inventory.", "config.gui.TFCConfig.general.enableDebugInventoryRendering");
+		enableDefaultCelestialAngle = generalConfig.getBoolean("enableDefaultCelestialAngle", GENERAL, enableDefaultCelestialAngle, "When enabled, the sun and moon will use the default calculations for position in the sky.", "config.gui.TFCConfig.general.enableDefaultCelestialAngle");
 		enableFiniteWater = generalConfig.getBoolean("enableFiniteWater", GENERAL, enableFiniteWater, "Set this to true to enable finite water. Two adjacent source water blocks will not create a third.", "config.gui.TFCConfig.general.enableFiniteWater");
 		onionsAreGross = generalConfig.getBoolean("onionsAreGross", GENERAL, onionsAreGross, "Set this to true if you don't like onions.", "config.gui.TFCConfig.general.onionsAreGross");
 		quiverHUDPosition = generalConfig.getString("quiverHUDPosition", GENERAL, quiverHUDPosition, "Valid position strings are: bottomleft, left, topleft, bottomright, right, topright", new String[]{"bottomleft", "left", "topleft", "bottomright", "right", "topright"}, "config.gui.TFCConfig.general.quiverHUDPosition");

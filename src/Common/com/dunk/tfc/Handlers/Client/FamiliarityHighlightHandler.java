@@ -58,7 +58,7 @@ public class FamiliarityHighlightHandler {
 							this.drawTexturedModalRect(-8, 0, 92, 40, 16, 16);
 						}
 						GL11.glTranslatef(0, 0, -0.001F);
-						if (percentFam == 1 || !animal.canFamiliarize())
+						if (percentFam == 1)
 						{
 							this.drawTexturedModalRect(-6, 14 - (int) (12 * percentFam), 114, 74 - (int) (12 * percentFam), 12, (int) (12 * percentFam));
 						}

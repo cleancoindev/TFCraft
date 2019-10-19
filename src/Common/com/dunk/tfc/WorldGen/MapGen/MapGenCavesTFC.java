@@ -166,7 +166,7 @@ public class MapGenCavesTFC extends MapGenBaseTFC
 												grassBlock = idArray[index];
 												isGrass = true;
 											}
-											if (TFC_Core.isSoil(idArray[index]) || TFC_Core.isRawStone(idArray[index]))
+											if (TFC_Core.isSoil(idArray[index]) || TFC_Core.isRawStone(idArray[index]) || true)
 											{
 												if(TFC_Core.isSoilOrGravel(idArray[index+1]))
 												{
@@ -181,6 +181,10 @@ public class MapGenCavesTFC extends MapGenBaseTFC
 												}
 												else
 												{
+													if(yCoord > 128 && yCoord < 144)
+													{
+														//System.out.println("converting at " + worldX + ", " + yCoord + ", " + worldZ);
+													}
 													idArray[index] = Blocks.air;
 													//metaArray[index] = 0;
 													if (isGrass && TFC_Core.isDirt(idArray[index - 1]))
@@ -208,12 +212,12 @@ public class MapGenCavesTFC extends MapGenBaseTFC
 	 * Recursively called by generate() (generate) and optionally by itself.
 	 */
 	@Override
-	protected void recursiveGenerate(World world, int par2, int par3, int par4, int par5, Block[] ids)
+	protected void recursiveGenerate(World world, int chunkX, int chunkZ, int par4, int par5, Block[] ids)
 	{
 		int var7 = this.rand.nextInt(this.rand.nextInt(this.rand.nextInt(40) + 1) + 1);
-		double xCoord = par2 * 16 + this.rand.nextInt(16);
+		double xCoord = chunkX * 16 + this.rand.nextInt(16);
 		double yCoord = this.rand.nextInt(1 + this.rand.nextInt(140)) + 60;
-		double zCoord = par3 * 16 + this.rand.nextInt(16);
+		double zCoord = chunkZ * 16 + this.rand.nextInt(16);
 		float rain = TFC_Climate.getRainfall(world, (int) xCoord, 144, (int) zCoord);
 		double width = 2;
 		int caveChance = 35;

@@ -179,7 +179,12 @@ public class TFC_Core
 		{
 			if(world.getBlock(x, y+i, z) == TFCBlocks.tileRoof)
 			{
-				percent = Math.min(percent+0.375f,1f);
+				percent = Math.min(percent+0.5f,1f);
+				roofed = true;
+			}
+			else if(world.getBlock(x, y+i, z) == TFCBlocks.slateRoof)
+			{
+				percent = Math.min(percent+0.25f, 1f);
 				roofed = true;
 			}
 		}
@@ -215,7 +220,7 @@ public class TFC_Core
 		// 7 blocks from a forge or fire?
 		for (int i = -radius; i < radius && percent < 2; i++)
 		{
-			for (int j = -radius; j < radius && percent < 2; j++)
+			for (int j = -(2*radius)+2; j < 2 && percent < 2; j++)
 			{
 				for (int k = -radius; k < radius && percent < 2; k++)
 				{
@@ -259,6 +264,11 @@ public class TFC_Core
 			if(world.getBlock(x, y+i, z) == TFCBlocks.tileRoof || world.getBlock(x, y+i, z) == TFCBlocks.thatchRoof)
 			{
 				percent = Math.min(percent+0.25f,1f);
+				roofed = true;
+			}
+			else if(world.getBlock(x, y+i, z) == TFCBlocks.slateRoof)
+			{
+				percent = Math.min(percent+0.5f,1f);
 				roofed = true;
 			}
 		}
@@ -959,6 +969,8 @@ public class TFC_Core
 
 	public static Block getTypeForDirtFromGrass(Block block)
 	{
+		if(TFC_Core.isClay(block))
+			return block==TFCBlocks.clayGrass?TFCBlocks.clay: block==TFCBlocks.clayGrass2?TFCBlocks.clay2:block;
 		if (TFC_Core.isDirt(block))
 			return block;
 		if (block == TFCBlocks.grass || block == TFCBlocks.dryGrass)
@@ -2000,7 +2012,7 @@ public class TFC_Core
 	{
 		int highestY = world.getPrecipitationHeight(x, z) - 1;
 		boolean isExposed = true;
-		if(highestY == y)
+		if(highestY <= y )
 		{
 			return true;
 		}

@@ -542,6 +542,7 @@ public class BlockSetup extends TFCBlocks
 		
 		GameRegistry.registerBlock(tileRoof, "TileRoof");
 		GameRegistry.registerBlock(thatchRoof, "thatchRoof");
+		GameRegistry.registerBlock(slateRoof, "slateRoof");
 
 		GameRegistry.registerBlock(fireBrick, "FireBrick");
 		GameRegistry.registerBlock(metalSheet, "MetalSheet");
@@ -1516,6 +1517,7 @@ public class BlockSetup extends TFCBlocks
 
 		tileRoof = new BlockTileRoof().setBlockName("TileRoof").setHardness(8);
 		thatchRoof = new BlockTileRoof(Material.grass).setBlockName("ThatchRoof").setHardness(2);
+		slateRoof = new BlockTileRoof(Material.rock).setBlockName("SlateRoof").setHardness(12);
 		
 		fireBrick = new BlockFireBrick().setBlockName("FireBrick").setHardness(8);
 		metalSheet = new BlockMetalSheet().setBlockName("MetalSheet").setHardness(80);

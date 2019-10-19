@@ -92,7 +92,7 @@ public class BiomeDecoratorTFC extends BiomeDecorator
 		
 		CropIndex crop = regionCrops[regionCropId];//CropManager.getInstance().getCropFromId(cropid);
 		WorldGenGrowCrops cropGen = new WorldGenGrowCrops(crop.cropId);
-		if(randomGenerator.nextInt(20) == 0 && crop != null)
+		if(randomGenerator.nextInt(15) == 0 && crop != null)
 		{
 			int num = 2 + randomGenerator.nextInt(8);
 			xCoord = this.chunk_X + this.randomGenerator.nextInt(16) + 8;

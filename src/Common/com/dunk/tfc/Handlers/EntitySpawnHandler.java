@@ -1,5 +1,6 @@
 package com.dunk.tfc.Handlers;
 
+import com.dunk.tfc.Blocks.BlockTileRoof;
 import com.dunk.tfc.Chunkdata.ChunkData;
 import com.dunk.tfc.Containers.ContainerPlayerTFC;
 import com.dunk.tfc.Core.TFC_Core;
@@ -8,6 +9,7 @@ import com.dunk.tfc.api.TFCBlocks;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +26,8 @@ public class EntitySpawnHandler
 		int chunkX = (int)Math.floor(entity.posX) >> 4;
 		int chunkZ = (int)Math.floor(entity.posZ) >> 4;
 
-		if(event.world.getBlock((int)Math.floor(entity.posX), (int)Math.floor(entity.posY), (int)Math.floor(entity.posZ)) == TFCBlocks.thatch)
+		Block b = event.world.getBlock((int)Math.floor(entity.posX), (int)Math.floor(entity.posY), (int)Math.floor(entity.posZ)) ;
+		if(b == TFCBlocks.thatch || b instanceof BlockTileRoof)
 		{
 			event.setResult(Result.DENY);
 		}

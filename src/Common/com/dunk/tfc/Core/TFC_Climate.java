@@ -91,14 +91,15 @@ public class TFC_Climate
 			float z = zCoord;
 
 			factor = Math.abs(z) / getMaxZPos();
+			factor = Math.max(-1f, Math.min(1f,factor));
 
 			Z_FACTOR_CACHE[zCoord] = factor;
 			double L = factor * 90;
 
 			SUMMER_LOW_TEMP_CACHE[zCoord] = (float) ((0.0000207237 * L * L * L) - (0.00699399 * L * L) + (0.244519 * L)
 					+ 19.1519);
-			WINTER_LOW_TEMP_CACHE[zCoord] = (float) ((0.000290385 * L * L * L) - (0.0375465 * L * L) + (0.51148 * L)
-					+ 18.7403);
+			WINTER_LOW_TEMP_CACHE[zCoord] = (float) ((0.000290385 * L * L * L) - (0.0415465 * L * L) + (0.51148 * L) + (18.7403));
+					//(float) ((0.000290385 * L * L * L) - (0.0375465 * L * L) + (0.51148 * L) + (18.7403)); //This is the old value
 			BASE_TEMP_DELTA_CACHE[zCoord] = 11f - factor * 3f;
 			
 			L = Math.abs(3 * z / 10000d);
@@ -190,7 +191,8 @@ public class TFC_Climate
 			
 			float tempVariation = bio ? 0f : WeatherManager.INSTANCE.getDailyTemp(day);
 
-			float temp =  TFC_Time.getPercentSummer(day, z) * SUMMER_LOW_TEMP_CACHE[aZ]
+			float summerCache = Math.abs(z) > 27000 && SUMMER_LOW_TEMP_CACHE[aZ] > 0 ? SUMMER_LOW_TEMP_CACHE[aZ] * ( Math.max(28000 - Math.abs(z),-2000f)/1000f):SUMMER_LOW_TEMP_CACHE[aZ] ;
+			float temp =  TFC_Time.getPercentSummer(day, z) * summerCache
 					+ TFC_Time.getPercentWinter(day, z) * WINTER_LOW_TEMP_CACHE[aZ];
 			
 			
@@ -228,7 +230,12 @@ public class TFC_Climate
 			}
 			temp += BASE_TEMP_DELTA_CACHE[aZ] * dailyFluxuation * temperatureDeltaCoefficient + tempVariation;
 			//Rainy areas have higher lows than normal. Dry areas have lower lows or something. The normal range is 0.5 to 2, so this becomes -0.5 to 1.		
+			if(Math.abs(z)>27000)
+			{
+				temp = Math.min(temp, -5);
+			}
 			temp += 3 * -(temperatureDeltaCoefficient-1);			
+			
 			return temp;
 		}
 		return -10;

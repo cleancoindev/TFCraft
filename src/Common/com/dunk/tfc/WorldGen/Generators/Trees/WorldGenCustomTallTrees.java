@@ -257,7 +257,7 @@ public class WorldGenCustomTallTrees extends WorldGenTreeBase
 
 	public boolean placeLeaves(World world, Random random, int xCoord, int yCoord, int zCoord)
 	{
-		int radius = 3;
+		int radius = 2;
 		boolean lost = BlockBranch.shouldLoseLeaf(world, xCoord, yCoord, zCoord, random, block2);
 		boolean defLost = BlockBranch.shouldDefinitelyLoseLeaf(world, xCoord, yCoord, zCoord, block2);
 		for (int i = -(radius + 1); i <= (radius + 1); i++)
@@ -357,7 +357,7 @@ public class WorldGenCustomTallTrees extends WorldGenTreeBase
 			}
 		}
 
-		int extraBranchLength = 3;
+		int extraBranchLength = 2;
 		boolean hasBranches = false;
 		
 		hasBranches |= generateRandomBranches(world, random, xCoord, yCoord + height - 1 - random.nextInt(3), zCoord,

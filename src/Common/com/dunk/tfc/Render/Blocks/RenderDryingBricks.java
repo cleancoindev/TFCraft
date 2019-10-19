@@ -33,6 +33,8 @@ public class RenderDryingBricks implements ISimpleBlockRenderingHandler
 		}
 		TEDryingBricks te = (TEDryingBricks) world.getTileEntity(x, y, z);
 		GL11.glPushMatrix();
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		renderer.renderAllFaces = true;
 		renderer = new RenderBlocksWithRotation(renderer);
 		((RenderBlocksWithRotation) renderer).yRotation = 0;
 		((RenderBlocksWithRotation) renderer).rotation = 0;
@@ -65,8 +67,10 @@ public class RenderDryingBricks implements ISimpleBlockRenderingHandler
 			}
 		}
 		GL11.glColor3f(0.8f, 0.8f, 0.8f);
+		GL11.glEnable(GL11.GL_CULL_FACE);
 		renderer.clearOverrideBlockTexture();
 		GL11.glPopMatrix();
+		renderer.renderAllFaces = false;
 		return true;
 	}
 

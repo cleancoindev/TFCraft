@@ -58,7 +58,7 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 		System.arraycopy(Global.WOOD_ALL, 0, this.woodNames, 0, 16);
 		this.icons = new IIcon[16];
 		this.iconsOpaque = new IIcon[16];
-		// this.setTickRandomly(true);
+		 this.setTickRandomly(true);
 
 	}
 

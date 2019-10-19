@@ -42,16 +42,16 @@ public class ClearChunkCommand extends CommandBase
 			{
 				for (int z = 0; z < 16; z++)
 				{
-					for (int y = 256; y > 0; y-- )
+					for (int y = 256; y > 127; y-- )
 					{
 						Block id = chunk.getBlock(x, y, z);
-						if (!TFC_Core.isRawStone(id))
+						if (!TFC_Core.isRawStone(id) || true)
 						{
 							if (id != Blocks.air)
 								world.setBlock(x + (chunk.xPosition * 16), y, z + (chunk.zPosition * 16), Blocks.air, 0, 2);
 						}
-						else
-							break; // don't scan deeper once we hit stone.
+						//else
+						//	break; // don't scan deeper once we hit stone.
 					}
 				}
 			}

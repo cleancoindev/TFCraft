@@ -164,6 +164,7 @@ public class TFCBlocks
 	public static Block fern;
 	
 	public static Block thatchRoof;
+	public static Block slateRoof;
 
 	public static Block woodConstruct;
 	public static Block woodVert;

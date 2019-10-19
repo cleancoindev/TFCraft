@@ -3,6 +3,7 @@ package com.dunk.tfc.Entities.AI;
 import java.util.Iterator;
 import java.util.List;
 
+import com.dunk.tfc.Entities.Mobs.EntityPigTFC;
 import com.dunk.tfc.api.Entities.IAnimal;
 import com.dunk.tfc.api.Entities.IAnimal.GenderEnum;
 
@@ -72,6 +73,10 @@ public class EntityAIMateTFC extends EntityAIBase
 	@Override
 	public void resetTask ()
 	{
+		if(this.theAnimal instanceof EntityPigTFC)
+		{
+			((EntityPigTFC)theAnimal).mating = false;
+		}
 		targetMate = null;
 		matingCounter = 0;
 	}
@@ -85,7 +90,22 @@ public class EntityAIMateTFC extends EntityAIBase
 	{
 		theAnimal.getEntity().getLookHelper().setLookPositionWithEntity(targetMate.getEntity(), 10F, theAnimal.getEntity().getVerticalFaceSpeed());
 		theAnimal.getEntity().getNavigator().tryMoveToEntityLiving(targetMate.getEntity(), speed);
-		matingCounter++;
+		if(this.theAnimal instanceof EntityPigTFC )
+		{
+			if(((EntityPigTFC)theAnimal).sleepTimer > 50)
+			{
+				matingCounter++;
+			}
+			else if(!((EntityPigTFC)theAnimal).isSleeping && theAnimal.getEntity().getDistanceSqToEntity(this.targetMate.getEntity()) < 9.0D)
+			{
+				((EntityPigTFC)theAnimal).goToSleep();
+				((EntityPigTFC)theAnimal).mating = true;
+			}
+		}
+		else
+		{
+			matingCounter++;
+		}
 
 		if (matingCounter >= 60 && theAnimal.getEntity().getDistanceSqToEntity(this.targetMate.getEntity()) < 9.0D)
 			theAnimal.mate(targetMate);

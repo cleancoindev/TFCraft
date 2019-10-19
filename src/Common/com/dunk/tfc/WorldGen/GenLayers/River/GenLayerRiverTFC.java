@@ -25,11 +25,11 @@ public class GenLayerRiverTFC extends GenLayerTFC
 		int k1 = par3 + 2;
 		int l1 = par4 + 2;
 		int[] aint = this.parent.getInts(i1, j1, k1, l1);
-		int[] aint1 = new int[par3 * par4];
+		int[] aint1 = new int[(par3+0) * (par4+0)];
 
-		for (int i2 = 0; i2 < par4; ++i2)
+		for (int i2 = 0; i2 < par4 + 0; ++i2)
 		{
-			for (int j2 = 0; j2 < par3; ++j2)
+			for (int j2 = 0; j2 < par3 + 0; ++j2)
 			{
 				int k2 = this.calcWidth(aint[j2 + 0 + (i2 + 1) * k1]);
 				int l2 = this.calcWidth(aint[j2 + 2 + (i2 + 1) * k1]);
@@ -53,6 +53,6 @@ public class GenLayerRiverTFC extends GenLayerTFC
 
 	private int calcWidth(int i)
 	{
-		return i >= 2 ? 2 + (i & 1) : i; // Spits back 2 for even numbers >= 2 and 3 for odd numbers.
+		return  i >= 2 ? 2 + (i & 1) : i; // Spits back 2 for even numbers >= 2 and 3 for odd numbers.
 	}
 }

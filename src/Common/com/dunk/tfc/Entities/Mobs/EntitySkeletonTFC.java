@@ -1,6 +1,12 @@
 package com.dunk.tfc.Entities.Mobs;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
 import com.dunk.tfc.Core.TFC_MobData;
+import com.dunk.tfc.Core.TFC_Sounds;
+import com.dunk.tfc.Core.TFC_Time;
 import com.dunk.tfc.Entities.EntityJavelin;
 import com.dunk.tfc.Entities.EntityProjectileTFC;
 import com.dunk.tfc.Items.Tools.ItemCustomBow;
@@ -46,8 +52,9 @@ import net.minecraft.world.World;
 public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, ICausesDamage, IInnateArmor
 {
 	private final EntityAIArrowAttack aiArrowAttack = new EntityAIArrowAttack(this, 1.0D, 20, 120, 15.0F);
-	private final EntityAIAttackOnCollide aiAttackOnCollide = new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.2D, false);
-	private static final float[] ARMOR_PROBABILITY = new float[] {0.0F, 0.5F, 0.10F, 0.15F};
+	private final EntityAIAttackOnCollide aiAttackOnCollide = new EntityAIAttackOnCollide(this, EntityPlayer.class,
+			1.2D, false);
+	private static final float[] ARMOR_PROBABILITY = new float[] { 0.0F, 0.5F, 0.10F, 0.15F };
 
 	public EntitySkeletonTFC(World par1World)
 	{
@@ -77,10 +84,12 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 		}
 		else
 		{
-			/*if (itemstack != null && itemstack.getItem() instanceof ItemJavelin) 
-			{
-				this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111128_a(((ItemJavelin)itemstack.getItem()).weaponDamage);
-			}*/
+			/*
+			 * if (itemstack != null && itemstack.getItem() instanceof
+			 * ItemJavelin) {
+			 * this.func_110148_a(SharedMonsterAttributes.field_111264_e).
+			 * func_111128_a(((ItemJavelin)itemstack.getItem()).weaponDamage); }
+			 */
 			this.tasks.addTask(4, this.aiAttackOnCollide);
 		}
 	}
@@ -100,6 +109,13 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 	@Override
 	protected String getLivingSound()
 	{
+		// If you see this before Oct 31, 2019 DON'T SAY ANYTHING!!!!!!!
+		// PS that means anything. no winks, no mentions, nothing. you saw nothing!!
+		ItemStack itemstack = this.getHeldItem();
+		if (itemstack != null && itemstack.getItem() == TFCItems.brassHorn && !worldObj.isRemote)
+		{
+			return TFC_Sounds.BRASSHORN;
+		}
 		return "mob.skeleton.say";
 	}
 
@@ -125,7 +141,7 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 	 * Plays step sound at given x, y, z for the entity
 	 */
 	@Override
-	protected void func_145780_a/*playStepSound*/(int par1, int par2, int par3, Block par4)
+	protected void func_145780_a/* playStepSound */(int par1, int par2, int par3, Block par4)
 	{
 		this.playSound("mob.skeleton.step", 0.15F, 1.0F);
 		super.func_145780_a(par1, par2, par3, par4);
@@ -150,14 +166,14 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.writeEntityToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setByte("SkeletonType", (byte)this.getSkeletonType());
+		par1NBTTagCompound.setByte("SkeletonType", (byte) this.getSkeletonType());
 	}
 
 	@Override
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(TFC_MobData.SKELETON_HEALTH);//MaxHealth
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(TFC_MobData.SKELETON_HEALTH);// MaxHealth
 		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
 	}
 
@@ -176,11 +192,10 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 			this.attackEntityFrom(DamageSource.onFire, 50);
 	}
 
-	/*@Override
-	public boolean attackEntityAsMob(Entity par1Entity)
-	{
-		return super.attackEntityAsMob(par1Entity);
-	}*/
+	/*
+	 * @Override public boolean attackEntityAsMob(Entity par1Entity) { return
+	 * super.attackEntityAsMob(par1Entity); }
+	 */
 
 	/**
 	 * Get this Entity's EnumCreatureAttribute
@@ -198,7 +213,9 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 		{
 			float f = this.getBrightness(1.0F);
 
-			if (f > 0.5F && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.worldObj.canBlockSeeTheSky(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)))
+			if (f > 0.5F && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.worldObj.canBlockSeeTheSky(
+					MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY),
+					MathHelper.floor_double(this.posZ)))
 			{
 				boolean flag = true;
 				ItemStack itemstack = this.getEquipmentInSlot(4);
@@ -210,7 +227,7 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 						if (itemstack.getItemDamageForDisplay() >= itemstack.getMaxDamage())
 						{
 							this.renderBrokenItemStack(itemstack);
-							this.setCurrentItemOrArmor(4, (ItemStack)null);
+							this.setCurrentItemOrArmor(4, (ItemStack) null);
 						}
 					}
 					flag = false;
@@ -236,7 +253,7 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 		super.updateRidden();
 		if (this.ridingEntity instanceof EntityCreature)
 		{
-			EntityCreature entitycreature = (EntityCreature)this.ridingEntity;
+			EntityCreature entitycreature = (EntityCreature) this.ridingEntity;
 			this.renderYawOffset = entitycreature.renderYawOffset;
 		}
 	}
@@ -248,9 +265,10 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 	public void onDeath(DamageSource par1DamageSource)
 	{
 		super.onDeath(par1DamageSource);
-		if (par1DamageSource.getSourceOfDamage() instanceof EntityArrow && par1DamageSource.getEntity() instanceof EntityPlayer)
+		if (par1DamageSource.getSourceOfDamage() instanceof EntityArrow && par1DamageSource
+				.getEntity() instanceof EntityPlayer)
 		{
-			EntityPlayer entityplayer = (EntityPlayer)par1DamageSource.getEntity();
+			EntityPlayer entityplayer = (EntityPlayer) par1DamageSource.getEntity();
 			double d0 = entityplayer.posX - this.posX;
 			double d1 = entityplayer.posZ - this.posZ;
 
@@ -266,11 +284,12 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 	protected void dropFewItems(boolean par1, int par2)
 	{
 		int amnt;
-		//int count;
+		// int count;
 
 		if (this.getSkeletonType() == 1)
 		{
-			if (this.getHeldItem() != null && this.getHeldItem().getItem() instanceof ItemJavelin && this.rand.nextFloat() < 0.03f)
+			if (this.getHeldItem() != null && this.getHeldItem().getItem() instanceof ItemJavelin && this.rand
+					.nextFloat() < 0.03f)
 				this.dropItem(getHeldItem().getItem(), 1);
 		}
 		else
@@ -299,7 +318,8 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 			ItemStack itemstack = this.getEquipmentInSlot(j);
 			boolean flag1 = this.equipmentDropChances[j] > 1.0F;
 
-			if (itemstack != null && (forceDrop || flag1) && this.rand.nextFloat() - dropChance * 0.01F < this.equipmentDropChances[j])
+			if (itemstack != null && (forceDrop || flag1) && this.rand
+					.nextFloat() - dropChance * 0.01F < this.equipmentDropChances[j])
 			{
 				if (!flag1 && itemstack.isItemStackDamageable())
 				{
@@ -328,11 +348,22 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 	protected void addRandomArmor()
 	{
 		superAddRandomArmor();
-		if(this.getSkeletonType() == 0)
+		if (this.getSkeletonType() == 0)
 		{
-			this.setCurrentItemOrArmor(0, new ItemStack(TFCItems.bow));
+			// If you see this before Oct 31, 2019 DON'T SAY ANYTHING!!!!!!!
+			// PS that means anything. no winks, no mentions, nothing. you saw nothing!!
+			boolean inGameHalloween = TFC_Time.getDayOfMonth() == 31 && TFC_Time.getMonth() == TFC_Time.OCTOBER;
+			if ((Calendar.getInstance(TimeZone.getDefault()).get(Calendar.MONTH) == 9 && Calendar
+					.getInstance(TimeZone.getDefault()).get(Calendar.DAY_OF_MONTH) == 31)||inGameHalloween)
+			{
+				this.setCurrentItemOrArmor(0, new ItemStack(TFCItems.brassHorn));
+			}
+			else
+			{
+				this.setCurrentItemOrArmor(0, new ItemStack(TFCItems.bow));
+			}
 		}
-		else if(this.getSkeletonType() == 1)
+		else if (this.getSkeletonType() == 1)
 		{
 			int i = this.rand.nextInt(2);
 			if (this.rand.nextFloat() < 0.095F)
@@ -342,15 +373,15 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 			if (this.rand.nextFloat() < 0.095F)
 				++i;
 
-			if(i == 0)
+			if (i == 0)
 				this.setCurrentItemOrArmor(0, new ItemStack(TFCItems.sedStoneJavelin));
-			else if(i == 1)
+			else if (i == 1)
 				this.setCurrentItemOrArmor(0, new ItemStack(TFCItems.igExStoneJavelin));
-			else if(i == 2)
+			else if (i == 2)
 				this.setCurrentItemOrArmor(0, new ItemStack(TFCItems.copperJavelin));
-			else if(i == 3)
+			else if (i == 3)
 				this.setCurrentItemOrArmor(0, new ItemStack(TFCItems.bronzeJavelin));
-			else if(i == 4)
+			else if (i == 4)
 				this.setCurrentItemOrArmor(0, new ItemStack(TFCItems.wroughtIronJavelin));
 		}
 	}
@@ -459,24 +490,25 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 		this.addRandomArmor();
 		this.enchantEquipment();
 		setCombatTask();
-		this.setCanPickUpLoot(this.rand.nextFloat() < 0.55F * this.worldObj.func_147462_b/*getLocationTensionFactor*/(this.posX, this.posY, this.posZ));
+		this.setCanPickUpLoot(this.rand.nextFloat() < 0.55F * this.worldObj
+				.func_147462_b/* getLocationTensionFactor */(this.posX, this.posY, this.posZ));
 
 		return par1EntityLivingData;
 	}
 
 	@Override
-	public void attackEntityWithRangedAttack(EntityLivingBase par1EntityLiving,float par2)
+	public void attackEntityWithRangedAttack(EntityLivingBase par1EntityLiving, float par2)
 	{
 		EntityProjectileTFC projectile = null;
-		if(getSkeletonType() == 0)
+		if (getSkeletonType() == 0)
 		{
 			projectile = new EntityProjectileTFC(this.worldObj, this, par1EntityLiving, 1.6F, 12.0F);
 			projectile.setDamage(65.0);
 		}
-		else if(getSkeletonType() == 1)
+		else if (getSkeletonType() == 1)
 		{
 			ItemStack is = getHeldItem();
-			if(is!= null && is.getItem() instanceof IProjectile)
+			if (is != null && is.getItem() instanceof IProjectile)
 			{
 				projectile = new EntityJavelin(this.worldObj, this, par1EntityLiving, 1.6F, 12.0F);
 				double dam = ((IProjectile) is.getItem()).getRangedDamage(is);
@@ -484,11 +516,13 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 			}
 		}
 
-		if(projectile != null)
+		if (projectile != null)
 		{
 			int var3 = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, this.getHeldItem());
 			int var4 = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, this.getHeldItem());
-			projectile.setDamage(projectile.getDamage() * 1.0F + this.rand.nextGaussian() * 0.25D + this.worldObj.difficultySetting.getDifficultyId() * 0.11F);
+			projectile.setDamage(
+					projectile.getDamage() * 1.0F + this.rand.nextGaussian() * 0.25D + this.worldObj.difficultySetting
+							.getDifficultyId() * 0.11F);
 
 			if (var3 > 0)
 				projectile.setDamage(projectile.getDamage() + var3 * 0.5D);
@@ -512,7 +546,7 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 
 	public void setSkeletonType(int par1)
 	{
-		this.dataWatcher.updateObject(13, Byte.valueOf((byte)par1));
+		this.dataWatcher.updateObject(13, Byte.valueOf((byte) par1));
 		this.setSize(0.6F, 1.8F);
 	}
 
@@ -523,16 +557,22 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 	}
 
 	@Override
-	public int getCrushArmor() {
+	public int getCrushArmor()
+	{
 		return -335;
 	}
+
 	@Override
-	public int getSlashArmor() {
+	public int getSlashArmor()
+	{
 		return 1000;
 	}
+
 	@Override
-	public int getPierceArmor() {
-		return 500000;//this is not an error. this makes piercing damage useless.
+	public int getPierceArmor()
+	{
+		return 500000;// this is not an error. this makes piercing damage
+						// useless.
 	}
 
 	@Override
@@ -543,7 +583,7 @@ public class EntitySkeletonTFC extends EntityMob implements IRangedAttackMob, IC
 		int z = MathHelper.floor_double(this.posZ);
 		Block b = this.worldObj.getBlock(x, y, z);
 
-		if(b == TFCBlocks.leaves || b == TFCBlocks.leaves2 || b == TFCBlocks.thatch)
+		if (b == TFCBlocks.leaves || b == TFCBlocks.leaves2 || b == TFCBlocks.thatch)
 			return false;
 
 		return super.getCanSpawnHere();

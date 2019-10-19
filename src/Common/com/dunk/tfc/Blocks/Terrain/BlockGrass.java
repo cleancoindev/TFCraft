@@ -241,7 +241,7 @@ public class BlockGrass extends BlockTerra
 		if (!world.isRemote)
 		{
 			int meta = world.getBlockMetadata(i, j, k);
-			if(world.getBlock(i, j + 1, k) == Blocks.snow && !TFC_Core.isDryGrass(this))
+			if((world.getBlock(i, j + 1, k) == Blocks.snow  || TFC_Climate.getHeightAdjustedTemp(world, i, j, k) <= 0)&& !TFC_Core.isDryGrass(this))
 			{
 				world.setBlock(i, j, k, TFC_Core.getTypeForDryGrassFromSoil(this), meta, 0x2);
 				world.markBlockForUpdate(i, j, k);
@@ -267,7 +267,8 @@ public class BlockGrass extends BlockTerra
 				}
 
 				boolean nearWater = false;
-				if(j < 250 && j >= Global.SEALEVEL-1){
+				
+				if(j < 250 && j >= Global.SEALEVEL-1 &&  TFC_Climate.getHeightAdjustedTemp(world, i, j, k) > 0){
 					for(int y = 0; y < 2 && !nearWater; y++)
 					{
 						for(int x = -4; x < 5 && !nearWater; x++)

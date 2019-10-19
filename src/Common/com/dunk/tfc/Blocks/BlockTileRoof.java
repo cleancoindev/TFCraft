@@ -60,7 +60,7 @@ public class BlockTileRoof extends BlockTerra
 	public void getSubBlocks(Item item, CreativeTabs tabs, List list)
 	{
 		list.add(new ItemStack(this, 1, 0));
-		if (this == TFCBlocks.tileRoof)
+		if (this == TFCBlocks.tileRoof || this == TFCBlocks.slateRoof)
 		{
 			list.add(new ItemStack(this, 1, 4));
 		}

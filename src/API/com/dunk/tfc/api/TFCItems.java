@@ -855,6 +855,7 @@ public class TFCItems
 
 	public static Item spindleHead;
 	public static Item stoneBrick;
+	public static Item slateShingle;
 	public static Item mortar;
 	public static Item woodenBucketVinegar;
 	public static Item clayBucketVinegar;
@@ -1670,6 +1671,7 @@ public class TFCItems
 		GameRegistry.registerItem(spindle, spindle.getUnlocalizedName());
 		GameRegistry.registerItem(spindleHead, spindleHead.getUnlocalizedName());
 		GameRegistry.registerItem(stoneBrick , stoneBrick.getUnlocalizedName());
+		GameRegistry.registerItem(slateShingle , slateShingle.getUnlocalizedName());
 
 		GameRegistry.registerItem(mortar , mortar.getUnlocalizedName());
 		GameRegistry.registerItem(woodenBucketVinegar , woodenBucketVinegar.getUnlocalizedName());

@@ -27,10 +27,20 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		{
 			this.blockAccess = old.blockAccess;
 		}
-		this.renderDiagonal = -1;
+		this.renderDiagonal = -1; 
 	}
 
 	public int renderDiagonal = -1;
+	
+	public final int DIAGONAL_DOWN_RIGHT = 12345;
+	public final int DIAGONAL_UP_RIGHT = 12346;
+	public final int DIAGONAL_UP_LEFT = 12347;
+	public final int DIAGONAL_DOWN_LEFT = 12348;
+	
+	public final int CENTER_ROOF_NORTH = 128;
+	public final int CENTER_ROOF_EAST = 256;
+	public final int CENTER_ROOF_SOUTH = 512;
+	public final int CENTER_ROOF_WEST = 1024;
 
 	private int[][] mossId = new int[6][2];
 	private boolean[][] mossDirection = new boolean[6][2];
@@ -52,6 +62,8 @@ public class RenderBlocksWithRotation extends RenderBlocks
 	public float rot30 = (float) (30d * (Math.PI / 180d));
 	public float rot45 = (float) ((Math.PI / 4));
 	public float rot22_5 = (float) ((Math.PI / 8));
+	
+	public boolean useTextureBelow = false;
 
 	public float rot1 = (float) (Math.PI / 180d);
 
@@ -2399,6 +2411,10 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		{
 			icon = this.overrideBlockTexture;
 		}
+		else if(useTextureBelow)
+		{
+			icon = block.getIcon(0, this.blockAccess.getBlockMetadata((int)x, (int)y-1, (int)z));
+		}
 
 		double d3 = (double) icon.getInterpolatedU(this.renderMinX * 16.0D);
 		double d4 = (double) icon.getInterpolatedU(this.renderMaxX * 16.0D);
@@ -2577,6 +2593,118 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		enableAO = true;
 		if (this.enableAO && Minecraft.getMinecraft().gameSettings.ambientOcclusion != 0)
 		{
+			if(renderDiagonal == DIAGONAL_DOWN_LEFT)
+			{
+				/*tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+				tessellator.setBrightness(this.brightnessTopLeft);
+				tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+						xyZ.zCoord + 0.5 + z, d8, d10); // xyZ*/
+				
+				tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
+				tessellator.setBrightness(this.brightnessBottomLeft);
+				tessellator.addVertexWithUV((!renderFromInside ? xyz.xCoord : Xyz.xCoord) + 0.5 + x, xyz.yCoord + 0.5 + y,
+						xyz.zCoord + 0.5 + z, d3, d5); // xyz
+				
+				tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight,
+						this.colorBlueBottomRight);
+				tessellator.setBrightness(this.brightnessBottomRight);
+				tessellator.addVertexWithUV((!renderFromInside ? Xyz.xCoord : xyz.xCoord) + 0.5 + x, Xyz.yCoord + 0.5 + y,
+						Xyz.zCoord + 0.5 + z, d7, d9); // Xyz
+				
+				tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
+				tessellator.setBrightness(this.brightnessTopRight);
+				tessellator.addVertexWithUV((!renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x, XyZ.yCoord + 0.5 + y,
+						XyZ.zCoord + 0.5 + z, d4, d6); // XyZ
+				
+				tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
+				tessellator.setBrightness(this.brightnessBottomLeft);
+				tessellator.addVertexWithUV((!renderFromInside ? xyz.xCoord : Xyz.xCoord) + 0.5 + x, xyz.yCoord + 0.5 + y,
+						xyz.zCoord + 0.5 + z, d3, d5); // xyz
+			}
+			else if(renderDiagonal == DIAGONAL_UP_LEFT)
+			{
+			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+			tessellator.setBrightness(this.brightnessTopLeft);
+			tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+					xyZ.zCoord + 0.5 + z, d8, d10); // xyZ
+			
+			/*tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
+			tessellator.setBrightness(this.brightnessBottomLeft);
+			tessellator.addVertexWithUV((!renderFromInside ? xyz.xCoord : Xyz.xCoord) + 0.5 + x, xyz.yCoord + 0.5 + y,
+					xyz.zCoord + 0.5 + z, d3, d5); // xyz*/
+			
+			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight,
+					this.colorBlueBottomRight);
+			tessellator.setBrightness(this.brightnessBottomRight);
+			tessellator.addVertexWithUV((!renderFromInside ? Xyz.xCoord : xyz.xCoord) + 0.5 + x, Xyz.yCoord + 0.5 + y,
+					Xyz.zCoord + 0.5 + z, d7, d9); // Xyz
+			
+			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
+			tessellator.setBrightness(this.brightnessTopRight);
+			tessellator.addVertexWithUV((!renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x, XyZ.yCoord + 0.5 + y,
+					XyZ.zCoord + 0.5 + z, d4, d6); // XyZ
+			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+			tessellator.setBrightness(this.brightnessTopLeft);
+			tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+					xyZ.zCoord + 0.5 + z, d8, d10); // xyZ
+			}
+			else if(renderDiagonal == DIAGONAL_DOWN_RIGHT)
+			{
+			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+			tessellator.setBrightness(this.brightnessTopLeft);
+			tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+					xyZ.zCoord + 0.5 + z, d8, d10); // xyZ
+			
+			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
+			tessellator.setBrightness(this.brightnessBottomLeft);
+			tessellator.addVertexWithUV((!renderFromInside ? xyz.xCoord : Xyz.xCoord) + 0.5 + x, xyz.yCoord + 0.5 + y,
+					xyz.zCoord + 0.5 + z, d3, d5); // xyz
+			
+			/*tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight,
+					this.colorBlueBottomRight);
+			tessellator.setBrightness(this.brightnessBottomRight);
+			tessellator.addVertexWithUV((!renderFromInside ? Xyz.xCoord : xyz.xCoord) + 0.5 + x, Xyz.yCoord + 0.5 + y,
+					Xyz.zCoord + 0.5 + z, d7, d9); // Xyz*/
+			
+			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
+			tessellator.setBrightness(this.brightnessTopRight);
+			tessellator.addVertexWithUV((!renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x, XyZ.yCoord + 0.5 + y,
+					XyZ.zCoord + 0.5 + z, d4, d6); // XyZ
+			
+			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+			tessellator.setBrightness(this.brightnessTopLeft);
+			tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+					xyZ.zCoord + 0.5 + z, d8, d10); // xyZ
+			}
+			else if(renderDiagonal == DIAGONAL_UP_RIGHT)
+			{
+			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+			tessellator.setBrightness(this.brightnessTopLeft);
+			tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+					xyZ.zCoord + 0.5 + z, d8, d10); // xyZ
+			
+			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
+			tessellator.setBrightness(this.brightnessBottomLeft);
+			tessellator.addVertexWithUV((!renderFromInside ? xyz.xCoord : Xyz.xCoord) + 0.5 + x, xyz.yCoord + 0.5 + y,
+					xyz.zCoord + 0.5 + z, d3, d5); // xyz
+			
+			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight,
+					this.colorBlueBottomRight);
+			tessellator.setBrightness(this.brightnessBottomRight);
+			tessellator.addVertexWithUV((!renderFromInside ? Xyz.xCoord : xyz.xCoord) + 0.5 + x, Xyz.yCoord + 0.5 + y,
+					Xyz.zCoord + 0.5 + z, d7, d9); // Xyz
+			
+			/*tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
+			tessellator.setBrightness(this.brightnessTopRight);
+			tessellator.addVertexWithUV((!renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x, XyZ.yCoord + 0.5 + y,
+					XyZ.zCoord + 0.5 + z, d4, d6); // XyZ*/
+			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+			tessellator.setBrightness(this.brightnessTopLeft);
+			tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+					xyZ.zCoord + 0.5 + z, d8, d10); // xyZ
+			}
+			else
+			{
 			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 			tessellator.setBrightness(this.brightnessTopLeft);
 			tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
@@ -2594,9 +2722,80 @@ public class RenderBlocksWithRotation extends RenderBlocks
 			tessellator.setBrightness(this.brightnessTopRight);
 			tessellator.addVertexWithUV((!renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x, XyZ.yCoord + 0.5 + y,
 					XyZ.zCoord + 0.5 + z, d4, d6); // XyZ
+			}
 		}
 		else
 		{
+			if(renderDiagonal == DIAGONAL_DOWN_LEFT)
+			{
+				/*tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+						xyZ.zCoord + 0.5 + z, d8, d10);*/
+				
+				tessellator.addVertexWithUV((!renderFromInside ? xyz.xCoord : Xyz.xCoord) + 0.5 + x, xyz.yCoord + 0.5 + y,
+						xyz.zCoord + 0.5 + z, d3, d5);
+				
+				tessellator.addVertexWithUV((!renderFromInside ? Xyz.xCoord : xyz.xCoord) + 0.5 + x, Xyz.yCoord + 0.5 + y,
+						Xyz.zCoord + 0.5 + z, d7, d9);
+				
+				tessellator.addVertexWithUV((!renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x, XyZ.yCoord + 0.5 + y,
+						XyZ.zCoord + 0.5 + z, d4, d6);
+				
+				tessellator.addVertexWithUV((!renderFromInside ? xyz.xCoord : Xyz.xCoord) + 0.5 + x, xyz.yCoord + 0.5 + y,
+						xyz.zCoord + 0.5 + z, d3, d5);
+			}
+			else if(renderDiagonal == DIAGONAL_UP_LEFT)
+			{
+				tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+						xyZ.zCoord + 0.5 + z, d8, d10);
+				
+				/*tessellator.addVertexWithUV((!renderFromInside ? xyz.xCoord : Xyz.xCoord) + 0.5 + x, xyz.yCoord + 0.5 + y,
+						xyz.zCoord + 0.5 + z, d3, d5);*/
+				
+				tessellator.addVertexWithUV((!renderFromInside ? Xyz.xCoord : xyz.xCoord) + 0.5 + x, Xyz.yCoord + 0.5 + y,
+						Xyz.zCoord + 0.5 + z, d7, d9);
+				
+				tessellator.addVertexWithUV((!renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x, XyZ.yCoord + 0.5 + y,
+						XyZ.zCoord + 0.5 + z, d4, d6);
+				
+				tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+						xyZ.zCoord + 0.5 + z, d8, d10);
+			}
+			else if(renderDiagonal == DIAGONAL_DOWN_RIGHT)
+			{
+				tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+						xyZ.zCoord + 0.5 + z, d8, d10);
+				
+				tessellator.addVertexWithUV((!renderFromInside ? xyz.xCoord : Xyz.xCoord) + 0.5 + x, xyz.yCoord + 0.5 + y,
+						xyz.zCoord + 0.5 + z, d3, d5);
+				
+				/*tessellator.addVertexWithUV((!renderFromInside ? Xyz.xCoord : xyz.xCoord) + 0.5 + x, Xyz.yCoord + 0.5 + y,
+						Xyz.zCoord + 0.5 + z, d7, d9);*/
+				
+				tessellator.addVertexWithUV((!renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x, XyZ.yCoord + 0.5 + y,
+						XyZ.zCoord + 0.5 + z, d4, d6);
+				
+				tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+						xyZ.zCoord + 0.5 + z, d8, d10);
+			}
+			else if(renderDiagonal == DIAGONAL_UP_RIGHT)
+			{
+				tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+						xyZ.zCoord + 0.5 + z, d8, d10);
+				
+				tessellator.addVertexWithUV((!renderFromInside ? xyz.xCoord : Xyz.xCoord) + 0.5 + x, xyz.yCoord + 0.5 + y,
+						xyz.zCoord + 0.5 + z, d3, d5);
+				
+				tessellator.addVertexWithUV((!renderFromInside ? Xyz.xCoord : xyz.xCoord) + 0.5 + x, Xyz.yCoord + 0.5 + y,
+						Xyz.zCoord + 0.5 + z, d7, d9);
+				
+				/*tessellator.addVertexWithUV((!renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x, XyZ.yCoord + 0.5 + y,
+						XyZ.zCoord + 0.5 + z, d4, d6);*/
+				
+				tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
+						xyZ.zCoord + 0.5 + z, d8, d10);
+			}
+			else
+			{
 			tessellator.addVertexWithUV((!renderFromInside ? xyZ.xCoord : XyZ.xCoord) + 0.5 + x, xyZ.yCoord + 0.5 + y,
 					xyZ.zCoord + 0.5 + z, d8, d10);
 			tessellator.addVertexWithUV((!renderFromInside ? xyz.xCoord : Xyz.xCoord) + 0.5 + x, xyz.yCoord + 0.5 + y,
@@ -2605,6 +2804,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 					Xyz.zCoord + 0.5 + z, d7, d9);
 			tessellator.addVertexWithUV((!renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x, XyZ.yCoord + 0.5 + y,
 					XyZ.zCoord + 0.5 + z, d4, d6);
+			}
 		}
 		if ((this.yRotation != 0 || this.rotation != 0) && culled)
 		{
@@ -2618,7 +2818,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 	 */
 	public void renderFaceYPos(Block block, double x, double y, double z, IIcon p_147806_8_)
 	{
-		if (renderDiagonal != -1)
+		if (renderDiagonal != -1 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_LEFT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 		{
 			return;
 		}
@@ -2646,6 +2846,10 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		if (this.hasOverrideBlockTexture())
 		{
 			p_147806_8_ = this.overrideBlockTexture;
+		}
+		else if(useTextureBelow)
+		{
+			p_147806_8_ = block.getIcon(1, this.blockAccess.getBlockMetadata((int)x, (int)y-1, (int)z));
 		}
 
 		double d3 = (double) p_147806_8_.getInterpolatedU(this.renderMinX * 16.0D);
@@ -2795,6 +2999,110 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		}
 		if (this.enableAO && Minecraft.getMinecraft().gameSettings.ambientOcclusion != 0)
 		{
+			if(renderDiagonal == DIAGONAL_UP_RIGHT)
+			{
+				/*tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+				tessellator.setBrightness(this.brightnessTopLeft);
+				tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x, XYZ.yCoord + 0.5 + y,
+						XYZ.zCoord + 0.5 + z, d4, d6); // XYZ*/
+				
+				tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
+				tessellator.setBrightness(this.brightnessBottomLeft);
+				tessellator.addVertexWithUV((renderFromInside ? xYz.xCoord : XYz.xCoord) + 0.5 + x, XYz.yCoord + 0.5 + y,
+						XYz.zCoord + 0.5 + z, d7, d9);// XYz
+				
+				tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight,
+						this.colorBlueBottomRight);
+				tessellator.setBrightness(this.brightnessBottomRight);
+				tessellator.addVertexWithUV((renderFromInside ? XYz.xCoord : xYz.xCoord) + 0.5 + x, xYz.yCoord + 0.5 + y,
+						xYz.zCoord + 0.5 + z, d3, d5);// xYz
+				
+				tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
+				tessellator.setBrightness(this.brightnessTopRight);
+				tessellator.addVertexWithUV((renderFromInside ? XYZ.xCoord : xYZ.xCoord) + 0.5 + x, xYZ.yCoord + 0.5 + y,
+						xYZ.zCoord + 0.5 + z, d8, d10);// xYZ
+				tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
+				tessellator.setBrightness(this.brightnessBottomLeft);
+				tessellator.addVertexWithUV((renderFromInside ? xYz.xCoord : XYz.xCoord) + 0.5 + x, XYz.yCoord + 0.5 + y,
+						XYz.zCoord + 0.5 + z, d7, d9);// XYz
+			}
+			else if(renderDiagonal == DIAGONAL_DOWN_RIGHT)
+			{
+			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+			tessellator.setBrightness(this.brightnessTopLeft);
+			tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x, XYZ.yCoord + 0.5 + y,
+					XYZ.zCoord + 0.5 + z, d4, d6); // XYZ
+			/*tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
+			tessellator.setBrightness(this.brightnessBottomLeft);
+			tessellator.addVertexWithUV((renderFromInside ? xYz.xCoord : XYz.xCoord) + 0.5 + x, XYz.yCoord + 0.5 + y,
+					XYz.zCoord + 0.5 + z, d7, d9);// XYz*/
+			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight,
+					this.colorBlueBottomRight);
+			tessellator.setBrightness(this.brightnessBottomRight);
+			tessellator.addVertexWithUV((renderFromInside ? XYz.xCoord : xYz.xCoord) + 0.5 + x, xYz.yCoord + 0.5 + y,
+					xYz.zCoord + 0.5 + z, d3, d5);// xYz
+			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
+			tessellator.setBrightness(this.brightnessTopRight);
+			tessellator.addVertexWithUV((renderFromInside ? XYZ.xCoord : xYZ.xCoord) + 0.5 + x, xYZ.yCoord + 0.5 + y,
+					xYZ.zCoord + 0.5 + z, d8, d10);// xYZ
+			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+			tessellator.setBrightness(this.brightnessTopLeft);
+			tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x, XYZ.yCoord + 0.5 + y,
+					XYZ.zCoord + 0.5 + z, d4, d6); // XYZ
+			}
+			else if(renderDiagonal == DIAGONAL_UP_LEFT)
+			{
+			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+			tessellator.setBrightness(this.brightnessTopLeft);
+			tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x, XYZ.yCoord + 0.5 + y,
+					XYZ.zCoord + 0.5 + z, d4, d6); // XYZ
+			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
+			tessellator.setBrightness(this.brightnessBottomLeft);
+			tessellator.addVertexWithUV((renderFromInside ? xYz.xCoord : XYz.xCoord) + 0.5 + x, XYz.yCoord + 0.5 + y,
+					XYz.zCoord + 0.5 + z, d7, d9);// XYz
+			/*tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight,
+					this.colorBlueBottomRight);
+			tessellator.setBrightness(this.brightnessBottomRight);
+			tessellator.addVertexWithUV((renderFromInside ? XYz.xCoord : xYz.xCoord) + 0.5 + x, xYz.yCoord + 0.5 + y,
+					xYz.zCoord + 0.5 + z, d3, d5);// xYz*/
+			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
+			tessellator.setBrightness(this.brightnessTopRight);
+			tessellator.addVertexWithUV((renderFromInside ? XYZ.xCoord : xYZ.xCoord) + 0.5 + x, xYZ.yCoord + 0.5 + y,
+					xYZ.zCoord + 0.5 + z, d8, d10);// xYZ
+			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+			tessellator.setBrightness(this.brightnessTopLeft);
+			tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x, XYZ.yCoord + 0.5 + y,
+					XYZ.zCoord + 0.5 + z, d4, d6); // XYZ
+			}
+			else if(renderDiagonal == DIAGONAL_DOWN_LEFT)
+				{
+					tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+					tessellator.setBrightness(this.brightnessTopLeft);
+					tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x, XYZ.yCoord + 0.5 + y,
+							XYZ.zCoord + 0.5 + z, d4, d6); // XYZ
+					
+					tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
+					tessellator.setBrightness(this.brightnessBottomLeft);
+					tessellator.addVertexWithUV((renderFromInside ? xYz.xCoord : XYz.xCoord) + 0.5 + x, XYz.yCoord + 0.5 + y,
+							XYz.zCoord + 0.5 + z, d7, d9);// XYz
+					
+					tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight,
+							this.colorBlueBottomRight);
+					tessellator.setBrightness(this.brightnessBottomRight);
+					tessellator.addVertexWithUV((renderFromInside ? XYz.xCoord : xYz.xCoord) + 0.5 + x, xYz.yCoord + 0.5 + y,
+							xYz.zCoord + 0.5 + z, d3, d5);// xYz
+					
+					/*tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
+					tessellator.setBrightness(this.brightnessTopRight);
+					tessellator.addVertexWithUV((renderFromInside ? XYZ.xCoord : xYZ.xCoord) + 0.5 + x, xYZ.yCoord + 0.5 + y,
+							xYZ.zCoord + 0.5 + z, d8, d10);// xYZ*/
+					tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+					tessellator.setBrightness(this.brightnessTopLeft);
+					tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x, XYZ.yCoord + 0.5 + y,
+							XYZ.zCoord + 0.5 + z, d4, d6); // XYZ
+				}
+			else
+			{
 			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 			tessellator.setBrightness(this.brightnessTopLeft);
 			tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x, XYZ.yCoord + 0.5 + y,
@@ -2812,9 +3120,37 @@ public class RenderBlocksWithRotation extends RenderBlocks
 			tessellator.setBrightness(this.brightnessTopRight);
 			tessellator.addVertexWithUV((renderFromInside ? XYZ.xCoord : xYZ.xCoord) + 0.5 + x, xYZ.yCoord + 0.5 + y,
 					xYZ.zCoord + 0.5 + z, d8, d10);// xYZ
+			}
 		}
 		else
 		{
+			if(renderDiagonal == DIAGONAL_UP_RIGHT)
+			{
+			/*	tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x, XYZ.yCoord + 0.5 + y,
+						XYZ.zCoord + 0.5 + z, d4, d6); // XYZ*/
+				
+				tessellator.addVertexWithUV((renderFromInside ? xYz.xCoord : XYz.xCoord) + 0.5 + x, XYz.yCoord + 0.5 + y,
+						XYz.zCoord + 0.5 + z, d7, d9);// XYz
+				tessellator.addVertexWithUV((renderFromInside ? XYz.xCoord : xYz.xCoord) + 0.5 + x, xYz.yCoord + 0.5 + y,
+						xYz.zCoord + 0.5 + z, d3, d5);// xYz
+				tessellator.addVertexWithUV((renderFromInside ? XYZ.xCoord : xYZ.xCoord) + 0.5 + x, xYZ.yCoord + 0.5 + y,
+						xYZ.zCoord + 0.5 + z, d8, d10);// xYZ
+				tessellator.addVertexWithUV((renderFromInside ? xYz.xCoord : XYz.xCoord) + 0.5 + x, XYz.yCoord + 0.5 + y,
+						XYz.zCoord + 0.5 + z, d7, d9);// XYz
+			}
+			else if(renderDiagonal == DIAGONAL_DOWN_LEFT)
+			{
+				tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x, XYZ.yCoord + 0.5 + y,
+					XYZ.zCoord + 0.5 + z, d4, d6); // XYZ
+				tessellator.addVertexWithUV((renderFromInside ? xYz.xCoord : XYz.xCoord) + 0.5 + x, XYz.yCoord + 0.5 + y,
+						XYz.zCoord + 0.5 + z, d7, d9);// XYz
+				tessellator.addVertexWithUV((renderFromInside ? XYz.xCoord : xYz.xCoord) + 0.5 + x, xYz.yCoord + 0.5 + y,
+					xYz.zCoord + 0.5 + z, d3, d5);// xYz
+				/*tessellator.addVertexWithUV((renderFromInside ? XYZ.xCoord : xYZ.xCoord) + 0.5 + x, xYZ.yCoord + 0.5 + y,
+					xYZ.zCoord + 0.5 + z, d8, d10);// xYZ*/
+			}
+			else
+			{
 			tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x, XYZ.yCoord + 0.5 + y,
 					XYZ.zCoord + 0.5 + z, d4, d6); // XYZ
 			tessellator.addVertexWithUV((renderFromInside ? xYz.xCoord : XYz.xCoord) + 0.5 + x, XYz.yCoord + 0.5 + y,
@@ -2823,6 +3159,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 					xYz.zCoord + 0.5 + z, d3, d5);// xYz
 			tessellator.addVertexWithUV((renderFromInside ? XYZ.xCoord : xYZ.xCoord) + 0.5 + x, xYZ.yCoord + 0.5 + y,
 					xYZ.zCoord + 0.5 + z, d8, d10);// xYZ
+			}
 		}
 		if ((this.yRotation != 0 || this.rotation != 0) && culled)
 		{
@@ -2863,6 +3200,10 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		if (this.hasOverrideBlockTexture())
 		{
 			p_147761_8_ = this.overrideBlockTexture;
+		}
+		else if(useTextureBelow)
+		{
+			p_147761_8_ = block.getIcon(4, this.blockAccess.getBlockMetadata((int)x, (int)y-1, (int)z));
 		}
 
 		double d3 = (double) p_147761_8_.getInterpolatedU(this.renderMinX * 16.0D);
@@ -3020,7 +3361,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		}
 		if (this.enableAO && Minecraft.getMinecraft().gameSettings.ambientOcclusion != 0)
 		{
-			if(renderDiagonal>0&&((renderDiagonal >> 6) & 2) == 2 )
+			if(renderDiagonal>0&&(renderDiagonal & CENTER_ROOF_NORTH)  == CENTER_ROOF_NORTH && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -3071,11 +3412,11 @@ public class RenderBlocksWithRotation extends RenderBlocks
 						Xyz.zCoord + 0.5 + z, (d3+d7)/2d, d6); // Xyz
 
 			}
-			else if(renderDiagonal>64)
+			else if(renderDiagonal>=64 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				
 			}
-			else if (renderDiagonal == -1 || renderDiagonal == 39 || ((renderDiagonal & 3) == 2 && renderDiagonal != 18))
+			else if (renderDiagonal == DIAGONAL_DOWN_LEFT || renderDiagonal == DIAGONAL_UP_RIGHT ||renderDiagonal == -1 || renderDiagonal == 39 || ((renderDiagonal & 3) == 2 && renderDiagonal != 18 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT))
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -3096,7 +3437,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV((renderFromInside ? Xyz.xCoord : xyz.xCoord) + 0.5 + x,
 						xyz.yCoord + 0.5 + y, xyz.zCoord + 0.5 + z, d4, d6); // xyz
 			}
-			else if (((renderDiagonal & 3) == 1 && renderDiagonal != 13) || renderDiagonal == 18)
+			else if (((renderDiagonal & 3) == 1 && renderDiagonal != 13 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT) || renderDiagonal == 18)
 			{
 				/*
 				 * tessellator.setColorOpaque_F(this.colorRedTopLeft,
@@ -3126,7 +3467,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV((renderFromInside ? xYz.xCoord : XYz.xCoord) + 0.5 + x,
 						XYz.yCoord + 0.5 + y, XYz.zCoord + 0.5 + z, d3, d5); // XYz
 			}
-			else if ((renderDiagonal & 3) == 3 && renderDiagonal != 15)
+			else if ((renderDiagonal & 3) == 3 && renderDiagonal != 15 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -3157,7 +3498,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		}
 		else
 		{
-			if(renderDiagonal>0&&((renderDiagonal >> 6) & 2) == 2 )
+			if(renderDiagonal>0&&(renderDiagonal & CENTER_ROOF_NORTH)  == CENTER_ROOF_NORTH&& renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 	
 				tessellator.addVertexWithUV(xyz.xCoord + 0.5 + x, xyz.yCoord + 0.5 + y,
@@ -3197,11 +3538,11 @@ public class RenderBlocksWithRotation extends RenderBlocks
 						Xyz.zCoord + 0.5 + z, (d3+d7)/2d, d6); // Xyz
 
 			}
-			else if(renderDiagonal>64)
+			else if(renderDiagonal>=64&& renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				
 			}
-			else if (renderDiagonal == -1 || renderDiagonal == 39 || ((renderDiagonal & 3) == 2 && renderDiagonal != 18))
+			else if (renderDiagonal == DIAGONAL_DOWN_LEFT || renderDiagonal == DIAGONAL_UP_RIGHT ||renderDiagonal == -1 || renderDiagonal == 39 || ((renderDiagonal & 3) == 2 && renderDiagonal != 18 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT))
 			{
 				tessellator.addVertexWithUV((renderFromInside ? XYz.xCoord : xYz.xCoord) + 0.5 + x,
 						xYz.yCoord + 0.5 + y, xYz.zCoord + 0.5 + z, d7, d9); // xYz
@@ -3212,7 +3553,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV((renderFromInside ? Xyz.xCoord : xyz.xCoord) + 0.5 + x,
 						xyz.yCoord + 0.5 + y, xyz.zCoord + 0.5 + z, d4, d6); // xyz
 			}
-			else if (((renderDiagonal & 3) == 1 && renderDiagonal != 13) && renderDiagonal != 15)
+			else if (((renderDiagonal & 3) == 1 && renderDiagonal != 13) && renderDiagonal != 15 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				/*
 				 * tessellator.addVertexWithUV((renderFromInside ? XYz.xCoord :
@@ -3228,7 +3569,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV((renderFromInside ? xYz.xCoord : XYz.xCoord) + 0.5 + x,
 						XYz.yCoord + 0.5 + y, XYz.zCoord + 0.5 + z, d3, d5); // XYz
 			}
-			else if ((renderDiagonal & 3) == 3)
+			else if ((renderDiagonal & 3) == 3 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				tessellator.addVertexWithUV((renderFromInside ? XYz.xCoord : xYz.xCoord) + 0.5 + x,
 						xYz.yCoord + 0.5 + y, xYz.zCoord + 0.5 + z, d7, d9); // xYz
@@ -3285,6 +3626,10 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		if (this.hasOverrideBlockTexture())
 		{
 			p_147734_8_ = this.overrideBlockTexture;
+		}
+		else if(useTextureBelow)
+		{
+			p_147734_8_ = block.getIcon(5, this.blockAccess.getBlockMetadata((int)x, (int)y-1, (int)z));
 		}
 
 		double d3 = (double) p_147734_8_.getInterpolatedU(this.renderMinX * 16.0D);
@@ -3438,7 +3783,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		}
 		if (this.enableAO && Minecraft.getMinecraft().gameSettings.ambientOcclusion != 0)
 		{
-			if(renderDiagonal>0&&((renderDiagonal >> 6) & 8) == 8 )
+			if(renderDiagonal>0&&(renderDiagonal & CENTER_ROOF_SOUTH) == CENTER_ROOF_SOUTH  && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -3493,11 +3838,11 @@ public class RenderBlocksWithRotation extends RenderBlocks
 						XyZ.zCoord + 0.5 + z, (d3+d7)/2d, d6); // XyZ
 
 			}
-			else if(renderDiagonal>64)
+			else if(renderDiagonal>=64 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				
 			}
-			else if (renderDiagonal == -1 || renderDiagonal == 45 || renderDiagonal == 47 || ((renderDiagonal & 3) == 0 && renderDiagonal != 8))
+			else if ( renderDiagonal == DIAGONAL_UP_LEFT || renderDiagonal == DIAGONAL_DOWN_RIGHT ||renderDiagonal == -1 || renderDiagonal == 45 || renderDiagonal == 47 || ((renderDiagonal & 3) == 0 && renderDiagonal != 8 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT))
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -3518,7 +3863,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x,
 						XYZ.yCoord + 0.5 + y, XYZ.zCoord + 0.5 + z, d7, d9); // XYZ
 			}
-			else if ((renderDiagonal & 3) == 1 || renderDiagonal == 50)
+			else if (((renderDiagonal & 3) == 1 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)|| renderDiagonal == 50)
 			{
 				/*
 				 * tessellator.setColorOpaque_F(this.colorRedTopLeft,
@@ -3548,7 +3893,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV((renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x,
 						xyZ.yCoord + 0.5 + y, xyZ.zCoord + 0.5 + z, d8, d10); // xyZ
 			}
-			else if (((renderDiagonal & 3) == 3 || renderDiagonal == 8) && renderDiagonal != 7)
+			else if (((renderDiagonal & 3) == 3 || renderDiagonal == 8) && renderDiagonal != 7 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -3580,10 +3925,11 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		}
 		else
 		{
-			if (renderDiagonal > 99)
+			if (renderDiagonal > 99 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
+				System.out.println(renderDiagonal);
 			}
-			else if (renderDiagonal == -1 || renderDiagonal == 45 || renderDiagonal == 47 || ((renderDiagonal & 3) == 0 && renderDiagonal != 8))
+			else if ( renderDiagonal == DIAGONAL_UP_LEFT || renderDiagonal == DIAGONAL_DOWN_RIGHT ||renderDiagonal == -1 || renderDiagonal == 45 || renderDiagonal == 47 || ((renderDiagonal & 3) == 0 && renderDiagonal != 8 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT))
 			{
 				tessellator.addVertexWithUV((renderFromInside ? XYZ.xCoord : xYZ.xCoord) + 0.5 + x,
 						xYZ.yCoord + 0.5 + y, xYZ.zCoord + 0.5 + z, d3, d5); // xYZ
@@ -3594,7 +3940,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV((renderFromInside ? xYZ.xCoord : XYZ.xCoord) + 0.5 + x,
 						XYZ.yCoord + 0.5 + y, XYZ.zCoord + 0.5 + z, d7, d9); // XYZ
 			}
-			else if ((renderDiagonal & 3) == 1 || renderDiagonal == 50)
+			else if (((renderDiagonal & 3) == 1 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT )|| renderDiagonal == 50)
 			{
 				/*
 				 * tessellator.addVertexWithUV((renderFromInside ? XYZ.xCoord :
@@ -3610,7 +3956,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV((renderFromInside ? XyZ.xCoord : xyZ.xCoord) + 0.5 + x,
 						xyZ.yCoord + 0.5 + y, xyZ.zCoord + 0.5 + z, d8, d10); // xyZ
 			}
-			else if (((renderDiagonal & 3) == 3 || renderDiagonal == 8) && renderDiagonal != 7)
+			else if (((renderDiagonal & 3) == 3 || renderDiagonal == 8) && renderDiagonal != 7 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				tessellator.addVertexWithUV((renderFromInside ? XYZ.xCoord : xYZ.xCoord) + 0.5 + x,
 						xYZ.yCoord + 0.5 + y, xYZ.zCoord + 0.5 + z, d3, d5); // xYZ
@@ -3667,6 +4013,10 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		if (this.hasOverrideBlockTexture())
 		{
 			p_147798_8_ = this.overrideBlockTexture;
+		}
+		else if(useTextureBelow)
+		{
+			p_147798_8_ = block.getIcon(2, this.blockAccess.getBlockMetadata((int)x, (int)y-1, (int)z));
 		}
 
 		double d3 = (double) p_147798_8_.getInterpolatedU(this.renderMinZ * 16.0D);
@@ -3797,6 +4147,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		 * if (this.renderFromInside) { d14 = z + this.renderMaxZ; d15 = z +
 		 * this.renderMinZ; }
 		 */
+
 		boolean culled = GL11.glIsEnabled(GL11.GL_CULL_FACE);
 		if (this.yRotation != 0 || this.rotation != 0)
 		{
@@ -3804,7 +4155,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		}
 		if (this.enableAO && Minecraft.getMinecraft().gameSettings.ambientOcclusion != 0)
 		{
-			if(renderDiagonal>0&&((renderDiagonal >> 6) & 4) == 4 )
+			if(renderDiagonal>0&&( (renderDiagonal & CENTER_ROOF_WEST)==CENTER_ROOF_WEST )&& renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -3853,11 +4204,11 @@ public class RenderBlocksWithRotation extends RenderBlocks
 						(xyZ.zCoord + xyz.zCoord)/2d  + 0.5 + z, (d3+d7)/2d, d6); // xyz
 
 			}
-			else if(renderDiagonal>64)
+			else if(renderDiagonal>=64&& renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				
 			}
-			else if (renderDiagonal == -1 || renderDiagonal == 40 || ((renderDiagonal & 3) == 3 && renderDiagonal != 7 && renderDiagonal != 15))
+			else if (renderDiagonal == DIAGONAL_UP_RIGHT || renderDiagonal == DIAGONAL_DOWN_RIGHT || renderDiagonal == -1 || renderDiagonal == 40 || ((renderDiagonal & 3) == 3 && renderDiagonal != 7 && renderDiagonal != 15 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT))
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -3878,7 +4229,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV(xyZ.xCoord + 0.5 + x, xyZ.yCoord + 0.5 + y,
 						(renderFromInside ? xyz.zCoord : xyZ.zCoord) + 0.5 + z, d4, d6); // xyZ
 			}
-			else if ((renderDiagonal & 3) == 0 || renderDiagonal == 15 || renderDiagonal == 45)
+			else if (((renderDiagonal & 3) == 0 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT) || renderDiagonal == 15 || renderDiagonal == 45)
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -3910,7 +4261,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV(xYZ.xCoord + 0.5 + x, xYZ.yCoord + 0.5 + y,
 						(renderFromInside ? xYz.zCoord : xYZ.zCoord) + 0.5 + z, d7, d9); // xYZ
 			}
-			else if (((renderDiagonal & 3) == 2 && renderDiagonal != 18) || renderDiagonal == 7)
+			else if (((renderDiagonal & 3) == 2 && renderDiagonal != 18 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT) || renderDiagonal == 7)
 			{
 				/*
 				 * tessellator.setColorOpaque_F(this.colorRedTopLeft,
@@ -3947,7 +4298,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		}
 		else
 		{
-			if(renderDiagonal>0&&((renderDiagonal >> 6) & 4) == 4 )
+			if(renderDiagonal>0&&((renderDiagonal & CENTER_ROOF_WEST)==CENTER_ROOF_WEST )&& renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 
 				tessellator.addVertexWithUV(xyZ.xCoord + 0.5 + x, xyZ.yCoord + 0.5 + y,
@@ -3976,11 +4327,11 @@ public class RenderBlocksWithRotation extends RenderBlocks
 						(xyZ.zCoord + xyz.zCoord)/2d  + 0.5 + z, (d3+d7)/2d, d6); // xyz
 
 			}
-			else if(renderDiagonal>64)
+			else if(renderDiagonal>=64&& renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				
 			}
-			else if (renderDiagonal == -1 || renderDiagonal == 40 || ((renderDiagonal & 3) == 3 && renderDiagonal != 7 && renderDiagonal != 15))
+			else if (renderDiagonal == DIAGONAL_UP_RIGHT || renderDiagonal == DIAGONAL_DOWN_RIGHT || renderDiagonal == -1 || renderDiagonal == 40 || ((renderDiagonal & 3) == 3 && renderDiagonal != 7 && renderDiagonal != 15 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT))
 			{
 				tessellator.addVertexWithUV(xYZ.xCoord + 0.5 + x, xYZ.yCoord + 0.5 + y,
 						(renderFromInside ? xYz.zCoord : xYZ.zCoord) + 0.5 + z, d7, d9); // xYZ
@@ -3991,7 +4342,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV(xyZ.xCoord + 0.5 + x, xyZ.yCoord + 0.5 + y,
 						(renderFromInside ? xyz.zCoord : xyZ.zCoord) + 0.5 + z, d4, d6); // xyZ
 			}
-			else if ((renderDiagonal & 3) == 0 || renderDiagonal == 15 || renderDiagonal == 45)
+			else if (((renderDiagonal & 3) == 0 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)|| renderDiagonal == 15 || renderDiagonal == 45)
 			{
 				tessellator.addVertexWithUV(xYZ.xCoord + 0.5 + x, xYZ.yCoord + 0.5 + y,
 						(renderFromInside ? xYz.zCoord : xYZ.zCoord) + 0.5 + z, d7, d9); // xYZ
@@ -4007,7 +4358,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV(xYZ.xCoord + 0.5 + x, xYZ.yCoord + 0.5 + y,
 						(renderFromInside ? xYz.zCoord : xYZ.zCoord) + 0.5 + z, d7, d9); // xYZ
 			}
-			else if (((renderDiagonal & 3) == 2 && renderDiagonal != 18) || renderDiagonal == 7)
+			else if (((renderDiagonal & 3) == 2 && renderDiagonal != 18 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT) || renderDiagonal == 7)
 			{
 				/*
 				 * tessellator.addVertexWithUV(xYZ.xCoord + 0.5 + x, xYZ.yCoord
@@ -4084,7 +4435,10 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		{
 			p_147764_8_ = this.overrideBlockTexture;
 		}
-
+		else if(useTextureBelow)
+		{
+			p_147764_8_ = block.getIcon(3, this.blockAccess.getBlockMetadata((int)x, (int)y-1, (int)z));
+		}
 		double d3 = (double) p_147764_8_.getInterpolatedU(this.renderMinZ * 16.0D);
 		double d4 = (double) p_147764_8_.getInterpolatedU(this.renderMaxZ * 16.0D);
 
@@ -4227,6 +4581,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		 * if (this.renderFromInside) { d14 = z + this.renderMaxZ; d15 = z +
 		 * this.renderMinZ; }
 		 */
+		
 		boolean culled = GL11.glIsEnabled(GL11.GL_CULL_FACE);
 		if (this.yRotation != 0 || this.rotation != 0)
 		{
@@ -4234,7 +4589,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		}
 		if (this.enableAO && Minecraft.getMinecraft().gameSettings.ambientOcclusion != 0)
 		{
-			if(renderDiagonal>0&&((renderDiagonal >> 6) & 1) == 1 )
+			if(renderDiagonal>0&&(renderDiagonal & CENTER_ROOF_EAST)==CENTER_ROOF_EAST&& renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -4279,32 +4634,35 @@ public class RenderBlocksWithRotation extends RenderBlocks
 						(XyZ.zCoord + Xyz.zCoord)/2d  + 0.5 + z, (d3+d7)/2d, d6); // Xyz
 
 			}
-			else if(renderDiagonal>64)
+			else if((renderDiagonal == 8 || renderDiagonal>=64) && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				
 			}
-			else if (renderDiagonal == -1 || renderDiagonal == 50 || ((renderDiagonal & 3) == 1 && renderDiagonal != 13))
+			else if (renderDiagonal == DIAGONAL_UP_LEFT || renderDiagonal == DIAGONAL_DOWN_LEFT || renderDiagonal == -1 || renderDiagonal == 50 || ((renderDiagonal & 3) == 1 && renderDiagonal != 13 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT))
 			{
-				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-				tessellator.setBrightness(this.brightnessTopLeft);
+				tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight,
+						this.colorBlueBottomRight);
 				tessellator.addVertexWithUV(XyZ.xCoord + 0.5 + x, XyZ.yCoord + 0.5 + y,
 						(renderFromInside ? Xyz.zCoord : XyZ.zCoord) + 0.5 + z, d8, d10); // XyZ
+				
 				tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft,
 						this.colorBlueBottomLeft);
 				tessellator.setBrightness(this.brightnessBottomLeft);
 				tessellator.addVertexWithUV(Xyz.xCoord + 0.5 + x, Xyz.yCoord + 0.5 + y,
 						(renderFromInside ? XyZ.zCoord : Xyz.zCoord) + 0.5 + z, d4, d6); // Xyz
-				tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight,
-						this.colorBlueBottomRight);
+				
+				tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight,
+						this.colorBlueTopRight);
 				tessellator.setBrightness(this.brightnessBottomRight);
 				tessellator.addVertexWithUV(XYz.xCoord + 0.5 + x, XYz.yCoord + 0.5 + y,
 						(renderFromInside ? XYZ.zCoord : XYz.zCoord) + 0.5 + z, d7, d9); // XYz
-				tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-				tessellator.setBrightness(this.brightnessTopRight);
+				
+				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
+				tessellator.setBrightness(this.brightnessTopLeft);
 				tessellator.addVertexWithUV(XYZ.xCoord + 0.5 + x, XYZ.yCoord + 0.5 + y,
 						(renderFromInside ? XYz.zCoord : XYZ.zCoord) + 0.5 + z, d3, d5); // XYZ
 			}
-			else if ((renderDiagonal & 3) == 0 || renderDiagonal == 13 || renderDiagonal == 47)
+			else if (((renderDiagonal & 3) == 0 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT) || renderDiagonal == 13 || renderDiagonal == 47)
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -4332,7 +4690,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV(XyZ.xCoord + 0.5 + x, XyZ.yCoord + 0.5 + y,
 						(renderFromInside ? Xyz.zCoord : XyZ.zCoord) + 0.5 + z, d8, d10); // XyZ
 			}
-			else if ((renderDiagonal & 3) == 2)
+			else if ((renderDiagonal & 3) == 2 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
 				tessellator.setBrightness(this.brightnessTopLeft);
@@ -4364,7 +4722,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 		}
 		else
 		{
-			if (renderDiagonal > 64)
+			if (renderDiagonal>0&&(renderDiagonal & CENTER_ROOF_EAST)==CENTER_ROOF_EAST && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				if(renderDiagonal>0&&((renderDiagonal >> 6) & 1) == 1 )
 				{
@@ -4389,11 +4747,11 @@ public class RenderBlocksWithRotation extends RenderBlocks
 
 				}
 			}
-			else if(renderDiagonal>64)
+			else if((renderDiagonal == 8 ||renderDiagonal>=64) && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				
 			}
-			else if (renderDiagonal == -1 || renderDiagonal == 50 || ((renderDiagonal & 3) == 1 && renderDiagonal != 13))
+			else if (renderDiagonal == DIAGONAL_UP_LEFT || renderDiagonal == DIAGONAL_DOWN_LEFT || renderDiagonal == -1 || renderDiagonal == 50 || ((renderDiagonal & 3) == 1 && renderDiagonal != 13 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT))
 			{
 				tessellator.addVertexWithUV(XyZ.xCoord + 0.5 + x, XyZ.yCoord + 0.5 + y,
 						(renderFromInside ? Xyz.zCoord : XyZ.zCoord) + 0.5 + z, d8, d10); // XyZ
@@ -4404,7 +4762,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV(XYZ.xCoord + 0.5 + x, XYZ.yCoord + 0.5 + y,
 						(renderFromInside ? XYz.zCoord : XYZ.zCoord) + 0.5 + z, d3, d5); // XYZ
 			}
-			else if ((renderDiagonal & 3) == 0 || renderDiagonal == 13 || renderDiagonal == 47)
+			else if (((renderDiagonal & 3) == 0 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT) || renderDiagonal == 13 || renderDiagonal == 47)
 			{
 				tessellator.addVertexWithUV(XyZ.xCoord + 0.5 + x, XyZ.yCoord + 0.5 + y,
 						(renderFromInside ? Xyz.zCoord : XyZ.zCoord) + 0.5 + z, d8, d10); // XyZ
@@ -4420,7 +4778,7 @@ public class RenderBlocksWithRotation extends RenderBlocks
 				tessellator.addVertexWithUV(XyZ.xCoord + 0.5 + x, XyZ.yCoord + 0.5 + y,
 						(renderFromInside ? Xyz.zCoord : XyZ.zCoord) + 0.5 + z, d8, d10); // XyZ
 			}
-			else if ((renderDiagonal & 3) == 2)
+			else if ((renderDiagonal & 3) == 2 && renderDiagonal != DIAGONAL_UP_LEFT && renderDiagonal != DIAGONAL_DOWN_LEFT&& renderDiagonal != DIAGONAL_UP_RIGHT && renderDiagonal != DIAGONAL_DOWN_RIGHT)
 			{
 				tessellator.addVertexWithUV(XyZ.xCoord + 0.5 + x, XyZ.yCoord + 0.5 + y,
 						(renderFromInside ? Xyz.zCoord : XyZ.zCoord) + 0.5 + z, d8, d10); // XyZ

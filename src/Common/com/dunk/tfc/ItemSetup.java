@@ -1127,6 +1127,7 @@ public class ItemSetup extends TFCItems
 		spindleHead = new ItemPotteryBase().setMetaNames(new String[] { "Clay Spindle", "Spindle Head" })
 				.setUnlocalizedName("Spindle Head").setCreativeTab(TFCTabs.TFC_POTTERY);
 		stoneBrick = new ItemStoneBrick().setFolder("tools/").setUnlocalizedName("ItemStoneBrick");
+		slateShingle = new ItemTerra().setFolder("rocks/").setUnlocalizedName("Slate Shingle");
 		mortar = new ItemTerra().setFolder("tools/").setUnlocalizedName("Mortar").setCreativeTab(TFCTabs.TFC_MATERIALS);
 		
 		hide = new ItemRawHide().setFolder("tools/").setUnlocalizedName("Hide").setCreativeTab(TFCTabs.TFC_MATERIALS);

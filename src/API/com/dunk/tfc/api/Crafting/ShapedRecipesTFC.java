@@ -163,7 +163,7 @@ public class ShapedRecipesTFC implements IRecipe,IRegionalRecipe
 			matches = matches(inventorycrafting,world);
 			if(matches)
 			{
-				System.out.println("valid regions: " + validRegions);
+				//System.out.println("valid regions: " + validRegions);
 			}
 			return matches;
 		}

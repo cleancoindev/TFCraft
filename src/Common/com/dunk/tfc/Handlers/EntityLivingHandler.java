@@ -36,6 +36,7 @@ import com.dunk.tfc.api.TFCAttributes;
 import com.dunk.tfc.api.TFCItems;
 import com.dunk.tfc.api.TFCOptions;
 import com.dunk.tfc.api.Constant.Global;
+import com.dunk.tfc.api.Entities.IAnimal;
 import com.dunk.tfc.api.Interfaces.IBoots;
 import com.dunk.tfc.api.Interfaces.IEquipable;
 import com.dunk.tfc.api.Interfaces.IEquipable.ClothingType;
@@ -177,7 +178,7 @@ public class EntityLivingHandler
 					comfortDelta = Math.min(comfortDelta,
 							40 * TFC_Core.getWarmthTemperatureAdjustmentPercentage(player, player.worldObj));
 				}
-				else if(comfortDelta < 0)
+				else if (comfortDelta < 0)
 				{
 					comfortDelta = Math.max(comfortDelta,
 							-40 * TFC_Core.getCoolthTemperatureAdjustmentPercentage(player, player.worldObj));
@@ -512,9 +513,11 @@ public class EntityLivingHandler
 			}
 			else
 			{
-				//player.prevSwingProgress =(((TFC_Time.getTotalTicks())%20)/4f)/4f;
-				//player.swingProgress = player.prevSwingProgress + (1f/60f);//((TFC_Time.getTotalTicks()%20)/4f)/4f;
-				//player.isSwingInProgress = true;
+				// player.prevSwingProgress
+				// =(((TFC_Time.getTotalTicks())%20)/4f)/4f;
+				// player.swingProgress = player.prevSwingProgress +
+				// (1f/60f);//((TFC_Time.getTotalTicks()%20)/4f)/4f;
+				// player.isSwingInProgress = true;
 				if (TFC_Time.getTotalTicks() % 20 == 0)
 				{
 					// System.out.println(player.worldObj.getBlock((int)
@@ -886,8 +889,13 @@ public class EntityLivingHandler
 			if (backItem == null && item.getItem() instanceof IEquipable)
 			{
 				IEquipable equipment = (IEquipable) item.getItem();
-				if (equipment.getEquipType(item) == EquipType.BACK /*&& TFC_Time.getTotalTicks() % TFC_Core
-						.getClothingUpdateFrequency() != 1*/ && (equipment == TFCItems.quiver || equipment
+				if (equipment.getEquipType(
+						item) == EquipType.BACK /*
+												 * && TFC_Time.getTotalTicks() %
+												 * TFC_Core
+												 * .getClothingUpdateFrequency()
+												 * != 1
+												 */ && (equipment == TFCItems.quiver || equipment
 								.getTooHeavyToCarry(item)))
 				{
 					player.inventory.setInventorySlotContents(36, item.copy());
@@ -989,12 +997,14 @@ public class EntityLivingHandler
 	public void onLivingDrop(LivingDropsEvent event)
 	{
 		boolean processed = false;
-		if (!event.entity.worldObj.isRemote && event.recentlyHit && !(event.entity instanceof EntityPlayer) && !(event.entity instanceof EntityZombie))
+		if (!event.entity.worldObj.isRemote /* && event.recentlyHit */ && !(event.entity instanceof EntityPlayer) && !(event.entity instanceof EntityZombie))
 		{
-			if (event.source.getSourceOfDamage() instanceof EntityPlayer || event.source.isProjectile())
+			if ((event.source.getSourceOfDamage() instanceof EntityPlayer || event.source
+					.getSourceOfDamage() instanceof IAnimal) || event.source.isProjectile())
 			{
 				boolean foundFood = false;
 				processed = true;
+				boolean noButchering = false;
 				ArrayList<EntityItem> drop = new ArrayList<EntityItem>();
 				EntityPlayer p = null;
 				if (event.source.getSourceOfDamage() instanceof EntityPlayer)
@@ -1005,12 +1015,16 @@ public class EntityLivingHandler
 					if (proj.shootingEntity instanceof EntityPlayer)
 						p = (EntityPlayer) proj.shootingEntity;
 				}
+				else if (event.source.getSourceOfDamage() instanceof IAnimal)
+				{
+					noButchering = true;
+				}
 				for (EntityItem ei : event.drops)
 				{
 					ItemStack is = ei.getEntityItem();
 					if (is.getItem() instanceof IFood)
 					{
-						if (p == null)
+						if (p == null && !noButchering)
 							continue;
 						foundFood = true;
 
@@ -1022,8 +1036,16 @@ public class EntityLivingHandler
 
 						float oldWeight = Food.getWeight(is);
 						Food.setWeight(is, 0);
-						float newWeight = oldWeight * ((TFC_Core.getSkillStats(p)
-								.getSkillMultiplier(Global.SKILL_BUTCHERING) + 0.01f)*0.5f + 0.5f);
+						float newWeight;
+						if (!noButchering)
+						{
+							newWeight = oldWeight * ((TFC_Core.getSkillStats(p)
+									.getSkillMultiplier(Global.SKILL_BUTCHERING) + 0.01f) * 0.5f + 0.5f);
+						}
+						else
+						{
+							newWeight = oldWeight * 0.25f;
+						}
 						while (newWeight >= Global.FOOD_MIN_DROP_WEIGHT)
 						{
 							float fw = Helper.roundNumber(Math.min(Global.FOOD_MAX_WEIGHT, newWeight), 10);

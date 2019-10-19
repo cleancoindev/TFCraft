@@ -140,6 +140,12 @@ public class EntityHorseTFC extends EntityHorse implements IInvBasic, IAnimal
 		//For Testing Only(makes spawned animals into babies)
 		//this.setGrowingAge((int) TFC_Time.getTotalDays());
 	}
+	
+	public EntityHorseTFC(World world, int type)
+	{
+		this(world);
+		this.setHorseType(type);
+	}
 
 	public EntityHorseTFC(World par1World, IAnimal mother, List<Float> data, int type, int variant)
 	{
@@ -378,6 +384,7 @@ public class EntityHorseTFC extends EntityHorse implements IInvBasic, IAnimal
 		float foodWeight = ageMod * (this.sizeMod * 4000);
 
 		TFC_Core.animalDropMeat(this, TFCItems.horseMeatRaw, foodWeight);
+		
 	}
 
 	@Override

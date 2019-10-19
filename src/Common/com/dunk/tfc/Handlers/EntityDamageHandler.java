@@ -315,7 +315,7 @@ public class EntityDamageHandler
 
 				if (player.isPotionActive(Potion.weakness))
 					damageAmount -= 2 << player.getActivePotionEffect(Potion.weakness).getAmplifier();
-
+				
 				int knockback = 0;
 				float enchantmentDamage = 0;
 
@@ -349,7 +349,7 @@ public class EntityDamageHandler
 					}
 
 					boolean entityAttacked = target.attackEntityFrom(DamageSource.causePlayerDamage(player), damageAmount);
-
+					//knockback = -2;
 					if (entityAttacked)
 					{
 						if (knockback > 0)
